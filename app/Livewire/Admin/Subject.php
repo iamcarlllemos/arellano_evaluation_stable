@@ -2,19 +2,24 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\CourseModel;
-use App\Models\SubjectModel;
 use Livewire\Component;
+
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use App\Traits\ExecuteRule;
 
+use App\Traits\ExecuteRule;
+use App\Traits\Account;
+
+use App\Models\CourseModel;
+use App\Models\SubjectModel;
 
 class Subject extends Component
 {
 
     use ExecuteRule;
-    
+    use Account;
+
+
     public $form;
     public $select;
     public $search;
@@ -82,13 +87,13 @@ class Subject extends Component
                 'status' => 'failed',
                 'message' => $e->getMessage()
             ]);
-        }       
+        }
     }
 
     public function update() {
 
         $model = SubjectModel::where('id', $this->id)->first();
-    
+
         if ($model) {
 
             $rules = [
@@ -103,9 +108,9 @@ class Subject extends Component
                     })->ignore($this->id)
                 ]
             ];
-    
+
             $this->validate($rules);
-            
+
             try {
 
                 $model->course_id = $this->course_id;
@@ -113,19 +118,19 @@ class Subject extends Component
                 $model->name = htmlspecialchars($this->name);
 
                 $model->save();
-    
+
                 session()->flash('flash', [
                     'status' => 'success',
                     'message' => 'Subject `' . ucwords($this->name) . '` updated successfully'
                 ]);
-    
+
             } catch (\Exception $e) {
-    
+
                 session()->flash('flash', [
                     'status' => 'failed',
                     'message' => $e->getMessage()
                 ]);
-            }    
+            }
         }
     }
 
@@ -148,7 +153,7 @@ class Subject extends Component
         }
     }
     public function render(Request $request) {
-        
+
         $action = $request->input('action') ?? '';
 
         if($action == 'open') {
@@ -159,8 +164,8 @@ class Subject extends Component
             }
         }
 
-        $role = auth()->user()->role;
-        $assigned_branch = auth()->user()->assigned_branch;
+        $role = $this->admin()->role;
+        $assigned_branch = $this->admin()->assigned_branch;
 
         $subjects = SubjectModel::with(['courses.departments.branches'])
             ->when(strlen($this->search) >= 1, function ($query) {
@@ -176,7 +181,7 @@ class Subject extends Component
                 });
             })
             ->get();
-            
+
         $subjects = $subjects->isEmpty() ? [] : $subjects;
 
         $courses_dirty = CourseModel::with('departments.branches')
@@ -198,7 +203,7 @@ class Subject extends Component
         } else {
             foreach($courses_dirty as $course) {
                 $key = $course->departments->branches->id;
-                
+
                 if(!isset($courses[$key])) {
                     $courses[$key] = [
                         'id' => $key,

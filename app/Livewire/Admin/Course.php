@@ -2,16 +2,21 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\BranchModel;
-use App\Models\DepartmentModel;
-use App\Models\CourseModel;
-use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+
+use App\Traits\Account;
+
+use Livewire\Component;
+
+use App\Models\DepartmentModel;
+use App\Models\CourseModel;
 
 
 class Course extends Component
 {
+
+    use Account;
 
     public $form;
     public $select;
@@ -56,14 +61,18 @@ class Course extends Component
         $this->validate($rules);
 
         $data = [
-            'department_id' => htmlspecialchars($this->department_id),
-            'code' => htmlspecialchars($this->code),
-            'name' =>  htmlspecialchars($this->name)
+            'department_id' => $this->department_id,
+            'code' => $this->code,
+            'name' =>  $this->name
         ];
 
         try {
 
-            CourseModel::create($data);
+            $model = new CourseModel;
+
+            $model->department_id = $this->department_id;
+            $model->code = $this->code;
+            $model->name =  $this->name;
 
             session()->flash('flash', [
                 'status' => 'success',
@@ -75,18 +84,17 @@ class Course extends Component
             $this->name = '';
 
         } catch (\Exception $e) {
-
             session()->flash('flash', [
                 'status' => 'failed',
                 'message' => $e->getMessage()
             ]);
-        }       
+        }
     }
 
     public function update() {
 
         $model = CourseModel::where('id', $this->id)->first();
-    
+
         if ($model) {
 
             $rules = [
@@ -101,29 +109,28 @@ class Course extends Component
                     })->ignore($this->id)
                 ]
             ];
-    
+
             $this->validate($rules);
-            
+
             try {
 
                 $model->department_id = $this->department_id;
-                $model->code = htmlspecialchars($this->code);
-                $model->name = htmlspecialchars($this->name);
+                $model->code = $this->code;
+                $model->name = $this->name;
 
                 $model->save();
-    
+
                 session()->flash('flash', [
                     'status' => 'success',
                     'message' => 'Course `' . ucwords($this->name) . '` updated successfully'
                 ]);
-    
+
             } catch (\Exception $e) {
-    
                 session()->flash('flash', [
                     'status' => 'failed',
                     'message' => $e->getMessage()
                 ]);
-            }    
+            }
         }
     }
 
@@ -132,7 +139,9 @@ class Course extends Component
         $model = CourseModel::where('id', $this->id)->first();
 
         if($model) {
+
             $model->delete();
+
             session()->flash('flash', [
                 'status' => 'success',
                 'message' => 'Course `'.$model->name.'` deleted successfully'
@@ -146,19 +155,11 @@ class Course extends Component
         }
     }
     public function render(Request $request) {
-        
-        $action = $request->input('action') ?? '';
 
-        if($action == 'open') {
-            $view = $request->input('view');
-            if(in_array($view, ['courses'])) {
-                $id = $request->input('id');
-                $this->select = $id;
-            }
-        }
+        $action = $request->input('action');
 
-        $role = auth()->user()->role;
-        $assigned_branch = auth()->user()->assigned_branch;
+        $role = $this->admin()->role;
+        $assigned_branch = $this->admin()->assigned_branch;
 
         $courses = CourseModel::with(['departments.branches'])
             ->when(strlen($this->search) >= 1, function ($query) {
@@ -170,12 +171,10 @@ class Course extends Component
             })
             ->when($role == 'admin', function($query) use ($assigned_branch) {
                 $query->whereHas('departments.branches', function($subQuery) use ($assigned_branch) {
-                    $subQuery->where('branch_id', $assigned_branch); 
+                    $subQuery->where('branch_id', $assigned_branch);
                 });
             })
             ->get();
-    
-        $courses = $courses->isEmpty() ? [] : $courses;
 
         $departments_dirty = DepartmentModel::with('branches')
             ->when($role == 'admin', function($query) use ($assigned_branch) {
@@ -195,7 +194,7 @@ class Course extends Component
         } else {
             foreach($departments_dirty as $department) {
                 $key = $department->branches->id;
-                
+
                 if(!isset($departments[$key])) {
                     $departments[$key] = [
                         'id' => $key,

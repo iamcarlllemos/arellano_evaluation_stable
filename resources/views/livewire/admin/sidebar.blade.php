@@ -53,7 +53,7 @@
                     </li>
                 </ul>
             </li>
-            @if (auth()->user()->role === 'superadmin')
+            @if (auth()->guard('admins')->user()->role === 'superadmin')
             <li class="py-3">
                 <label class="font-display text-xs text-slate-200 uppercase font-bold" style="font-size: 10px">Survey</label>
                 <ul class="mt-2">
@@ -83,7 +83,7 @@
             <li class="py-3">
                 <ul class="mt-3">
                     <label class="font-display text-xs text-slate-200 uppercase font-bold" style="font-size: 10px">Programs</label>
-                    @if(auth()->user()->role === 'superadmin')
+                    @if(auth()->guard('admins')->user()->role === 'superadmin')
                     <li class="ps-3 border-l-2 border-sky-950 hover:border-sky-400 transition ease-in-out duration-400">
                         <a wire:navigate href="{{route('admin.programs.branches')}}" class="p-2 w-100 flex items-center gap-3 text-slate-400 hover:text-sky-400">
                             <div class="p-2 rounded-lg bg-slate-800">
@@ -125,7 +125,7 @@
                             <span class="text-xs uppercase font-bold" style="font-size: 10px;">Subjects</span>
                         </a>
                     </li>
-                    @if(auth()->user()->role === 'superadmin')
+                    @if(auth()->guard('admins')->user()->role === 'superadmin')
                         <li class="ps-3 border-l-2 border-sky-950 hover:border-sky-400 transition ease-in-out duration-400">
                             <a wire:navigate href="{{route('admin.programs.school-year')}}" class="p-2 w-100 flex items-center gap-3 text-slate-400 hover:text-sky-400">
                                 <div class="p-2 rounded-lg bg-slate-800">
@@ -162,7 +162,7 @@
                             <span class="text-xs uppercase font-bold" style="font-size: 10px;">Faculty</span>
                         </a>
                     </li>
-                    @if(auth()->user()->role === 'superadmin')
+                    @if(auth()->guard('admins')->user()->role === 'superadmin')
                         <li class="ps-3 border-l-2 border-sky-950 hover:border-sky-400 transition ease-in-out duration-400">
                             <a wire:navigate href="{{ route('admin.accounts.administrator') }}" class="p-2 w-100 flex items-center gap-3 text-slate-400 hover:text-sky-400">
                                 <div class="p-2 rounded-lg bg-slate-800">

@@ -47,11 +47,7 @@ require_once __DIR__ . '/jetstream.php';
 // ADMIN
 
 
-Route::prefix('admin')->middleware([
-        'auth:sanctum',
-        config('jetstream.auth_session'),
-        'verified',
-    ])->group(function() {
+Route::prefix('admin')->middleware('admins')->group(function() {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 

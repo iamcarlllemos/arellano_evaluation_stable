@@ -92,6 +92,14 @@ class BranchController extends Controller
                                     'disabled' => true,
                                     'css' => 'col-span-12'
                                 ],
+                                'image' => [
+                                    'label' => 'Image',
+                                    'type' => 'file',
+                                    'placeholder' => 'Upload Image',
+                                    'required' => false,
+                                    'disabled' => true,
+                                    'css' => 'col-span-12'
+                                ],
                             ]
                         ]
                     ],

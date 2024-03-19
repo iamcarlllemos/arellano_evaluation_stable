@@ -16,6 +16,7 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "alpinejs": "^3.13.7",
         "flowbite": "^2.3.0",
         "jstree": "^3.3.16",
         "selectize": "^0.12.6"

@@ -19,7 +19,7 @@ class Role
     public function handle(Request $request, Closure $next, ...$allowedRoles)
     {
         // Get the authenticated user's role
-        $userRole = auth()->user()->role;
+        $userRole = auth()->guard('admins')->user()->role;
 
         // Check if the user's role is allowed
         if (in_array($userRole, $allowedRoles)) {

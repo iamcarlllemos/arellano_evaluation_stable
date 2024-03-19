@@ -14,8 +14,6 @@ class Dashboard extends Component
     public function render()
     {
 
-        $this->active = 'dashboard';
-
         $time = Carbon::now();
         $mode = strtolower($time->format('H'));
 
@@ -30,7 +28,7 @@ class Dashboard extends Component
         }
 
         $mode_string = ucwords($mode_string);
-        $name = auth()->user()->name;
+        $name = auth()->guard('admins')->user()->name;
 
         $message = $mode_string . '! ' . $name ;
 

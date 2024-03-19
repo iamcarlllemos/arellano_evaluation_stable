@@ -1,16 +1,10 @@
 <?php
 
-namespace App\Livewire\Admin;
-
 use App\Models\CriteriaModel;
 use App\Models\QuestionnaireModel;
 use App\Models\QuestionnaireItemModel;
 use Livewire\Component;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Str;
-
-
 
 class QuestionnaireItem extends Component
 {
@@ -53,7 +47,7 @@ class QuestionnaireItem extends Component
 
         foreach ($dirty_data[0]['questionnaire_item'] as $item) {
             $key = $item['criteria']->name;
-            
+
             if(!isset($cleaned_data[$key])) {
                 $cleaned_data[$key] = [
                     'criteria' => $key,
@@ -92,34 +86,34 @@ class QuestionnaireItem extends Component
                     'min:8',
                 ]
             ];
-    
+
             $this->validate($rules);
-    
+
             $data = [
                 'questionnaire_id' =>  $this->questionnaire_id,
                 'criteria_id' =>  $this->criteria_id,
                 'item' =>  $this->item,
             ];
-    
+
             try {
-    
+
                 QuestionnaireItemModel::create($data);
-    
+
                 session()->flash('flash', [
                     'status' => 'success',
                     'message' => 'Questionnaire item added'
                 ]);
-    
+
                 $this->criteria_id = '';
                 $this->item = '';
-    
+
             } catch (\Exception $e) {
-    
+
                 session()->flash('flash', [
                     'status' => 'failed',
                     'message' => $e->getMessage()
                 ]);
-            }       
+            }
         } else {
 
             $rules = [
@@ -134,35 +128,35 @@ class QuestionnaireItem extends Component
             ];
 
             $this->validate($rules);
-            
+
             $data = [
                 'criteria_id' =>  $this->criteria_id,
                 'item' =>  $this->item,
             ];
 
             try {
-    
+
                 QuestionnaireItemModel::where('id', $this->questionnaire_item_id)->update($data);
-    
+
                 session()->flash('flash', [
                     'status' => 'success',
                     'message' => 'Questionnaire item updated'
                 ]);
-    
+
                 $this->questionnaire_item_id = '';
                 $this->criteria_id = '';
                 $this->item = '';
-    
+
             } catch (\Exception $e) {
-    
+
                 session()->flash('flash', [
                     'status' => 'failed',
                     'message' => $e->getMessage()
                 ]);
-            }       
+            }
 
         }
-        
+
     }
 
     public function update($id) {
@@ -178,7 +172,7 @@ class QuestionnaireItem extends Component
         } else {
             return redirect()->route('admin.programs.questionnaire');
         }
-       
+
     }
 
     public function delete($id) {
@@ -202,24 +196,14 @@ class QuestionnaireItem extends Component
         }
     }
     public function render(Request $request) {
-        
-        $action = $request->input('action') ?? '';
 
-        if($action == 'open') {
-            $view = $request->input('view');
-            if(in_array($view, ['courses'])) {
-                $id = $request->input('id');
-                $this->select = $id;
-            }
-        }
+        $action = $request->input('action');
 
         $questionnaire = QuestionnaireModel::with(['school_year'])
             ->when(strlen($this->search) >= 1, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })->get();
-        
 
-        $questionnaire = $questionnaire->isEmpty() ? [] : $questionnaire;
 
         $data = [
             'questionnaire' => $questionnaire,

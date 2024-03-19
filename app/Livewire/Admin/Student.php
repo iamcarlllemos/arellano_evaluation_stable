@@ -2,21 +2,26 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\BranchModel;
-use App\Models\StudentModel;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
+
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
+
+use App\Traits\Account;
+
+use App\Models\BranchModel;
+use App\Models\StudentModel;
 
 
 class Student extends Component
 {
 
     use WithFileUploads;
+    use Account;
 
     public $form;
     public $select;
@@ -134,13 +139,13 @@ class Student extends Component
                 'status' => 'failed',
                 'message' => $e->getMessage()
             ]);
-        }       
+        }
     }
 
     public function update() {
 
         $model = StudentModel::where('id', $this->id)->first();
-    
+
         if ($model) {
 
             $rules = [
@@ -173,9 +178,9 @@ class Student extends Component
                     })->ignore($this->id)
                 ],
             ];
-    
+
             $this->validate($rules);
-            
+
             if($this->image instanceof TemporaryUploadedFile) {
 
                 $rules = [
@@ -185,12 +190,12 @@ class Student extends Component
                 $this->validate($rules);
 
                 Storage::disk('public')->delete('images/students/' . $model->image);
-        
+
                 $temp_filename = time();
                 $extension = $this->image->getClientOriginalExtension();
-        
+
                 $filename = $temp_filename . '.' . $extension;
-        
+
                 $this->image->storeAs('public/images/students', $filename);
                 $this->image = $filename;
                 $model->image = $filename;
@@ -212,12 +217,12 @@ class Student extends Component
                     $this->password = '';
                     $this->password_repeat = '';
                 } catch (\Exception $e) {
-    
+
                     session()->flash('flash', [
                         'status' => 'failed',
                         'message' => $e->getMessage()
                     ]);
-                }    
+                }
 
             }
 
@@ -235,19 +240,19 @@ class Student extends Component
                 $model->email = $this->email;
                 $model->username = $this->username;
                 $model->save();
-    
+
                 session()->flash('flash', [
                     'status' => 'success',
                     'message' => 'Student `' . ucwords($this->firstname . ' ' . $this->lastname) . '` updated successfully'
                 ]);
-    
+
             } catch (\Exception $e) {
-    
+
                 session()->flash('flash', [
                     'status' => 'failed',
                     'message' => $e->getMessage()
                 ]);
-            }    
+            }
         }
     }
 
@@ -270,11 +275,11 @@ class Student extends Component
         }
     }
     public function render(Request $request) {
-        
+
         $action = $request->input('action') ?? '';
 
-        $role = auth()->user()->role;
-        $assigned_branch = auth()->user()->assigned_branch;
+        $role = $this->admin()->role;
+        $assigned_branch = $this->admin()->assigned_branch;
 
         $students = StudentModel::with(['courses.departments.branches'])
             ->when(strlen($this->search) >= 1, function ($sQuery) {
@@ -304,13 +309,13 @@ class Student extends Component
                 });
             })
             ->get();
-       
+
             $branches = BranchModel::with('departments')
                 ->when($role == 'admin', function($query) use ($assigned_branch) {
                     $query->where('id', $assigned_branch);
                 })
                 ->get();
-    
+
         $students = $students->isEmpty() ? [] : $students;
         $data = [
             'branches' => $branches,
@@ -319,6 +324,6 @@ class Student extends Component
 
 
         return view('livewire.admin.student', compact('data'));
-       
+
     }
 }

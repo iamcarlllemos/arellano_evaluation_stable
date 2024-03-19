@@ -8,14 +8,19 @@ use Illuminate\Http\Request;
 use App\Models\CourseModel;
 use App\Models\DepartmentModel;
 
+use App\Traits\Account;
+
 class CourseController extends Controller
 {
+
+    use Account;
+
     public function index(Request $request) {
 
         $action = $request->input('action') ?? '';
-        
-        $role = auth()->user()->role;
-        $assigned_branch = auth()->user()->assigned_branch;
+
+        $role = $this->admin()->role;
+        $assigned_branch = $this->admin()->assigned_branch;
 
         $get_data = [];
 
@@ -38,7 +43,7 @@ class CourseController extends Controller
             ->get();
 
         $departments = [];
-        
+
         if($role === 'admin') {
             foreach($departments_dirty as $department) {
                 $departments[] = [
@@ -49,7 +54,7 @@ class CourseController extends Controller
         } else {
             foreach($departments_dirty as $department) {
                 $key = $department->branches->id;
-                
+
                 if(!isset($departments[$key])) {
                     $departments[$key] = (object) [
                         'id' => $key,

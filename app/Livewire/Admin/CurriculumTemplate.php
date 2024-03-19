@@ -1,22 +1,24 @@
 <?php
 
 namespace App\Livewire\Admin;
+use Livewire\Component;
 
-use App\Models\BranchModel;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+
+use App\Traits\SearchCurriculumTemplate;
+use App\Traits\Account;
+
 use App\Models\CourseModel;
 use App\Models\CurriculumTemplateModel;
 use App\Models\DepartmentModel;
 use App\Models\SubjectModel;
-use App\Traits\SearchCurriculumTemplate;
-use Livewire\Component;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-
 
 class CurriculumTemplate extends Component
 {
 
     use SearchCurriculumTemplate;
+    use Account;
 
     public $form;
     public $select;
@@ -40,12 +42,12 @@ class CurriculumTemplate extends Component
 
         if($id == null) {
 
-            $role = auth()->user()->role;
-            $assigned_branch = auth()->user()->assigned_branch;
+            $role = $this->admin()->role;
+            $assigned_branch = $this->admin()->assigned_branch;
 
             $department_dirty = DepartmentModel::with('branches')
                 ->when($role == 'admin', function($query) use ($assigned_branch) {
-                    $query->where('branch_id', $assigned_branch); 
+                    $query->where('branch_id', $assigned_branch);
                 })
                 ->get();
 
@@ -68,14 +70,14 @@ class CurriculumTemplate extends Component
                             'departments' => []
                         ];
                     }
-    
+
                     $departments[$key]['departments'][] = [
                         'id' => $item->id,
                         'name' => $item->name,
                     ];
                 }
                 $departments = array_values($departments);
-            }        
+            }
 
             return $this->departments = $departments;
         } else {
@@ -91,7 +93,7 @@ class CurriculumTemplate extends Component
             $data = CourseModel::where('department_id', $this->department_id)->get();
             $this->loadSubjects();
             return $this->courses = $data;
-        } 
+        }
     }
 
     public function loadYear($id) {
@@ -133,7 +135,7 @@ class CurriculumTemplate extends Component
                 $this->year_level = $data->year_level;
 
                 $dirty = DepartmentModel::with('branches')->get();
-                
+
                 $clean = [];
 
                 foreach($dirty as $item) {
@@ -153,7 +155,7 @@ class CurriculumTemplate extends Component
                 $this->subject_sem = '';
                 $this->year_level = '';
             } else {
-                
+
                 $courses_dirty = CourseModel::with('departments.branches')->get();
 
                 $courses = [];
@@ -162,7 +164,7 @@ class CurriculumTemplate extends Component
                     $branch_key = $item->departments->branches->id;
                     $branch_name = $item->departments->branches->name;
                     $key = $branch_key;
-                   
+
                     if(!isset($courses[$branch_key])) {
                         $courses[$branch_key] = [
                             'id' => $branch_key,
@@ -176,8 +178,8 @@ class CurriculumTemplate extends Component
                         'name' => $item->name . ' (' . strtoupper($item->code) . ') '
                     ];
                 }
-               
-                
+
+
                 $courses = array_values($courses);
                 $this->courses = $courses;
             }
@@ -240,7 +242,7 @@ class CurriculumTemplate extends Component
                 'status' => 'failed',
                 'message' => $e->getMessage()
             ]);
-        }       
+        }
     }
 
     public function delete() {
@@ -263,7 +265,7 @@ class CurriculumTemplate extends Component
     }
 
     public function render(Request $request) {
-        
+
         $action = $request->input('action') ?? '';
 
         $keywords = [
@@ -273,7 +275,7 @@ class CurriculumTemplate extends Component
         ];
 
         $this->dispatch('reinitializeJstree');
-       
+
         $templates = $this->find($keywords);
 
         $data = [

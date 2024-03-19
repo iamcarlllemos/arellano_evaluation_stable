@@ -59,18 +59,18 @@ trait SearchCurriculumTemplate {
         ->toArray();
 
         return $data;
-    } 
+    }
 
     public function organize($data) {
         $templates = [];
-    
+
         foreach ($data as $item) {
             $branch_key = $item['branch_id'];
             $department_key = $item['department_id'];
             $course_key = $item['course_id'];
             $year_level = $item['year_level'];
             $semester = $item['semester'];
-    
+
             // Initialize branch level if not exists
             if (!isset($templates[$branch_key])) {
                 $templates[$branch_key] = [
@@ -78,7 +78,7 @@ trait SearchCurriculumTemplate {
                     'departments' => []
                 ];
             }
-    
+
             // Initialize department level if not exists
             if (!isset($templates[$branch_key]['departments'][$department_key])) {
                 $templates[$branch_key]['departments'][$department_key] = [
@@ -86,7 +86,7 @@ trait SearchCurriculumTemplate {
                     'years' => []
                 ];
             }
-    
+
             // Initialize year level if not exists
             if (!isset($templates[$branch_key]['departments'][$department_key]['years'][$year_level])) {
                 $templates[$branch_key]['departments'][$department_key]['years'][$year_level] = [
@@ -94,7 +94,7 @@ trait SearchCurriculumTemplate {
                     'courses' => []
                 ];
             }
-    
+
             // Initialize course if not exists
             if (!isset($templates[$branch_key]['departments'][$department_key]['years'][$year_level]['courses'][$course_key])) {
                 $templates[$branch_key]['departments'][$department_key]['years'][$year_level]['courses'][$course_key] = [
@@ -103,7 +103,7 @@ trait SearchCurriculumTemplate {
                     'semesters' => []
                 ];
             }
-    
+
             // Initialize semester if not exists
             if (!isset($templates[$branch_key]['departments'][$department_key]['years'][$year_level]['courses'][$course_key]['semesters'][$semester])) {
                 $templates[$branch_key]['departments'][$department_key]['years'][$year_level]['courses'][$course_key]['semesters'][$semester] = [
@@ -111,16 +111,16 @@ trait SearchCurriculumTemplate {
                     'subjects' => []
                 ];
             }
-    
+
             // Add subject to the structure
             $templates[$branch_key]['departments'][$department_key]['years'][$year_level]['courses'][$course_key]['semesters'][$semester]['subjects'][] = [
                 'id' => $item['id'],
                 'code' => $item['subject_code'],
                 'name' => $item['subject_name'],
-               
+
             ];
         }
-    
+
         // Apply array values to reindex the array
         $templates = array_values($templates);
         foreach ($templates as &$branch) {
@@ -138,11 +138,11 @@ trait SearchCurriculumTemplate {
                 }
             }
         }
-        
+
         return $templates;
-        
+
     }
-    
+
 
 
 }

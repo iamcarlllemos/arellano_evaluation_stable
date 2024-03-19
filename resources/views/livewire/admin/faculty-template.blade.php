@@ -17,11 +17,11 @@
                 </div>
                 <form wire:submit="create" class="p-4 md:p-5">
                     <div class="grid gap-4 mb-4 grid-cols-12">
-                        @foreach($form['data'] as $key => $item) 
+                        @foreach($form['data'] as $key => $item)
                             @if(in_array($item['type'], ['text', 'email', 'date', 'password']))
                                 <div class="col-span-{{$item['col-span']}}">
                                     <label for="{{$key}}" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase" style="font-size: 12px">
-                                        {{$item['label']}} 
+                                        {{$item['label']}}
                                         {!!$item['is_required'] == true ? '<span class="text-red-900">*</span>' : ''!!}
                                     </label>
                                     <input type="{{$item['type']}}" wire:model="{{$key}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="{{$item['placeholder']}}">
@@ -73,11 +73,11 @@
                                             </div>
                                             <input id="dropzone-file" wire:model="{{$key}}" type="{{$item['type']}}" class="hidden" />
                                         </label>
-                                    </div>                  
+                                    </div>
                                     <div wire:loading wire:target="{{$key}}">Uploading...</div>
                                     @if ($image && in_array($image->getClientOriginalExtension(), ['png', 'jpg', 'jpeg']))
                                         <label for="{{$key}}" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase mt-5" style="font-size: 12px">Image Preview</label>
-                                        <img src="{{ $image->temporaryUrl() }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">    
+                                        <img src="{{ $image->temporaryUrl() }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
                                     @endif
                                     @error($key)
                                         <p class="text-xs text-red-500 font-bold mt-2">{{$message}}</p>
@@ -94,7 +94,7 @@
                 </form>
             </div>
         </div>
-    @elseif($form['action'] === 'update') 
+    @elseif($form['action'] === 'update')
         <h1 class="text-3xl font-semibold">{{$form['title']['update']}}</h1>
         <p class="text-sm font-medium mt-1 text-slate-900">{{$form['subtitle']['update']}}</p>
         <div class="w-100 flex justify-between items-center gap-2 mb-10">
@@ -112,11 +112,11 @@
                 </div>
                 <form wire:submit="update" class="p-4 md:p-5">
                     <div class="grid gap-4 mb-4 grid-cols-2">
-                        @foreach($form['data'] as $key => $item) 
+                        @foreach($form['data'] as $key => $item)
                             @if(in_array($item['type'], ['text', 'email', 'date', 'password']))
                                 <div class="col-span-{{$item['col-span']}}">
                                     <label for="{{$key}}" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase" style="font-size: 12px">
-                                        {{$item['label']}} 
+                                        {{$item['label']}}
                                         {!!$item['is_required'] == true ? '<span class="text-red-900">*</span>' : ''!!}
                                     </label>
                                     <input type="{{$item['type']}}" wire:model="{{$key}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="{{$item['placeholder']}}">
@@ -161,7 +161,7 @@
                                         <img src="{{ asset('storage/images/faculty/' . $image) }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
                                     @elseif(session()->has('flash') && session('flash')['status'] == 'success')
                                         <img src="{{ asset('storage/images/faculty/' . $image) }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
-                                    @endif       
+                                    @endif
                                     <div class="flex items-center justify-center w-full mt-3">
                                         <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                             <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -173,12 +173,12 @@
                                             </div>
                                             <input id="dropzone-file" wire:model="{{$key}}" type="{{$item['type']}}" class="hidden" />
                                         </label>
-                                    </div>                  
+                                    </div>
                                     <div wire:loading wire:target="{{$key}}">Uploading...</div>
                                     @if ($image && method_exists($image, 'getClientOriginalExtension') && in_array($image->getClientOriginalExtension(), ['png', 'jpg', 'jpeg']))
                                         <label for="{{$key}}" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase mt-5" style="font-size: 12px">Image Preview</label>
-                                        <img src="{{ $image->temporaryUrl() }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">    
-                                    @endif                
+                                        <img src="{{ $image->temporaryUrl() }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
+                                    @endif
                                     @error($key)
                                         <p class="text-xs text-red-500 font-bold mt-2">{{$message}}</p>
                                     @enderror
@@ -236,7 +236,7 @@
                                 <div class="jstree mt-2">
                                     <ul>
                                         @foreach ($template['subjects'] as $template)
-                                            <li class="text-xs font-bold">{{$template}}</li>  
+                                            <li class="text-xs font-bold">{{$template}}</li>
                                         @endforeach
                                     </ul>
                                 </div>
@@ -308,7 +308,7 @@
                         <button id="toggle-action" wire:click.prevent='toggleLinkMultiple(true)' class="border border-slate-900 bg-slate-900 py-2 px-6 text-white text-sm font-bold rounded-md">Link Selected</button>
                     </div>
                 </div>
-                @if($curriculum_template->count() > 0) 
+                @if($curriculum_template->count() > 0)
                     @foreach($curriculum_template as $curriculum_templates)
                         <div class="col-span-12 md:col-span-4 relative">
                             <div class="card-parent border-2 w-full p-4 bg-white shadow-xs rounded-lg h-[250px]" wire:ignore.self>
@@ -373,11 +373,11 @@
                 </div>
                 <form wire:submit="delete" class="p-4 md:p-5">
                     <div class="grid gap-4 mb-4 grid-cols-2">
-                        @foreach($form['data'] as $key => $item) 
+                        @foreach($form['data'] as $key => $item)
                             @if(in_array($item['type'], ['text', 'email', 'date']))
                                 <div class="col-span-{{$item['col-span']}}">
                                     <label for="{{$key}}" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase" style="font-size: 12px">
-                                        {{$item['label']}} 
+                                        {{$item['label']}}
                                         {!!$item['is_required'] == true ? '<span class="text-red-900">*</span>' : ''!!}
                                     </label>
                                     <input type="{{$item['type']}}" wire:model="{{$key}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="{{$item['placeholder']}}" disabled>
@@ -463,20 +463,20 @@
         <div wire:poll class="grid grid-cols-12 gap-3 mt-10">
             @if (count($data['faculty']) > 0)
                 @foreach($data['faculty'] as $faculty)
-                    <div class="col-span-12 md:col-span-4 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">                        
+                    <div class="col-span-12 md:col-span-4 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
                         <div wire:ignore.self class="absolute z-10 top-5 right-3 text-teal-50">
                             <button id="dropdown-button" >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                                </svg>      
-                            </button>       
+                                </svg>
+                            </button>
                             <div wire:ignore.self id="drodown" class="dropdown z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                                 <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
                                     <li>
                                         <a wire:navigate href="{{route('admin.linking.faculty-template', ['action' => 'template', 'id' => $faculty->id])}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Link Template</a>
                                     </li>
                                 </ul>
-                            </div>             
+                            </div>
                         </div>
                         <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relatives">
                             <img class="rounded-lg w-full h-56 object-cover brightness-50" src="{{asset('storage/images/branches/' . $faculty['departments']['branches']->image)}}" alt="" />
@@ -504,5 +504,5 @@
             </div>
             @endif
         </div>
-    @endif    
+    @endif
 </div>

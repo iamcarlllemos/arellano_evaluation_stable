@@ -10,21 +10,21 @@ window.$ = $;
 window.read_more = read_more;
 window.jstree_init = jstree_init;
 
-$(function () { 
+$(function () {
 
     dropdown();
     hideAlert();
-    scrollTopError(); 
-    
+    // scrollTopError();
+
     jstree_init();
-    
+
     $('.selectize').each(function () {
         const dataMaxItems = $(this).data('max-items');
         $(this).selectize({
             plugins: ["clear_button"],
             delimiter: " - ",
             persist: false,
-            maxItems: dataMaxItems, 
+            maxItems: dataMaxItems,
         });
     });
 
@@ -86,9 +86,9 @@ function read_more(elem) {
     $(document).on('click', elem, function() {
         const $prevElement = $(this).prev();
         $prevElement.toggleClass('hidden');
-    
+
         const readMoreEllipsis = $(this).prevAll('.read-more-ellipsis').first();
-        
+
         if (!$prevElement.hasClass('hidden')) {
             readMoreEllipsis.addClass('hidden');
             $(this).text('Read Less');
@@ -163,5 +163,5 @@ Livewire.on('leaving', (data) => {
     } else {
         window.location.href= data[0].route;
     }
-   
+
 });

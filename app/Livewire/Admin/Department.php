@@ -2,22 +2,24 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\BranchModel;
-use App\Models\DepartmentModel;
 use Livewire\Component;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
+
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Storage;
-use App\Traits\ExecuteRule;
 
+use App\Traits\ExecuteRule;
+use App\Traits\Account;
+
+use App\Models\BranchModel;
+use App\Models\DepartmentModel;
 
 class Department extends Component
 {
 
     use WithFileUploads;
     use ExecuteRule;
+    use Account;
 
     public $form;
     public $select;
@@ -87,13 +89,13 @@ class Department extends Component
                 'status' => 'failed',
                 'message' => $e->getMessage()
             ]);
-        }       
+        }
     }
 
     public function update() {
 
         $model = DepartmentModel::where('id', $this->id)->first();
-    
+
         if ($model) {
 
             $rules = [
@@ -107,28 +109,28 @@ class Department extends Component
                     })->ignore($this->id)
                 ]
             ];
-    
+
             $this->validate($rules);
-            
+
             try {
 
                 $model->branch_id = $this->branch_id;
                 $model->name = $this->name;
 
                 $model->save();
-    
+
                 session()->flash('flash', [
                     'status' => 'success',
                     'message' => 'Department `' . ucwords($this->name) . '` updated successfully'
                 ]);
-    
+
             } catch (\Exception $e) {
-    
+
                 session()->flash('flash', [
                     'status' => 'failed',
                     'message' => $e->getMessage()
                 ]);
-            }    
+            }
         }
     }
 
@@ -152,11 +154,11 @@ class Department extends Component
     }
 
     public function render(Request $request) {
-        
+
         $action = $request->input('action') ?? '';
 
-        $role = auth()->user()->role;
-        $assigned_branch = auth()->user()->assigned_branch;
+        $role = $this->admin()->role;
+        $assigned_branch = $this->admin()->assigned_branch;
 
         $departments = DepartmentModel::with('branches')
             ->when(strlen($this->search) >= 1, function ($query) {
@@ -169,16 +171,16 @@ class Department extends Component
                 $query->where('branch_id', $assigned_branch);
             })
             ->get();
-    
+
 
         $departments = $departments->isEmpty() ? [] : $departments;
-        
+
         $branches = BranchModel::with('departments')
             ->when($role == 'admin', function($query) use ($assigned_branch) {
                 $query->where('id', $assigned_branch);
             })
             ->get();
-            
+
         $data = [
             'branches' => $branches,
             'departments' => $departments

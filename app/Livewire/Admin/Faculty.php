@@ -2,16 +2,16 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\BranchModel;
-use App\Models\FacultyModel;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
+
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Hash;
 
+use App\Models\BranchModel;
+use App\Models\FacultyModel;
 
 class Faculty extends Component
 {
@@ -28,9 +28,12 @@ class Faculty extends Component
     public $firstname;
     public $lastname;
     public $middlename;
+    public $birthday;
+    public $year_level;
     public $gender;
     public $image;
     public $email;
+    public $username;
 
 
     public function mount(Request $request) {
@@ -112,13 +115,13 @@ class Faculty extends Component
                 'status' => 'failed',
                 'message' => $e->getMessage()
             ]);
-        }       
+        }
     }
 
     public function update() {
 
         $model = FacultyModel::where('id', $this->id)->first();
-    
+
         if ($model) {
 
             $rules = [
@@ -142,9 +145,9 @@ class Faculty extends Component
                     })->ignore($this->id)
                 ],
             ];
-    
+
             $this->validate($rules);
-            
+
             if($this->image instanceof TemporaryUploadedFile) {
 
                 $rules = [
@@ -154,12 +157,12 @@ class Faculty extends Component
                 $this->validate($rules);
 
                 Storage::disk('public')->delete('images/faculty/' . $model->image);
-        
+
                 $temp_filename = time();
                 $extension = $this->image->getClientOriginalExtension();
-        
+
                 $filename = $temp_filename . '.' . $extension;
-        
+
                 $this->image->storeAs('public/images/faculty', $filename);
                 $this->image = $filename;
                 $model->image = $filename;
@@ -177,19 +180,19 @@ class Faculty extends Component
                 $model->gender = $this->gender;
                 $model->email = $this->email;
                 $model->save();
-    
+
                 session()->flash('flash', [
                     'status' => 'success',
                     'message' => 'Faculty `' . ucwords($this->firstname . ' ' . $this->lastname) . '` updated successfully'
                 ]);
-    
+
             } catch (\Exception $e) {
-    
+
                 session()->flash('flash', [
                     'status' => 'failed',
                     'message' => $e->getMessage()
                 ]);
-            }    
+            }
         }
     }
 
@@ -212,11 +215,11 @@ class Faculty extends Component
         }
     }
     public function render(Request $request) {
-        
+
         $action = $request->input('action') ?? '';
 
-        $role = auth()->user()->role;
-        $assigned_branch = auth()->user()->assigned_branch;
+        $role = auth()->guard('admins')->user()->role;
+        $assigned_branch = auth()->guard('admins')->user()->assigned_branch;
 
         $faculty = FacultyModel::with(['departments.branches'])
             ->when(strlen($this->search) >= 1, function ($sQuery) {
@@ -241,8 +244,8 @@ class Faculty extends Component
                 });
             })
             ->get();
-       
-    
+
+
         $branches = BranchModel::with('departments')
             ->when($role == 'admin', function($query) use ($assigned_branch) {
                 $query->where('id', $assigned_branch);
@@ -250,7 +253,7 @@ class Faculty extends Component
             ->get();
 
         $faculty = $faculty->isEmpty() ? [] : $faculty;
-        
+
         $data = [
             'branches' => $branches,
             'faculty' => $faculty
@@ -258,6 +261,6 @@ class Faculty extends Component
 
 
         return view('livewire.admin.faculty', compact('data'));
-       
+
     }
 }

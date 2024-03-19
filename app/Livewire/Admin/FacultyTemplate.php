@@ -2,20 +2,16 @@
 
 namespace App\Livewire\Admin;
 
+use Livewire\Component;
+use Livewire\WithFileUploads;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
 use App\Models\BranchModel;
 use App\Models\CurriculumTemplateModel;
 use App\Models\FacultyModel;
 use App\Models\FacultyTemplateModel;
-use Illuminate\Support\Facades\DB;
-use Livewire\Component;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use Livewire\WithFileUploads;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-
-
 
 class FacultyTemplate extends Component
 {
@@ -57,7 +53,7 @@ class FacultyTemplate extends Component
             // dd($data->toArray());
 
             $data = FacultyModel::with(['templates.curriculum_template.subjects.courses.departments.branches', 'departments.branches'])->where('id', $id)->get()[0]->toArray();
-        
+
             $template_data = [];
             foreach ($data['templates'] as $template) {
                 $courseName = $template['curriculum_template'][0]['subjects']['courses']['name'];
@@ -65,9 +61,9 @@ class FacultyTemplate extends Component
                 $yearLevel = $template['curriculum_template'][0]['year_level'];
                 $semester = $template['curriculum_template'][0]['subject_sem'];
                 $branchName = $template['curriculum_template'][0]['subjects']['courses']['departments']['branches']['name'];
-        
+
                 $key = "$branchName-$courseName-$yearLevel-$semester";
-        
+
                 if (!isset($template_data[$key])) {
                     $template_data[$key] = [
                         'branch' => $branchName,
@@ -77,25 +73,25 @@ class FacultyTemplate extends Component
                         'subjects' => []
                     ];
                 }
-        
+
                 $template_data[$key]['subjects'][] = $subjectName;
             }
-        
+
             $template_data = array_values($template_data);
-        
+
             $data['templates'] = $template_data;
-        
+
 
             $this->template = $data;
         }
-        
+
 
     }
 
     public function loadCurriculumTemplate() {
         $id = $this->id;
-        $role = auth()->user()->role;
-        $assigned_branch = auth()->user()->assigned_branch;
+        $role = auth()->guard('admins')->user()->role;
+        $assigned_branch = auth()->guard('admins')->user()->assigned_branch;
         $curriculum_template = CurriculumTemplateModel::select('*')
             ->when($role == 'admin', function($query) use ($assigned_branch) {
                 $query->whereHas('departments', function($subQuery) use ($assigned_branch) {
@@ -136,7 +132,7 @@ class FacultyTemplate extends Component
             ) THEN 1 ELSE 0 END) as is_exists', [$id])
             ->with(['departments', 'courses', 'subjects'])
             ->get();
-            
+
             $this->curriculum_template = $curriculum_template;
     }
 
@@ -146,7 +142,7 @@ class FacultyTemplate extends Component
 
     public function toggleLinkMultiple($isTrue) {
         $dirty = $this->link_multiple;
-    
+
         $cleaned = [];
 
         foreach($dirty as $dirt) {
@@ -163,13 +159,13 @@ class FacultyTemplate extends Component
                     'faculty_id' => 'required|exists:afears_faculty,id',
                     'template_id' => 'required|exists:afears_curriculum_template,id'
                 ];
-        
+
                 $validator = Validator::make($clean, $rules);
-    
+
                 if($validator->fails()) {
                     dd(123);
                 }
-    
+
             }
             if($isTrue) {
                 FacultyTemplateModel::insert($cleaned);
@@ -202,7 +198,7 @@ class FacultyTemplate extends Component
         if($validator->fails()) {
             dd($validator->errors());
         }
-        
+
         $exists = FacultyTemplateModel::where('faculty_id', $faculty_id)
         ->where('template_id', $template_id)->exists();
 
@@ -217,13 +213,13 @@ class FacultyTemplate extends Component
         }
 
     }
-    
+
     public function render(Request $request) {
-        
+
         $action = $request->input('action') ?? '';
 
-        $role = auth()->user()->role;
-        $assigned_branch = auth()->user()->assigned_branch;
+        $role = auth()->guard('admins')->user()->role;
+        $assigned_branch = auth()->guard('admins')->user()->assigned_branch;
 
         $faculty = FacultyModel::with(['departments.branches'])
             ->when(strlen($this->search) >= 1, function ($sQuery) {
@@ -248,8 +244,8 @@ class FacultyTemplate extends Component
                 });
             })
             ->get();
-       
-    
+
+
         $faculty = $faculty->isEmpty() ? [] : $faculty;
 
         $branches = BranchModel::with('departments')
@@ -266,6 +262,6 @@ class FacultyTemplate extends Component
         ];
 
         return view('livewire.admin.faculty-template', compact('data'));
-       
+
     }
 }

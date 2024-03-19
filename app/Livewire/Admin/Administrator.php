@@ -2,22 +2,25 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\BranchModel;
-use App\Models\StudentModel;
-use App\Models\User;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
+
+use App\Traits\Account;
+
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 
+use App\Models\BranchModel;
+use App\Models\User;
 
 class Administrator extends Component
 {
 
     use WithFileUploads;
+    use Account;
 
     public $form;
     public $select;
@@ -86,7 +89,7 @@ class Administrator extends Component
         try {
 
             User::create($data);
-            
+
 
             session()->flash('flash', [
                 'status' => 'success',
@@ -107,13 +110,13 @@ class Administrator extends Component
                 'status' => 'failed',
                 'message' => $e->getMessage()
             ]);
-        }       
+        }
     }
 
     public function update() {
 
         $model = User::where('id', $this->id)->first();
-    
+
         if ($model) {
 
             $rules = [
@@ -137,9 +140,9 @@ class Administrator extends Component
                 'role' => 'required|in:admin,superadmin',
                 'branch' => 'required|exists:afears_branch,id|integer'
             ];
-    
+
             $this->validate($rules);
-            
+
             if($this->image instanceof TemporaryUploadedFile) {
 
                 $rules = [
@@ -149,12 +152,12 @@ class Administrator extends Component
                 $this->validate($rules);
 
                 Storage::disk('public')->delete('images/users/' . $model->image);
-        
+
                 $temp_filename = time();
                 $extension = $this->image->getClientOriginalExtension();
-        
+
                 $filename = $temp_filename . '.' . $extension;
-        
+
                 $this->image->storeAs('public/images/users', $filename);
                 $this->image = $filename;
                 $model->image = $filename;
@@ -176,12 +179,12 @@ class Administrator extends Component
                     $this->password = '';
                     $this->password_repeat = '';
                 } catch (\Exception $e) {
-    
+
                     session()->flash('flash', [
                         'status' => 'failed',
                         'message' => $e->getMessage()
                     ]);
-                }    
+                }
 
             }
 
@@ -194,19 +197,19 @@ class Administrator extends Component
                 $model->role = $this->role;
                 $model->assigned_branch = $this->branch;
                 $model->save();
-    
+
                 session()->flash('flash', [
                     'status' => 'success',
                     'message' => 'User `' . ucwords($this->firstname . ' ' . $this->lastname) . '` updated successfully'
                 ]);
-    
+
             } catch (\Exception $e) {
-    
+
                 session()->flash('flash', [
                     'status' => 'failed',
                     'message' => $e->getMessage()
                 ]);
-            }    
+            }
         }
     }
 
@@ -229,12 +232,12 @@ class Administrator extends Component
         }
     }
     public function render(Request $request) {
-        
+
         $action = $request->input('action') ?? '';
 
-        $users = User::where('id', '!=', auth()->user()->id)->get();       
+        $users = User::where('id', '!=', $this->admin()->id)->get();
 
-    
+
         $users = $users->isEmpty() ? [] : $users;
         $data = [
             'branches' => BranchModel::with('departments')->get(),
@@ -243,6 +246,6 @@ class Administrator extends Component
 
 
         return view('livewire.admin.administrator', compact('data'));
-       
+
     }
 }
