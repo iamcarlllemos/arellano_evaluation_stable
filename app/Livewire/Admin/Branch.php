@@ -19,7 +19,10 @@ class Branch extends Component
     use WithFileUploads;
 
     public $form;
-    public $search;
+
+    public $search = [
+        'type' => ''
+    ];
 
     public $id;
 
@@ -71,7 +74,6 @@ class Branch extends Component
 
         }
 
-
         try {
 
             $model = new BranchModel;
@@ -87,7 +89,7 @@ class Branch extends Component
             ]);
 
             $this->name = '';
-            $this->image = $filename;
+            $this->image = '';
 
         } catch (\Exception $e) {
             session()->flash('flash', [
@@ -178,8 +180,8 @@ class Branch extends Component
 
     public function render() {
 
-        $data = BranchModel::when(strlen($this->search >= 1), function($query) {
-            $query->where('name', 'like', '%' . $this->search . '%');
+        $data = BranchModel::when(strlen($this->search['type'] >= 1), function($query) {
+            $query->where('name', 'like', '%' . $this->search['type'] . '%');
         })->get();
 
         return view('livewire.admin.branch', compact('data'));

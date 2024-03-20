@@ -156,7 +156,7 @@
                 <a wire:navigate href="?action=create" class="bg-slate-900 py-2 px-6 text-white text-sm font-bold rounded-md">Create</a>
             </div>
             <div class="w-100 md:flex justify-end md:gap-3 mt-10 md:mt-0">
-                <input wire:ignore.self type="search" wire:model.live="search" class="bg-transparent rounded-md w-full" placeholder="Search here...">
+                <input wire:ignore.self type="search" wire:model.live="search.type" class="bg-transparent rounded-md w-full" placeholder="Search here...">
             </div>
         </div>
         @if(session()->has('flash'))
@@ -167,7 +167,7 @@
         <div wire:poll class="grid grid-cols-12 gap-3 mt-10">
             @if (count($data['criteria']) > 0)
                 @foreach($data['criteria'] as $criteria)
-                <div class="col-span-12 md:col-span-4 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
+                <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-3 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
                     <div wire:ignore.self class="absolute z-10 top-5 right-3 text-teal-50">
                         <button id="dropdown-button" >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -185,7 +185,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="max-w-sm h-56 bg-slate-800 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relatives">
+                    <div class="h-56 bg-slate-800 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relatives">
                         <div class="p-5 absolute bottom-2 left-0">
                             <h5 class="text-2xl font-bold tracking-tight text-white uppercase whitespace-break-spaces line-clamp-1">{{$criteria->name}}</h5>
                         </div>

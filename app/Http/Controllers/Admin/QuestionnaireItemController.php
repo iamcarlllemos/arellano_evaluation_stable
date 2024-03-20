@@ -3,20 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 use App\Models\CriteriaModel;
 use App\Models\QuestionnaireModel;
-use App\Models\SchoolYearModel;
 
 class QuestionnaireItemController extends Controller
 {
     public function index($slug) {
 
         $slug = QuestionnaireModel::where('slug', $slug);
-        
+
         if(!$slug->exists()) {
-            return redirect()->route('programs.questionnaire');
+            return redirect()->route('admin.programs.questionnaire');
         }
 
         $id = $slug->first()->id;
@@ -63,6 +61,7 @@ class QuestionnaireItemController extends Controller
                 ]
             ]
         ];
+
 
         return view('template', compact('data'));
     }

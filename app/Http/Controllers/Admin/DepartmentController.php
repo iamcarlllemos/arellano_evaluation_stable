@@ -54,7 +54,7 @@ class DepartmentController extends Controller
                                         'is_from_db' => true,
                                         'group' => '',
                                         'data' => $branches,
-                                        'no_data' => 'Create branch first.'
+                                        'no_data' => 'create branch first.'
                                     ],
                                     'required' => true,
                                     'disabled' => false,
@@ -81,7 +81,7 @@ class DepartmentController extends Controller
                                         'is_from_db' => true,
                                         'group' => '',
                                         'data' => $branches,
-                                        'no_data' => 'Create branch first.'
+                                        'no_data' => 'create branch first.'
                                     ],
                                     'required' => true,
                                     'disabled' => false,
@@ -108,7 +108,7 @@ class DepartmentController extends Controller
                                         'is_from_db' => true,
                                         'group' => '',
                                         'data' => $branches,
-                                        'no_data' => 'Create branch first.'
+                                        'no_data' => 'create branch first.'
                                     ],
                                     'required' => false,
                                     'disabled' => true,

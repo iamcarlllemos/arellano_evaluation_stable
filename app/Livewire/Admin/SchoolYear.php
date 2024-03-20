@@ -13,8 +13,10 @@ class SchoolYear extends Component
 {
 
     public $form;
-    public $select;
-    public $search;
+
+    public $search = [
+        'type' => ''
+    ];
 
     public $id;
     public $name;
@@ -172,10 +174,10 @@ class SchoolYear extends Component
         $action = $request->input('action');
 
         $school_year = SchoolYearModel::
-            when(strlen($this->search) >= 1, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%')
-                    ->orWhere('start_year', 'like', '%' . $this->search . '%')
-                    ->orWhere('end_year', 'like', '%' . $this->search . '%')
+            when(strlen($this->search['type']) >= 1, function ($query) {
+                $query->where('name', 'like', '%' . $this->search['type'] . '%')
+                    ->orWhere('start_year', 'like', '%' . $this->search['type'] . '%')
+                    ->orWhere('end_year', 'like', '%' . $this->search['type'] . '%')
                     ->orWhere(function($query) {
                         $query->whereRaw("CONCAT(start_year, '-', end_year) LIKE ?", ['%' . $this->search . '%']);
                     });

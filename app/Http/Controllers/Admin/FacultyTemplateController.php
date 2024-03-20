@@ -14,7 +14,7 @@ class FacultyTemplateController extends Controller
     public function index(Request $request) {
 
         $action = $request->input('action') ?? '';
-        
+
         $get_data = [];
 
         if(in_array($action, ['update', 'delete', 'template', 'connect'])) {
@@ -32,7 +32,7 @@ class FacultyTemplateController extends Controller
         $dirty = DepartmentModel::with('branches')->get();
 
         $departments = [];
-        
+
         foreach($dirty as $item) {
             $departments[] = (object)[
                 'id' => $item->id,
@@ -123,7 +123,7 @@ class FacultyTemplateController extends Controller
                                 ],
                                 'is_required' => true,
                                 'col-span' => '6',
-                            ],  
+                            ],
                             'image' => [
                                 'label' => 'Profile Image',
                                 'type' => 'file',

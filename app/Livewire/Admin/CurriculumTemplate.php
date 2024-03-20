@@ -38,6 +38,14 @@ class CurriculumTemplate extends Component
     public $year_level;
     public $subject_sem;
 
+    public $attr = [
+        'department_id' => 'Department name',
+        'course_id' => 'Course name',
+        'subject_id' => 'Subject name',
+        'year_level' => 'Year level',
+        'subject_sem' => 'Semester'
+    ];
+
     public function loadDepartments($id = null) {
 
         if($id == null) {
@@ -179,7 +187,6 @@ class CurriculumTemplate extends Component
                     ];
                 }
 
-
                 $courses = array_values($courses);
                 $this->courses = $courses;
             }
@@ -211,23 +218,22 @@ class CurriculumTemplate extends Component
             'year_level' => 'required|integer|in:1,2,3,4',
         ];
 
-        $this->validate($rules);
-
-        $data = [
-            'department_id' => $this->department_id,
-            'course_id' => $this->course_id,
-            'subject_id' => $this->subject_id,
-            'subject_sem' => $this->subject_sem,
-            'year_level' => $this->year_level,
-        ];
+        $this->validate($rules, [], $this->attr);
 
         try {
 
-            CurriculumTemplateModel::create($data);
+            $model = new CurriculumTemplateModel;
+            $model->department_id = $this->department_id;
+            $model->course_id = $this->course_id;
+            $model->subject_id = $this->subject_id;
+            $model->subject_sem = $this->subject_sem;
+            $model->year_level = $this->year_level;
 
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Curriculum Template created successfully'
+            $model->save();
+
+            $this->dispatch('alert');
+            session()->flash('alert', [
+                'message' => 'Added.'
             ]);
 
             $this->department_id = '';
@@ -237,7 +243,6 @@ class CurriculumTemplate extends Component
             $this->year_level = '';
 
         } catch (\Exception $e) {
-
             session()->flash('flash', [
                 'status' => 'failed',
                 'message' => $e->getMessage()
@@ -251,9 +256,9 @@ class CurriculumTemplate extends Component
 
         if($model) {
             $model->delete();
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Curriculum Template deleted successfully'
+            $this->dispatch('alert');
+            session()->flash('alert', [
+                'message' => 'Saved.'
             ]);
             return redirect()->route('admin.linking.curriculum-template');
         } else {
@@ -266,7 +271,7 @@ class CurriculumTemplate extends Component
 
     public function render(Request $request) {
 
-        $action = $request->input('action') ?? '';
+        $action = $request->input('action');
 
         $keywords = [
             'course' => $this->search['course'] ?? 0,

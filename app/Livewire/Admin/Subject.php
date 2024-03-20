@@ -21,8 +21,11 @@ class Subject extends Component
 
 
     public $form;
-    public $select;
-    public $search;
+
+    public $search = [
+        'type' => '',
+        'select' => ''
+    ];
 
     public $id;
 
@@ -56,7 +59,7 @@ class Subject extends Component
 
         $rules = [
             'course_id' => 'required|integer|exists:afears_course,id',
-            'code' => 'required|min:4',
+            'code' => 'required|min:3',
             'name' => [
                 'required',
                 'string',
@@ -103,7 +106,7 @@ class Subject extends Component
 
             $rules = [
                 'course_id' => 'required|integer|exists:afears_course,id',
-                'code' => 'required|min:4',
+                'code' => 'required|min:3',
                 'name' => [
                     'required',
                     'string',
@@ -160,12 +163,12 @@ class Subject extends Component
         $assigned_branch = $this->admin()->assigned_branch;
 
         $subjects = SubjectModel::with(['courses.departments.branches'])
-            ->when(strlen($this->search) >= 1, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%')
-                    ->orWhere('code', 'like', '%' . $this->search . '%');
+            ->when(strlen($this->search['type']) >= 1, function ($query) {
+                $query->where('name', 'like', '%' . $this->search['type'] . '%')
+                    ->orWhere('code', 'like', '%' . $this->search['type'] . '%');
             })
-            ->when($this->select != '', function ($query) {
-                $query->where('course_id', $this->select);
+            ->when($this->search['select'] != '', function ($query) {
+                $query->where('course_id', $this->search['select']);
             })
             ->when($role == 'admin', function($query) use ($assigned_branch) {
                 $query->whereHas('courses.departments.branches', function($subQuery) use ($assigned_branch) {

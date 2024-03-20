@@ -174,7 +174,7 @@
                 <a wire:navigate href="?action=create" class="bg-slate-900 py-2 px-6 text-white text-sm font-bold rounded-md">Create</a>
             </div>
             <div class="w-100 md:flex justify-end md:gap-3 mt-10 md:mt-0">
-                <input wire:ignore.self type="search" wire:model.live="search" class="bg-transparent rounded-md w-full" placeholder="Search here...">
+                <input wire:ignore.self type="search" wire:model.live="search.type" class="bg-transparent rounded-md w-full" placeholder="Search here...">
             </div>
         </div>
         @if(session()->has('flash'))
@@ -185,7 +185,7 @@
         <div wire:poll class="grid grid-cols-12 gap-3 mt-10">
             @if (count($data['school_year']) > 0)
                 @foreach($data['school_year'] as $school_year)
-                <div class="col-span-12 md:col-span-4 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
+                <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-3 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
                     <div wire:ignore.self class="absolute z-10 top-5 right-3 text-teal-50">
                         <button id="dropdown-button" >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -203,7 +203,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="max-w-sms border h-56 border-gray-200 rounded-lg shadow bg-slate-800 dark:border-gray-700 relative">
+                    <div class="border h-56 border-gray-200 rounded-lg shadow bg-slate-800 dark:border-gray-700 relative">
                         <div class="p-5 absolute bottom-0 left-0">
                             <h5 class="text-2xl font-bold tracking-tight text-white uppercase whitespace-break-spaces line-clamp-1">{{$school_year->name}}</h5>
                             <p class="text-sm text-white font-bold line-clamp-2">{{$school_year->start_year . '-' . $school_year->end_year . ' ('.to_ordinal($school_year->semester, 'year').')'}}</p>

@@ -32,19 +32,18 @@
 
             <!-- Page Content -->
             <main>
-                <div class="">
-                    <div class="">
-                        @livewire('admin.sidebar')
-                        <div class="content sm:ml-[320px]">
-                            @livewire('admin.navbar')
-                            @if(!isset($slot))
-                                @yield('content')
-                            @else
-                                {{ $slot }}
-                            @endif
-                        </div>
-                    </div>
+                <div id="sidebar" class="sidebar fixed top-0 left-0 z-40 md:w-80 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar" style="background-color: #192231">
+                    @livewire('admin.sidebar')
                 </div>
+                <div class="content md:ml-80">
+                    @livewire('admin.navbar')
+                    @if(!isset($slot))
+                        @yield('content')
+                    @else
+                        {{ $slot }}
+                    @endif
+                </div>
+
             </main>
         </div>
 

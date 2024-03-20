@@ -19,12 +19,14 @@ class FacultyTemplate extends Component
     use WithFileUploads;
 
     public $form;
+
     public $select = [
         'branch' => '',
         'year'=> '',
         'semester' => ''
     ];
-    public $search;
+
+    public $search ;
 
     public $id;
     public $department_id;
@@ -47,10 +49,6 @@ class FacultyTemplate extends Component
         $this->id = $id;
 
         if (in_array($action, ['template', 'connect'])) {
-
-            // $data = FacultyModel::with('templates.curriculum_template.subjects.courses.departments.branches')->get();
-
-            // dd($data->toArray());
 
             $data = FacultyModel::with(['templates.curriculum_template.subjects.courses.departments.branches', 'departments.branches'])->where('id', $id)->get()[0]->toArray();
 

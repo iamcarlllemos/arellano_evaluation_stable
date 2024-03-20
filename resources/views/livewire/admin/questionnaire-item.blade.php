@@ -19,7 +19,7 @@
                 </div>
                 <form wire:submit="save" class="p-4 md:p-5">
                     <div class="grid gap-4 mb-4 grid-cols-2">
-                        @foreach($form['data'] as $key => $item) 
+                        @foreach($form['data'] as $key => $item)
                             @if(in_array($item['type'], ['text', 'email', 'password']))
                                 <div class="col-span-2" wire:ignore.self>
                                     <label for="{{$key}}" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase" style="font-size: 12px">{{$item['label']}} <span class="text-red-900">*</span></label>
@@ -27,14 +27,14 @@
                                     @error($key)
                                         <p class="text-xs text-red-500 font-bold mt-2">{{$message}}</p>
                                     @enderror
-                                </div>  
+                                </div>
                             @elseif(in_array($item['type'], ['hidden']))
                                 <div class="col-span-2" wire:ignore.self>
                                     <input type="{{$item['type']}}" wire:model.live="{{$key}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="{{$item['placeholder']}}">
                                     @error($key)
                                         <p class="text-xs text-red-500 font-bold mt-2">{{$message}}</p>
                                     @enderror
-                                </div>  
+                                </div>
                             @elseif(in_array($item['type'], ['select']))
                                 <div class="col-span-2"  wire:ignore.self>
                                     <label for="{{$key}}" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase" style="font-size: 12px">{{$item['label']}} <span class="text-red-900">*</span></label>
@@ -66,7 +66,7 @@
                                     @error($key)
                                         <p class="text-xs text-red-500 font-bold mt-2">{{$message}}</p>
                                     @enderror
-                                </div>                   
+                                </div>
                             @elseif(in_array($item['type'], ['file']))
                                 <div class="col-span-2">
                                     <label for="{{$key}}" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase" style="font-size: 12px">{{$item['label']}} <span class="text-red-900">*</span></label>
@@ -81,7 +81,7 @@
                                             </div>
                                             <input id="dropzone-file" wire:model.live="{{$key}}" type="{{$item['type']}}" class="hidden" />
                                         </label>
-                                    </div>                  
+                                    </div>
                                     @error($key)
                                         <p class="text-xs text-red-500 font-bold mt-2">{{$message}}</p>
                                     @enderror
@@ -89,15 +89,20 @@
                             @endif
                         @endforeach
                     </div>
-                    <div class="flex justify-end mt-10">
-                        <button wire:click='loadItems' id="form-button" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            Proceed
-                        </button>
+                    <x-alert-message class="me-3" on="alert" message="{{ session('alert')['message'] ?? '' }}">
+                    </x-alert-message>
+                    <div class="flex items-center justify-between mt-10">
+                        <x-button wire:click.prevent='__reset'>
+                            {{ __('Reset') }}
+                        </x-button>
+                        <x-button wire:loading.attr="disabled">
+                            {{ $is_update ? __('Update') : __('Save') }}
+                        </x-button>
                     </div>
                 </form>
             </div>
         </div>
-        <div class="w-full md:w-7/12" wire:poll.5500ms='loadItems'>
+        <div class="w-full md:w-7/12" wire:poll='loadItems'>
             <div>
                 <script type="module">
                     $(document).on('livewire:init', function() {
@@ -129,7 +134,7 @@
                                                 <button wire:click='update({{$item['id']}})' class="px-2 py-2 rounded-md text-sm bg-slate-600 text-white">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-3.5 h-3.5">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                                    </svg>                                                      
+                                                    </svg>
                                                 </button>
                                                 <button wire:click='delete({{$item['id']}})' class="px-2 py-2 rounded-md text-sm bg-red-600 text-white">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-3.5 h-3.5">
@@ -151,7 +156,7 @@
                         <div class="ms-3 text-sm font-medium">
                             No records found.
                         </div>
-                    </div>   
+                    </div>
                 @endif
             </div>
         </div>

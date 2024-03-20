@@ -99,7 +99,7 @@ class SubjectController extends Controller
                                         'is_from_db' => true,
                                         'group' => 'courses',
                                         'data' => $courses,
-                                        'no_data' => 'Create course first.'
+                                        'no_data' => 'create course first.'
                                     ],
                                     'required' => true,
                                     'disabled' => false,
@@ -171,7 +171,7 @@ class SubjectController extends Controller
                                         'is_from_db' => true,
                                         'group' => 'courses',
                                         'data' => $courses,
-                                        'no_data' => 'Create course first.'
+                                        'no_data' => 'create course first.'
                                     ],
                                     'required' => false,
                                     'disabled' => true,

@@ -73,7 +73,7 @@
                                 <p class="text-xs text-red-500 font-bold mt-2">{{$message}}</p>
                             @enderror
                         </div>
-                        @foreach($form['data'] as $key => $item) 
+                        @foreach($form['data'] as $key => $item)
                             @if(in_array($item['type'], ['text', 'email', 'password']))
                                 <div class="col-span-2">
                                     <label for="{{$key}}" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase" style="font-size: 12px">{{$item['label']}} <span class="text-red-900">*</span></label>
@@ -120,11 +120,11 @@
                                             </div>
                                             <input id="dropzone-file" wire:model.live="{{$key}}" type="{{$item['type']}}" class="hidden" />
                                         </label>
-                                    </div>                  
+                                    </div>
                                     <div wire:loading wire:target="{{$key}}">Uploading...</div>
                                     @if ($image && in_array($image->getClientOriginalExtension(), ['png', 'jpg', 'jpeg']))
                                         <label for="{{$key}}" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase mt-5" style="font-size: 12px">Image Preview</label>
-                                        <img src="{{ $image->temporaryUrl() }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">    
+                                        <img src="{{ $image->temporaryUrl() }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
                                     @endif
                                     @error($key)
                                         <p class="text-xs text-red-500 font-bold mt-2">{{$message}}</p>
@@ -133,14 +133,16 @@
                             @endif
                         @endforeach
                     </div>
-                    <div class="flex justify-end mt-10">
-                        <button class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            Proceed
-                        </button>
+                    <div class="flex items-center justify-end mt-10">
+                        <x-alert-message class="me-3" on="alert" message="{{ session('alert')['message'] ?? '' }}">
+                        </x-alert-message>
+                        <x-button wire:loading.attr="disabled">
+                            {{ $form['action'] }}
+                        </x-button>
                     </div>
                 </form>
             </div>
-        </div>  
+        </div>
     @elseif($form['action'] === 'delete')
         <h1 class="text-3xl font-semibold">{{$form['title']['delete']}}</h1>
         <p class="text-sm font-medium mt-1 text-slate-900">{{$form['subtitle']['delete']}}</p>
@@ -208,7 +210,7 @@
                                 <p class="text-xs text-red-500 font-bold mt-2">{{$message}}</p>
                             @enderror
                         </div>
-                        @foreach($form['data'] as $key => $item) 
+                        @foreach($form['data'] as $key => $item)
                             @if(in_array($item['type'], ['text', 'email', 'password']))
                                 <div class="col-span-2">
                                     <label for="{{$key}}" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase" style="font-size: 12px">{{$item['label']}} <span class="text-red-900">*</span></label>
@@ -255,11 +257,11 @@
                                             </div>
                                             <input id="dropzone-file" wire:model.live="{{$key}}" type="{{$item['type']}}" class="hidden" />
                                         </label>
-                                    </div>                  
+                                    </div>
                                     <div wire:loading wire:target="{{$key}}">Uploading...</div>
                                     @if ($image && in_array($image->getClientOriginalExtension(), ['png', 'jpg', 'jpeg']))
                                         <label for="{{$key}}" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase mt-5" style="font-size: 12px">Image Preview</label>
-                                        <img src="{{ $image->temporaryUrl() }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">    
+                                        <img src="{{ $image->temporaryUrl() }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
                                     @endif
                                     @error($key)
                                         <p class="text-xs text-red-500 font-bold mt-2">{{$message}}</p>
@@ -314,7 +316,7 @@
                                                 </optgroup>
                                             @endforeach
                                         @else
-                                            <option value=""> - Create or add atleast one curriculum template. - </option>
+                                            <option value=""> - create or add atleast one curriculum template - </option>
                                         @endif
                                     </select>
                                 </div>
@@ -339,7 +341,7 @@
                             </div>
                         </div>
                     </div>
-                </div>  
+                </div>
             </div>
             <div class="col-span-12 mt-5">
                 <div>
@@ -379,7 +381,7 @@
                                                                                 <div class="inline-flex items-center gap-2.5 ms-[6px]">
                                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"></path>
-                                                                                    </svg>                                                                     
+                                                                                    </svg>
                                                                                     {{ucwords($course['name'])}}
                                                                                 </div>
                                                                                 <ul>
@@ -388,7 +390,7 @@
                                                                                             <div class="inline-flex items-center gap-2.5 ms-[6px]">
                                                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                                                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" />
-                                                                                                </svg>                                                                          
+                                                                                                </svg>
                                                                                                 {{ucwords($semester['name'])}}
                                                                                             </div>
                                                                                             <ul>
@@ -398,7 +400,7 @@
                                                                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                                                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 0 0-1.883 2.542l.857 6a2.25 2.25 0 0 0 2.227 1.932H19.05a2.25 2.25 0 0 0 2.227-1.932l.857-6a2.25 2.25 0 0 0-1.883-2.542m-16.5 0V6A2.25 2.25 0 0 1 6 3.75h3.879a1.5 1.5 0 0 1 1.06.44l2.122 2.12a1.5 1.5 0 0 0 1.06.44H18A2.25 2.25 0 0 1 20.25 9v.776"></path>
                                                                                                             </svg>
-                                                                                                            {{ '(' . strtoupper($subject['code']) . ') - ' . ucwords($subject['name'])}} 
+                                                                                                            {{ '(' . strtoupper($subject['code']) . ') - ' . ucwords($subject['name'])}}
                                                                                                         </div>
                                                                                                     </li>
                                                                                                 @endforeach
@@ -420,7 +422,7 @@
                                 </ul>
                             </div>
                         </div>
-                    @else 
+                    @else
                     <div class="col-span-12">
                         <div class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800" role="alert">
                             <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -437,5 +439,5 @@
             </div>
         </div>
 
-    @endif    
+    @endif
 </div>

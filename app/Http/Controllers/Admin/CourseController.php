@@ -93,7 +93,7 @@ class CourseController extends Controller
                                         'is_from_db' => true,
                                         'group' => 'departments',
                                         'data' => $departments,
-                                        'no_data' => 'Creat department first.'
+                                        'no_data' => 'create department first.'
                                     ],
                                     'required' => true,
                                     'disabled' => false,

@@ -23,8 +23,11 @@ class Faculty extends Component
     use Account;
 
     public $form;
-    public $select;
-    public $search;
+
+    public $search = [
+        'type' => '',
+        'select' => ''
+    ];
 
     public $id;
     public $department_id;
@@ -250,20 +253,20 @@ class Faculty extends Component
         $assigned_branch = $this->admin()->assigned_branch;
 
         $faculty = FacultyModel::with(['departments.branches'])
-            ->when(strlen($this->search) >= 1, function ($sQuery) {
+            ->when(strlen($this->search['type']) >= 1, function ($sQuery) {
                 $sQuery->where(function($query) {
-                    $query->where('firstname', 'like', '%' . $this->search . '%');
+                    $query->where('firstname', 'like', '%' . $this->search['type'] . '%');
                 });
                 $sQuery->orWhereHas('departments', function ($dQuery) {
-                    $dQuery->where('name', 'like', '%' . $this->search . '%');
+                    $dQuery->where('name', 'like', '%' . $this->search['type'] . '%');
                     $dQuery->orWhereHas('branches', function ($bQuery) {
-                        $bQuery->where('name', 'like', '%' . $this->search . '%');
+                        $bQuery->where('name', 'like', '%' . $this->search['type'] . '%');
                     });
                 });
             })
-            ->when($this->select != '', function ($query) {
+            ->when($this->search['select'] != '', function ($query) {
                 $query->whereHas('departments.branches', function ($subQuery) {
-                    $subQuery->where('branch_id', $this->select);
+                    $subQuery->where('branch_id', $this->search['select']);
                 });
             })
             ->when($role == 'admin', function($query) use ($assigned_branch) {

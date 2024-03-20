@@ -23,8 +23,11 @@ class Administrator extends Component
     use Account;
 
     public $form;
-    public $select;
-    public $search;
+
+    public $search = [
+        'type' => '',
+        'select' => ''
+    ];
 
     public $id;
     public $firstname;

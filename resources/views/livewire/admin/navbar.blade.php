@@ -1,6 +1,6 @@
 <div class="navbar sticky top-0 z-20 flex items-center justify-between bg-white w-50 py-4 px-5 z-100 w-100">
-    <div class="greetings hidden md:block">
-        <h5 class="text-xl font-medium">Dashboard</h5>
+    <div class="greetings hidden md:block w-full">
+        <div class="text-xl font-extrabold uppercase">Administrator Panel</div>
     </div>
     <div class="menu w-full md:w-100 md:pe-4 flex justify-center md:justify-end items-center gap-10">
         <ul class="list inline-flex items-center gap-5">

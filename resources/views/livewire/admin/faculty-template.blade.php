@@ -207,7 +207,7 @@
             <div class="relative bg-white rounded-lg shadow-xs dark:bg-gray-700 mt-[50px]">
                 <div class="block md:flex items-center p-5 border-b rounded-t dark:border-gray-600 gap-5">
                     <div>
-                        <img src="{{asset('storage/images/faculty/'.$template['image'])}}" class="w-[120px] h-[120px] rounded-lg">
+                        <img src="{{$template['image'] ? asset('storage/images/faculty/' . $template['image']) : 'https://ui-avatars.com/api/?name='.$template['firstname'].'&length=2&bold=true&color=ff0000&background=random'}}" class="w-[120px] h-[120px]">
                     </div>
                     <div class="block mt-5 md:mt-0">
                         <div class="font-bold text-normal">Employee #: {{$template['employee_number']}}</div>
@@ -280,7 +280,7 @@
                             <option value="{{$item->id}}">{{$item->name}}</option>
                     @endforeach
                 @else
-                    <option value="">Create a branch first.</option>
+                    <option value=""> - create a branch first - </option>
                 @endif
             </select>
             <select wire:ignore.self wire:model.live='select.year' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full mt-5 md:mt-0">
@@ -291,7 +291,7 @@
                     <option value="3">(3rd) Third Year</option>
                     <option value="4">(4th) Fourth Year</option>
                 @else
-                    <option value="">Create a branch first.</option>
+                    <option value=""> - create a branch first - </option>
                 @endif
             </select>
             <select wire:ignore.self wire:model.live='select.semester' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full mt-5 md:mt-0">
@@ -448,7 +448,7 @@
                             <option value="{{$item->id}}">{{$item->name}}</option>
                         @endforeach
                     @else
-                        <option value="">Create a branch first.</option>
+                        <option value=""> - create a branch first -</option>
                     @endif
                 </select>
                 <input wire:ignore.self type="search" wire:model.live="search" class="bg-transparent rounded-md w-full" placeholder="Search here...">
@@ -462,8 +462,8 @@
         {{-- DISPLAY --}}
         <div wire:poll class="grid grid-cols-12 gap-3 mt-10">
             @if (count($data['faculty']) > 0)
-                @foreach($data['faculty'] as $faculty)
-                    <div class="col-span-12 md:col-span-4 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
+                @foreach($data['faculty'] as $collection)
+                    <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-3 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
                         <div wire:ignore.self class="absolute z-10 top-5 right-3 text-teal-50">
                             <button id="dropdown-button" >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -473,19 +473,19 @@
                             <div wire:ignore.self id="drodown" class="dropdown z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
                                 <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
                                     <li>
-                                        <a wire:navigate href="{{route('admin.linking.faculty-template', ['action' => 'template', 'id' => $faculty->id])}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Link Template</a>
+                                        <a wire:navigate href="{{route('admin.linking.faculty-template', ['action' => 'template', 'id' => $collection->id])}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Link Template</a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relatives">
-                            <img class="rounded-lg w-full h-56 object-cover brightness-50" src="{{asset('storage/images/branches/' . $faculty['departments']['branches']->image)}}" alt="" />
+                        <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relatives">
+                            <img class="rounded-lg w-full h-56 object-cover brightness-50" src="{{asset('storage/images/branches/' . $collection['departments']['branches']->image)}}" alt="" />
                             <div class="p-5 absolute bottom-0 left-0">
-                                <h5 class="text-2xl font-black tracking-tight text-white uppercase whitespace-break-spaces line-clamp-1">{{ucwords($faculty->firstname . ' ' . $faculty->lastname)}}</h5>
-                                <p class="text-sm text-white font-bold line-clamp-2">{{$faculty['departments']->name}}</p>
+                                <h5 class="text-2xl font-black tracking-tight text-white uppercase whitespace-break-spaces line-clamp-1">{{ucwords($collection->firstname . ' ' . $collection->lastname)}}</h5>
+                                <p class="text-sm text-white font-bold line-clamp-2">{{$collection['departments']->name}}</p>
                             </div>
                             <div class="absolute top-6 border-2 border-sky-500 left-5 rounded-full text-slate-100 backdrop-blur-sm bg-white/30">
-                                <img src="{{asset('storage/images/faculty/' . $faculty->image)}}" class="rounded-full w-[100px] h-[100px]">
+                                <img src="{{$collection->image ? asset('storage/images/faculty/' . $collection->image) : 'https://ui-avatars.com/api/?name='.$collection->firstname.'&length=2&bold=true&color=ff0000&background=random'}}" class="rounded-full w-[100px] h-[100px]">
                             </div>
                         </div>
                 </div>

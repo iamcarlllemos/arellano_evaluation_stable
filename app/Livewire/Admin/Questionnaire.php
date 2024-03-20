@@ -14,7 +14,10 @@ class Questionnaire extends Component
 {
 
     public $form;
-    public $search;
+
+    public $search = [
+        'type' => ''
+    ];
 
     public $id;
     public $school_year_id;
@@ -58,6 +61,8 @@ class Questionnaire extends Component
 
             $model->school_year_id = $this->school_year_id;
             $model->name = $this->name;
+
+            $model->save();
 
             $this->dispatch('alert');
             session()->flash('alert', [
@@ -146,8 +151,8 @@ class Questionnaire extends Component
         $action = $request->input('action');
 
         $questionnaire = QuestionnaireModel::with(['school_year'])
-        ->when(strlen($this->search) >= 1, function ($query) {
-            $query->where('name', 'like', '%' . $this->search . '%');
+        ->when(strlen($this->search['type']) >= 1, function ($query) {
+            $query->where('name', 'like', '%' . $this->search['type'] . '%');
         })->get();
 
 

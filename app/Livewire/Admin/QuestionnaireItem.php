@@ -1,9 +1,10 @@
 <?php
 
-use App\Models\CriteriaModel;
+namespace App\Livewire\Admin;
+
+use Livewire\Component;
 use App\Models\QuestionnaireModel;
 use App\Models\QuestionnaireItemModel;
-use Livewire\Component;
 use Illuminate\Http\Request;
 
 class QuestionnaireItem extends Component
@@ -22,6 +23,11 @@ class QuestionnaireItem extends Component
     public $criterias;
     public $items;
 
+    public $attr = [
+        'criteria_id' => 'Criteria name',
+        'item' => 'Questionnaire item'
+    ];
+
     public function mount(Request $request) {
 
         $slug = explode('/', $request->getRequestUri());
@@ -36,12 +42,11 @@ class QuestionnaireItem extends Component
 
         $this->loadItems();
     }
-    public function loadItems() {
 
+    public function loadItems() {
 
         $dirty_data = QuestionnaireModel::with(['questionnaire_item.criteria'])
             ->where('slug', $this->slug)->get();
-
 
         $cleaned_data = [];
 
@@ -65,12 +70,7 @@ class QuestionnaireItem extends Component
 
     }
 
-    public function placeholder() {
-        return view('livewire.placeholder');
-    }
-
     public function save(Request $request) {
-
 
         if(empty($this->questionnaire_item_id)) {
             $this->is_update = false;
@@ -87,7 +87,7 @@ class QuestionnaireItem extends Component
                 ]
             ];
 
-            $this->validate($rules);
+            $this->validate($rules, [], $this->attr);
 
             $data = [
                 'questionnaire_id' =>  $this->questionnaire_id,
@@ -97,18 +97,23 @@ class QuestionnaireItem extends Component
 
             try {
 
-                QuestionnaireItemModel::create($data);
+                $model = new QuestionnaireItemModel;
 
-                session()->flash('flash', [
-                    'status' => 'success',
-                    'message' => 'Questionnaire item added'
+                $model->questionnaire_id = $this->questionnaire_id;
+                $model->criteria_id = $this->criteria_id;
+                $model->item = $this->item;
+
+                $model->save();
+
+                $this->dispatch('alert');
+                session()->flash('alert', [
+                    'message' => 'Saved.'
                 ]);
 
                 $this->criteria_id = '';
                 $this->item = '';
 
             } catch (\Exception $e) {
-
                 session()->flash('flash', [
                     'status' => 'failed',
                     'message' => $e->getMessage()
@@ -127,7 +132,7 @@ class QuestionnaireItem extends Component
                 ]
             ];
 
-            $this->validate($rules);
+            $this->validate($rules, [], $this->attr);
 
             $data = [
                 'criteria_id' =>  $this->criteria_id,
@@ -138,9 +143,9 @@ class QuestionnaireItem extends Component
 
                 QuestionnaireItemModel::where('id', $this->questionnaire_item_id)->update($data);
 
-                session()->flash('flash', [
-                    'status' => 'success',
-                    'message' => 'Questionnaire item updated'
+                $this->dispatch('alert');
+                session()->flash('alert', [
+                    'message' => 'Updated.'
                 ]);
 
                 $this->questionnaire_item_id = '';
@@ -177,19 +182,27 @@ class QuestionnaireItem extends Component
 
         if($model) {
             $model->delete();
-            $this->questionnaire_item_id = '';
+
+            $this->dispatch('alert');
+            session()->flash('alert', [
+                'message' => 'Deleted.'
+            ]);
+
             $this->criteria_id = '';
             $this->item = '';
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Questionnaire item deleted successfully'
-            ]);
+
         } else {
             session()->flash('flash', [
                 'status' => 'failed',
                 'message' => 'No records found for id `'.$id.'`. Unable to delete.'
             ]);
         }
+    }
+
+    public function __reset() {
+        $this->is_update = false;
+        $this->criteria_id = '';
+        $this->item = '';
     }
 
     public function render(Request $request) {
@@ -210,3 +223,4 @@ class QuestionnaireItem extends Component
         return view('livewire.admin.questionnaire-item', compact('data'));
     }
 }
+

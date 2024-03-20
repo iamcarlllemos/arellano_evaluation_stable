@@ -23,8 +23,10 @@ class Department extends Component
 
     public $form;
 
-    public $select;
-    public $search;
+    public $search = [
+        'select' => '',
+        'type' => ''
+    ];
 
     public $id;
 
@@ -153,11 +155,11 @@ class Department extends Component
         $assigned_branch = $this->admin()->assigned_branch;
 
         $departments = DepartmentModel::with('branches')
-            ->when(strlen($this->search) >= 1, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
+            ->when(strlen($this->search['type']) >= 1, function ($query) {
+                $query->where('name', 'like', '%' . $this->search['type'] . '%');
             })
-            ->when($this->select != '', function ($query) {
-                $query->where('branch_id', $this->select);
+            ->when($this->search['select'] != '', function ($query) {
+                $query->where('branch_id', $this->search['select']);
             })
             ->when($role == 'admin', function($query) use ($assigned_branch) {
                 $query->where('branch_id', $assigned_branch);

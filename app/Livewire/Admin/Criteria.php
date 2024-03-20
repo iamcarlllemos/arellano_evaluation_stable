@@ -13,7 +13,9 @@ class Criteria extends Component
 
     public $form;
 
-    public $search;
+    public $search = [
+        'type' => ''
+    ];
 
     public $id;
     public $name;
@@ -129,8 +131,8 @@ class Criteria extends Component
         $action = $request->input('action');
 
         $criteria = CriteriaModel::
-            when(strlen($this->search) >= 1, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
+            when(strlen($this->search['type']) >= 1, function ($query) {
+                $query->where('name', 'like', '%' . $this->search['type'] . '%');
             })->get();
 
         $data = [

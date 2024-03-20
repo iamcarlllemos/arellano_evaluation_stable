@@ -30,7 +30,7 @@
             </svg>
         </button>
     </div>
-   
+
 </div>
 
 @endsection

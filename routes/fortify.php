@@ -26,7 +26,7 @@ Route::group(['middleware' => config('fortify.middleware', ['admins'])], functio
         $enableViews = config('fortify.views', true);
 
         if ($enableViews) {
-            Route::get(RoutePath::for('login', '/admin/login'), [AuthenticatedSessionController::class, 'create'])
+            Route::get(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'create'])
                 ->middleware(['guest:'.config('fortify.guard')])
                 ->name('admin.login');
         }
@@ -35,13 +35,13 @@ Route::group(['middleware' => config('fortify.middleware', ['admins'])], functio
         $twoFactorLimiter = config('fortify.limiters.two-factor');
         $verificationLimiter = config('fortify.limiters.verification', '6,1');
 
-        Route::post(RoutePath::for('login', '/admin/login'), [AuthenticatedSessionController::class, 'store'])
+        Route::post(RoutePath::for('login', '/login'), [AuthenticatedSessionController::class, 'store'])
             ->middleware(array_filter([
                 'guest:'.config('fortify.guard'),
                 $limiter ? 'throttle:'.$limiter : null,
             ]));
 
-        Route::any(RoutePath::for('signout', '/admin/logout'), [AuthenticatedSessionController::class, 'destroy'])
+        Route::any(RoutePath::for('signout', '/logout'), [AuthenticatedSessionController::class, 'destroy'])
             ->name('admin.logout');
 
         if (Features::enabled(Features::resetPasswords())) {
