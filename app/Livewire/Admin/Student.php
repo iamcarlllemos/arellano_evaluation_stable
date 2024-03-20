@@ -327,7 +327,6 @@ class Student extends Component
             'students' => $students
         ];
 
-
         return view('livewire.admin.student', compact('data'));
 
     }
