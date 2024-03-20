@@ -28,7 +28,7 @@ class Student extends Component
     public $search;
 
     public $id;
-    public $status;
+
     public $course_id;
     public $student_number;
     public $firstname;
@@ -42,6 +42,22 @@ class Student extends Component
     public $username;
     public $password;
     public $password_repeat;
+
+    public $attr = [
+        'course_id' => 'Course name',
+        'student_number' => 'Student number',
+        'firstname' => 'First name',
+        'lastname' => 'Last name',
+        'middlename' => 'Middle name',
+        'gender' => 'Gender',
+        'birthday' => 'Birthday',
+        'year_level' => 'Year level',
+        'image' => 'Profile photo',
+        'email' => 'Email',
+        'username' => 'Username',
+        'password' => 'Password',
+        'password_repeat' => 'Password repeat'
+    ];
 
     public function mount(Request $request) {
 
@@ -84,39 +100,37 @@ class Student extends Component
             'password_repeat' => 'required|string|min:8|same:password'
         ];
 
-
-        $this->status = 'failed';
-
-        $this->validate($rules);
+        $this->validate($rules, [], $this->attr);
 
         $temp_filename = time();
         $extension =$this->image->getClientOriginalExtension();
 
         $filename = $temp_filename . '.' . $extension;
 
-        $data = [
-            'course_id' => $this->course_id,
-            'student_number' => $this->student_number,
-            'firstname' => $this->firstname,
-            'lastname' => $this->lastname,
-            'middlename' => $this->middlename,
-            'gender' => $this->gender,
-            'birthday' => $this->birthday,
-            'year_level' => $this->year_level,
-            'image' => $filename,
-            'email' => $this->email,
-            'username' => $this->username,
-            'password' => Hash::make($this->password),
-        ];
-
         try {
 
-            StudentModel::create($data);
             $this->image->storeAs('public/images/students', $filename);
 
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Student `' . ucwords($this->firstname . ' ' . $this->lastname) . '` created successfully'
+            $model = new StudentModel;
+
+            $model->course_id = $this->course_id;
+            $model->student_number = $this->student_number;
+            $model->firstname = $this->firstname;
+            $model->lastname = $this->lastname;
+            $model->middlename = $this->middlename;
+            $model->gender = $this->gender;
+            $model->birthday = $this->birthday;
+            $model->year_level = $this->year_level;
+            $model->image = $filename;
+            $model->email = $this->email;
+            $model->username = $this->username;
+            $model->password = Hash::make($this->password);
+
+            $model->save();
+
+            $this->dispatch('alert');
+            session()->flash('alert', [
+                'message' => 'Saved.'
             ]);
 
             $this->course_id = '';
@@ -134,7 +148,6 @@ class Student extends Component
             $this->password_repeat = '';
 
         } catch (\Exception $e) {
-
             session()->flash('flash', [
                 'status' => 'failed',
                 'message' => $e->getMessage()
@@ -179,7 +192,7 @@ class Student extends Component
                 ],
             ];
 
-            $this->validate($rules);
+            $this->validate($rules, [], $this->attr);
 
             if($this->image instanceof TemporaryUploadedFile) {
 
@@ -187,7 +200,7 @@ class Student extends Component
                     'image' => 'required|image|mimes:jpeg,png,jpg|max:5000'
                 ];
 
-                $this->validate($rules);
+                $this->validate($rules, [], $this->attr);
 
                 Storage::disk('public')->delete('images/students/' . $model->image);
 
@@ -209,7 +222,7 @@ class Student extends Component
                     'password_repeat' => 'required|string|min:8|same:password'
                 ];
 
-                $this->validate($rules);
+                $this->validate($rules, [], $this->attr);
 
                 try {
                     $model->password = Hash::make($this->password);
@@ -217,15 +230,12 @@ class Student extends Component
                     $this->password = '';
                     $this->password_repeat = '';
                 } catch (\Exception $e) {
-
                     session()->flash('flash', [
                         'status' => 'failed',
                         'message' => $e->getMessage()
                     ]);
                 }
-
             }
-
 
             try {
 
@@ -239,15 +249,15 @@ class Student extends Component
                 $model->year_level = $this->year_level;
                 $model->email = $this->email;
                 $model->username = $this->username;
+
                 $model->save();
 
-                session()->flash('flash', [
-                    'status' => 'success',
-                    'message' => 'Student `' . ucwords($this->firstname . ' ' . $this->lastname) . '` updated successfully'
+                $this->dispatch('alert');
+                session()->flash('alert', [
+                    'message' => 'Updated.'
                 ]);
 
             } catch (\Exception $e) {
-
                 session()->flash('flash', [
                     'status' => 'failed',
                     'message' => $e->getMessage()
@@ -262,10 +272,6 @@ class Student extends Component
 
         if($model) {
             $model->delete();
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Student `' . ucwords($this->firstname . ' ' . $this->lastname) . '` deleted successfully'
-            ]);
             return redirect()->route('admin.accounts.student');
         } else {
             session()->flash('flash', [
@@ -276,7 +282,7 @@ class Student extends Component
     }
     public function render(Request $request) {
 
-        $action = $request->input('action') ?? '';
+        $action = $request->input('action');
 
         $role = $this->admin()->role;
         $assigned_branch = $this->admin()->assigned_branch;
@@ -310,13 +316,12 @@ class Student extends Component
             })
             ->get();
 
-            $branches = BranchModel::with('departments')
-                ->when($role == 'admin', function($query) use ($assigned_branch) {
-                    $query->where('id', $assigned_branch);
-                })
-                ->get();
+        $branches = BranchModel::with('departments')
+            ->when($role == 'admin', function($query) use ($assigned_branch) {
+                $query->where('id', $assigned_branch);
+            })
+            ->get();
 
-        $students = $students->isEmpty() ? [] : $students;
         $data = [
             'branches' => $branches,
             'students' => $students

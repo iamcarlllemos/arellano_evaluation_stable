@@ -8,12 +8,16 @@ use Illuminate\Http\Request;
 use App\Models\CourseModel;
 use App\Models\StudentModel;
 
+use App\Traits\Account;
+
 class StudentController extends Controller
 {
+    use Account;
+
     public function index(Request $request) {
 
         $action = $request->input('action') ?? '';
-        
+
         $get_data = [];
 
         if(in_array($action, ['update', 'delete'])) {
@@ -28,15 +32,39 @@ class StudentController extends Controller
 
         }
 
-        $dirty = CourseModel::with('departments.branches')->get();
+        $role = $this->admin()->role;
+        $assigned_branch = $this->admin()->assigned_branch;
+
+        $courses_dirty = CourseModel::with('departments.branches')->get();
 
         $courses = [];
-        
-        foreach($dirty as $item) {
-            $courses[] = (object)[
-                'id' => $item->id,
-                'name' => $item->name . ' - (' . $item['departments']['branches']->name . ')',
-            ];
+
+        if($role === 'admin') {
+            foreach($courses_dirty as $course) {
+                $courses[] = [
+                    'id' => $course->id,
+                    'name' => $course->name
+                ];
+            }
+        } else {
+            foreach($courses_dirty as $course) {
+                $key = $course->departments->branches->id;
+
+                if(!isset($courses[$key])) {
+                    $courses[$key] = (object) [
+                        'id' => $key,
+                        'name' => $course->departments->branches->name,
+                        'courses' => []
+                    ];
+                }
+
+                $courses[$key]->courses[] = (object) [
+                    'id' => $course->id,
+                    'name' => $course->name,
+                    'code' => $course->code
+                ];
+
+            }
         }
 
         $data = [
@@ -68,7 +96,7 @@ class StudentController extends Controller
                                     'type' => 'select',
                                     'options' => [
                                         'is_from_db' => true,
-                                        'group' => '',
+                                        'group' => 'courses',
                                         'data' => $courses,
                                         'no_data' => 'Create course first'
                                     ],
@@ -325,7 +353,7 @@ class StudentController extends Controller
                                     'label' => 'Student Number',
                                     'type' => 'text',
                                     'placeholder' => 'ex. 20-00780',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-4',
                                 ],
@@ -338,7 +366,7 @@ class StudentController extends Controller
                                         'data' => $courses,
                                         'no_data' => 'Create course first'
                                     ],
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-4',
                                 ],
@@ -356,7 +384,7 @@ class StudentController extends Controller
                                         ],
                                         'no_data' => 'No data found'
                                     ],
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-4',
                                 ],
@@ -364,7 +392,7 @@ class StudentController extends Controller
                                     'label' => 'First Name',
                                     'type' => 'text',
                                     'placeholder' => 'ex. John Paul',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-4',
                                 ],
@@ -380,7 +408,7 @@ class StudentController extends Controller
                                     'label' => 'Last Name',
                                     'type' => 'text',
                                     'placeholder' => 'ex. Llemos',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-4',
                                 ],
@@ -397,7 +425,7 @@ class StudentController extends Controller
                                         ],
                                         'no_data' => 'No data'
                                     ],
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-6',
                                 ],
@@ -405,14 +433,14 @@ class StudentController extends Controller
                                     'label' => 'Birthday',
                                     'type' => 'date',
                                     'placeholder' => 'Type ...',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-6',
                                 ],
                                 'image' => [
                                     'label' => 'Profile Image',
                                     'type' => 'file',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-32',
                                 ],
@@ -420,7 +448,7 @@ class StudentController extends Controller
                                     'label' => 'Email',
                                     'type' => 'email',
                                     'placeholder' => 'Type ...',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-3',
                                 ],
@@ -428,7 +456,7 @@ class StudentController extends Controller
                                     'label' => 'Username',
                                     'type' => 'text',
                                     'placeholder' => 'Type...',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-3',
                                 ],
@@ -436,7 +464,7 @@ class StudentController extends Controller
                                     'label' => 'Password',
                                     'type' => 'password',
                                     'placeholder' => '••••••••',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-32',
                                 ],
@@ -444,7 +472,7 @@ class StudentController extends Controller
                                     'label' => 'Password Repeat',
                                     'type' => 'password',
                                     'placeholder' => '••••••••',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-32',
                                 ],

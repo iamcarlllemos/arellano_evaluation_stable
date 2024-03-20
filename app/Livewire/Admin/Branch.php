@@ -2,13 +2,15 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\BranchModel;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
+
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+
+use App\Models\BranchModel;
 
 
 class Branch extends Component
@@ -17,12 +19,17 @@ class Branch extends Component
     use WithFileUploads;
 
     public $form;
-
     public $search;
+
     public $id;
 
     public $name;
     public $image;
+
+    public $attr = [
+        'name' => 'Branch name',
+        'image' => 'Branch image',
+    ];
 
     public function mount(Request $request) {
 
@@ -43,30 +50,40 @@ class Branch extends Component
 
         $rules = [
             'name' => 'required|string|min:4|unique:afears_branch',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2000'
         ];
 
-        $this->validate($rules);
+        $this->validate($rules, [], $this->attr);
 
-        $temp_filename = time();
-        $extension =$this->image->getClientOriginalExtension();
+        if($this->image instanceof TemporaryUploadedFile) {
 
-        $filename = $temp_filename . '.' . $extension;
+            $rules = [
+                'image' => 'image|mimes:jpeg,png,jpg|max:2000'
+            ];
+
+            $this->validate($rules, [], $this->attr);
+
+            $temp_filename = time();
+            $extension =$this->image->getClientOriginalExtension();
+
+            $filename = $temp_filename . '.' . $extension;
+
+            $this->image->storeAs('public/images/branches', $filename);
+
+        }
+
 
         try {
 
             $model = new BranchModel;
 
-            $model->name = $this->name;
-            $model->image = $filename;
+            $model->name = ucfirst($this->name);
+            $model->image = $filename ?? null;
 
             $model->save();
 
-            $this->image->storeAs('public/images/branches', $filename);
-
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Branch `' . ucwords($this->name) . '` created successfully'
+            $this->dispatch('alert');
+            session()->flash('alert', [
+                'message' => 'Saved.'
             ]);
 
             $this->name = '';
@@ -95,7 +112,7 @@ class Branch extends Component
                 ],
             ];
 
-            $this->validate($rules);
+            $this->validate($rules, [], $this->attr);
 
             if($this->image instanceof TemporaryUploadedFile) {
 
@@ -103,7 +120,7 @@ class Branch extends Component
                     'image' => 'required|image|mimes:jpeg,png,jpg|max:5000'
                 ];
 
-                $this->validate($rules);
+                $this->validate($rules, [], $this->attr);
 
                 Storage::disk('public')->delete('images/branches/' . $model->image);
 
@@ -121,12 +138,12 @@ class Branch extends Component
 
             try {
 
-                $model->name = $this->name;
+                $model->name = ucfirst($this->name);
                 $model->save();
 
-                session()->flash('flash', [
-                    'status' => 'success',
-                    'message' => 'Branch `' . ucwords($this->name) . '` updated successfully'
+                $this->dispatch('alert');
+                session()->flash('alert', [
+                    'message' => 'Updated.'
                 ]);
 
             } catch (\Exception $e) {
@@ -148,10 +165,6 @@ class Branch extends Component
 
             $model->delete();
 
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Branch `'.$model->name.'` deleted successfully'
-            ]);
             return redirect()->route('admin.programs.branches');
 
         } else {

@@ -25,9 +25,16 @@ class Subject extends Component
     public $search;
 
     public $id;
+
     public $course_id;
     public $code;
     public $name;
+
+    public $attr = [
+        'course_id' => 'Course name',
+        'code' => 'Subject code',
+        'name' => 'Subject name'
+    ];
 
     public function mount(Request $request) {
 
@@ -60,21 +67,20 @@ class Subject extends Component
             ]
         ];
 
-        $this->validate($rules);
-
-        $data = [
-            'course_id' => htmlspecialchars($this->course_id),
-            'code' => htmlspecialchars($this->code),
-            'name' =>  htmlspecialchars($this->name)
-        ];
+        $this->validate($rules, [], $this->attr);
 
         try {
 
-            SubjectModel::create($data);
+            $model = new SubjectModel;
+            $model->course_id = $this->course_id;
+            $model->code = strtoupper($this->code);
+            $model->name = ucfirst($this->name);
 
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Subject `' . ucwords($this->name) . '` created successfully'
+            $model->save();
+
+            $this->dispatch('alert');
+            session()->flash('alert', [
+                'message' => 'Saved.'
             ]);
 
             $this->course_id = '';
@@ -82,7 +88,6 @@ class Subject extends Component
             $this->name = '';
 
         } catch (\Exception $e) {
-
             session()->flash('flash', [
                 'status' => 'failed',
                 'message' => $e->getMessage()
@@ -109,7 +114,7 @@ class Subject extends Component
                 ]
             ];
 
-            $this->validate($rules);
+            $this->validate($rules, [], $this->attr);
 
             try {
 
@@ -119,13 +124,12 @@ class Subject extends Component
 
                 $model->save();
 
-                session()->flash('flash', [
-                    'status' => 'success',
-                    'message' => 'Subject `' . ucwords($this->name) . '` updated successfully'
+                $this->dispatch('alert');
+                session()->flash('alert', [
+                    'message' => 'Updated.'
                 ]);
 
             } catch (\Exception $e) {
-
                 session()->flash('flash', [
                     'status' => 'failed',
                     'message' => $e->getMessage()
@@ -140,10 +144,6 @@ class Subject extends Component
 
         if($model) {
             $model->delete();
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Subject `'.$model->name.'` deleted successfully'
-            ]);
             return redirect()->route('admin.programs.subjects');
         } else {
             session()->flash('flash', [
@@ -154,15 +154,7 @@ class Subject extends Component
     }
     public function render(Request $request) {
 
-        $action = $request->input('action') ?? '';
-
-        if($action == 'open') {
-            $view = $request->input('view');
-            if(in_array($view, ['courses'])) {
-                $id = $request->input('id');
-                $this->select = $id;
-            }
-        }
+        $action = $request->input('action');
 
         $role = $this->admin()->role;
         $assigned_branch = $this->admin()->assigned_branch;

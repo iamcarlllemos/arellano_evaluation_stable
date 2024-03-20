@@ -20,6 +20,11 @@ class Questionnaire extends Component
     public $school_year_id;
     public $name;
 
+    public $attr = [
+        'school_year_id' => 'School year',
+        'name' => 'Questionnaire name'
+    ];
+
     public function mount(Request $request) {
 
         $slug = $request->input('slug');
@@ -45,12 +50,7 @@ class Questionnaire extends Component
             ]
         ];
 
-        $this->validate($rules);
-
-        $data = [
-            'school_year_id' =>  $this->school_year_id,
-            'name' =>  $this->name,
-        ];
+        $this->validate($rules, [], $this->attr);
 
         try {
 
@@ -59,12 +59,13 @@ class Questionnaire extends Component
             $model->school_year_id = $this->school_year_id;
             $model->name = $this->name;
 
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Questionnaire `' . ucwords($this->name) . '` created successfully'
+            $this->dispatch('alert');
+            session()->flash('alert', [
+                'message' => 'Saved.'
             ]);
 
-           $this->reset();
+            $this->school_year_id = '';
+            $this->name = '';
 
         } catch (\Exception $e) {
             session()->flash('flash', [
@@ -99,7 +100,7 @@ class Questionnaire extends Component
                 ]
             ];
 
-            $this->validate($rules);
+            $this->validate($rules, [], $this->attr);
 
             try {
 
@@ -108,13 +109,12 @@ class Questionnaire extends Component
 
                 $model->save();
 
-                session()->flash('flash', [
-                    'status' => 'success',
-                    'message' => 'Questionnaire `' . ucwords($this->name) . '` updated successfully'
+                $this->dispatch('alert');
+                session()->flash('alert', [
+                    'message' => 'Update.'
                 ]);
 
             } catch (\Exception $e) {
-
                 session()->flash('flash', [
                     'status' => 'failed',
                     'message' => $e->getMessage()
@@ -131,13 +131,7 @@ class Questionnaire extends Component
         if($model) {
 
             $model->delete();
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Questionnaire `'.$model->name.'` deleted successfully'
-            ]);
-
             return redirect()->route('admin.programs.questionnaire');
-
         } else {
             session()->flash('flash', [
                 'status' => 'failed',
@@ -149,7 +143,7 @@ class Questionnaire extends Component
 
     public function render(Request $request) {
 
-        $action = $request->input('action') ?? '';
+        $action = $request->input('action');
 
         $questionnaire = QuestionnaireModel::with(['school_year'])
         ->when(strlen($this->search) >= 1, function ($query) {

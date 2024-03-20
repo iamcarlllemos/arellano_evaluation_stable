@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class BranchModel extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'afears_branch';
     protected $fillable = [
         'name',

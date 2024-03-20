@@ -80,7 +80,7 @@ class CourseController extends Controller
                         'action' => $action,
                         'index' => [
                             'title' => 'All Courses',
-                            'subtitle' => 'Lists of all create courses.'
+                            'subtitle' => 'Lists of all courses created.'
                         ],
                         'create' => [
                             'title' => 'Create Course',
@@ -165,7 +165,7 @@ class CourseController extends Controller
                                         'data' => $departments,
                                         'no_data' => 'Creat department first.'
                                     ],
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12',
                                 ],
@@ -173,7 +173,7 @@ class CourseController extends Controller
                                     'label' => 'Course Code',
                                     'type' => 'text',
                                     'placeholder' => 'Write something...',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12',
                                 ],
@@ -181,7 +181,7 @@ class CourseController extends Controller
                                     'label' => 'Course Name',
                                     'type' => 'text',
                                     'placeholder' => 'Write something...',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12',
                                 ],

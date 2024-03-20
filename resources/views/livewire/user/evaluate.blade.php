@@ -62,7 +62,7 @@
                                     {{$item['label']}} 
                                     {!!($item['required']) ? '<span class="text-red-900">*</span>' : ''!!}
                                 </label>
-                                <input type="{{$item['type']}}" wire:model="{{$key}}" 
+                                <input type="{{$item['type']}}" wire:model.live="{{$key}}" 
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
                                     placeholder="{{$item['placeholder']}}"
                                     {{($item['disabled']) ? 'disabled' : '' }}
@@ -79,7 +79,7 @@
                                 </label>
                                 <select 
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                    wire:model="{{$key}}"
+                                    wire:model.live="{{$key}}"
                                     {{($item['disabled']) ? 'disabled' : ''}}>
                                     @if(count($item['options']['data']) > 0)
                                         @if($item['options']['is_from_db'])
@@ -131,7 +131,7 @@
                                         </div>
                                         <input 
                                             id="dropzone-file" 
-                                            wire:model="{{$key}}" 
+                                            wire:model.live="{{$key}}" 
                                             type="{{$item['type']}}" 
                                             class="hidden" 
                                             {{($item['disabled']) ? 'disabled' : ''}}
@@ -201,19 +201,19 @@
                                         <div class="text-sm font-medium text-justify">{{$questionnaire['name']}}</div>
                                         <div class="flex items-center">
                                             <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="4" class="">
+                                                <input type="radio" wire:model.live="responses.{{$questionnaire['id']}}" value="4" class="">
                                             </div>
                                         
                                             <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="3" class="">
+                                                <input type="radio" wire:model.live="responses.{{$questionnaire['id']}}" value="3" class="">
                                             </div>
                                         
                                             <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="2" class="">
+                                                <input type="radio" wire:model.live="responses.{{$questionnaire['id']}}" value="2" class="">
                                             </div>
                                         
                                             <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="1" class="">
+                                                <input type="radio" wire:model.live="responses.{{$questionnaire['id']}}" value="1" class="">
                                             </div>
                                         </div>
                                     </div>
@@ -306,19 +306,19 @@
                                         <div class="text-sm font-medium text-justify">{{$questionnaire['name']}}</div>
                                         <div class="flex items-center">
                                             <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="4" disabled>
+                                                <input type="radio" wire:model.live="responses.{{$questionnaire['id']}}" value="4" disabled>
                                             </div>
                                         
                                             <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="3" disabled>
+                                                <input type="radio" wire:model.live="responses.{{$questionnaire['id']}}" value="3" disabled>
                                             </div>
                                         
                                             <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="2" disabled>
+                                                <input type="radio" wire:model.live="responses.{{$questionnaire['id']}}" value="2" disabled>
                                             </div>
                                         
                                             <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="1" disabled>
+                                                <input type="radio" wire:model.live="responses.{{$questionnaire['id']}}" value="1" disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -348,7 +348,7 @@
                         </div>
                         <div class="bg-white p-4 border shadow-lg rounded-b text-sm font-medium">
                             <textarea 
-                                wire:model='comments'
+                                wire:model.live='comments'
                                 name="comments" 
                                 id="comnents" 
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 resize-none" rows="8" 

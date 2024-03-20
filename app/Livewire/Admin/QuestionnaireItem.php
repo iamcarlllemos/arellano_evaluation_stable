@@ -148,15 +148,12 @@ class QuestionnaireItem extends Component
                 $this->item = '';
 
             } catch (\Exception $e) {
-
                 session()->flash('flash', [
                     'status' => 'failed',
                     'message' => $e->getMessage()
                 ]);
             }
-
         }
-
     }
 
     public function update($id) {
@@ -172,7 +169,6 @@ class QuestionnaireItem extends Component
         } else {
             return redirect()->route('admin.programs.questionnaire');
         }
-
     }
 
     public function delete($id) {
@@ -195,6 +191,7 @@ class QuestionnaireItem extends Component
             ]);
         }
     }
+
     public function render(Request $request) {
 
         $action = $request->input('action');

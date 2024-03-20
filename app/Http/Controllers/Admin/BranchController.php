@@ -50,9 +50,9 @@ class BranchController extends Controller
                                     'css' => 'col-span-12'
                                 ],
                                 'image' => [
-                                    'label' => 'Image',
+                                    'label' => 'Branch Image',
                                     'type' => 'file',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => false,
                                     'css' => 'col-span-12'
                                 ],
@@ -60,21 +60,21 @@ class BranchController extends Controller
                         ],
                         'update' => [
                             'title' => 'Update Branch',
-                            'subtitle' => 'Apply changed to selected branch.',
+                            'subtitle' => 'Apply changes to selected branch.',
                             'data' => [
                                 'name' => [
                                     'label' => 'Branch Name',
                                     'type' => 'text',
                                     'placeholder' => 'Type...',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => false,
                                     'css' => 'col-span-12'
                                 ],
                                 'image' => [
-                                    'label' => 'Image',
+                                    'label' => 'Branch Image',
                                     'type' => 'file',
-                                    'placeholder' => 'Upload Image',
-                                    'required' => true,
+                                    'placeholder' => 'Upload Branch Image',
+                                    'required' => false,
                                     'disabled' => false,
                                     'css' => 'col-span-12'
                                 ],
@@ -93,9 +93,9 @@ class BranchController extends Controller
                                     'css' => 'col-span-12'
                                 ],
                                 'image' => [
-                                    'label' => 'Image',
+                                    'label' => 'Branch Image',
                                     'type' => 'file',
-                                    'placeholder' => 'Upload Image',
+                                    'placeholder' => 'Upload Branch Image',
                                     'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12'

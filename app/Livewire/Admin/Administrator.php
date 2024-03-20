@@ -37,6 +37,18 @@ class Administrator extends Component
     public $password;
     public $password_repeat;
 
+    public $attr = [
+        'firstname' => 'First name',
+        'lastname' => 'Last name',
+        'middlename' => 'Middle name',
+        'email' => 'Email',
+        'role' => 'Admin role',
+        'branch' => 'Assigned branch',
+        'username' => 'Username',
+        'password' => 'Password',
+        'password_repeat' => 'Password repeat'
+    ];
+
     public function mount(Request $request) {
 
         $id = $request->input('id');
@@ -50,7 +62,6 @@ class Administrator extends Component
         $this->id = $id;
         $this->firstname = $name[0] ?? '';
         $this->lastname = $name[1] ?? '';
-        $this->image = $data->profile_photo_path ?? '';
         $this->email = $data->email ?? '';
         $this->role = $data->role ?? '';
         $this->branch = $data->assigned_branch ?? '';
@@ -66,40 +77,40 @@ class Administrator extends Component
         $rules = [
             'firstname' => 'required|string',
             'lastname' => 'required|string',
-            'email' => 'required|email|unique:afears_student,email',
+            'email' => 'required|email|unique:users,email',
             'role' => 'required|in:admin,superadmin|string',
-            'username' => 'required|string|unique:afears_student,username',
+            'username' => 'required|string|unique:users,username',
             'password' => 'required|string|min:8|same:password_repeat',
             'password_repeat' => 'required|string|min:8|same:password'
         ];
 
 
-        $this->validate($rules);
-
-
-        $data = [
-            'name' => $this->firstname . ' ' . $this->lastname,
-            'email' => $this->email,
-            'role' => $this->role,
-            'username' => $this->username,
-            'assigned_branch' => 0,
-            'password' => Hash::make($this->password),
-        ];
+        $this->validate($rules, [], $this->attr);
 
         try {
 
-            User::create($data);
+            $model = new User;
 
+            $model->name = $this->firstname . ' ' . $this->lastname;
+            $model->email = $this->email;
+            $model->role = $this->role;
+            $model->username = $this->username;
+            $model->assigned_branch = $this->branch;
+            $model->password = $this->password;
 
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Student `' . ucwords($this->firstname . ' ' . $this->lastname) . '` created successfully'
+            $model->save();
+
+            $this->dispatch('alert');
+            session()->flash('alert', [
+                'message' => 'Saved.'
             ]);
 
             $this->firstname = '';
             $this->lastname = '';
             $this->image = '';
             $this->email = '';
+            $this->role = '';
+            $this->branch = '';
             $this->username = '';
             $this->password = '';
             $this->password_repeat = '';
@@ -141,28 +152,7 @@ class Administrator extends Component
                 'branch' => 'required|exists:afears_branch,id|integer'
             ];
 
-            $this->validate($rules);
-
-            if($this->image instanceof TemporaryUploadedFile) {
-
-                $rules = [
-                    'image' => 'required|image|mimes:jpeg,png,jpg|max:5000'
-                ];
-
-                $this->validate($rules);
-
-                Storage::disk('public')->delete('images/users/' . $model->image);
-
-                $temp_filename = time();
-                $extension = $this->image->getClientOriginalExtension();
-
-                $filename = $temp_filename . '.' . $extension;
-
-                $this->image->storeAs('public/images/users', $filename);
-                $this->image = $filename;
-                $model->image = $filename;
-
-            }
+            $this->validate($rules, [], $this->attr);
 
             if(!empty($this->password && !empty($this->password_repeat))) {
 
@@ -171,7 +161,7 @@ class Administrator extends Component
                     'password_repeat' => 'required|string|min:8|same:password'
                 ];
 
-                $this->validate($rules);
+                $this->validate($rules, [], $this->attr);
 
                 try {
                     $model->password = Hash::make($this->password);
@@ -179,7 +169,6 @@ class Administrator extends Component
                     $this->password = '';
                     $this->password_repeat = '';
                 } catch (\Exception $e) {
-
                     session()->flash('flash', [
                         'status' => 'failed',
                         'message' => $e->getMessage()
@@ -198,13 +187,12 @@ class Administrator extends Component
                 $model->assigned_branch = $this->branch;
                 $model->save();
 
-                session()->flash('flash', [
-                    'status' => 'success',
-                    'message' => 'User `' . ucwords($this->firstname . ' ' . $this->lastname) . '` updated successfully'
+                $this->dispatch('alert');
+                session()->flash('alert', [
+                    'message' => 'Updated.'
                 ]);
 
             } catch (\Exception $e) {
-
                 session()->flash('flash', [
                     'status' => 'failed',
                     'message' => $e->getMessage()
@@ -219,10 +207,6 @@ class Administrator extends Component
 
         if($model) {
             $model->delete();
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'User `' . ucwords($this->firstname . ' ' . $this->lastname) . '` deleted successfully'
-            ]);
             return redirect()->route('admin.accounts.administrator');
         } else {
             session()->flash('flash', [
@@ -233,17 +217,14 @@ class Administrator extends Component
     }
     public function render(Request $request) {
 
-        $action = $request->input('action') ?? '';
+        $action = $request->input('action');
 
         $users = User::where('id', '!=', $this->admin()->id)->get();
 
-
-        $users = $users->isEmpty() ? [] : $users;
         $data = [
             'branches' => BranchModel::with('departments')->get(),
             'users' => $users
         ];
-
 
         return view('livewire.admin.administrator', compact('data'));
 

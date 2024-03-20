@@ -12,7 +12,6 @@ use Livewire\Component;
 use App\Models\DepartmentModel;
 use App\Models\CourseModel;
 
-
 class Course extends Component
 {
 
@@ -23,9 +22,16 @@ class Course extends Component
     public $search;
 
     public $id;
+
     public $department_id;
     public $code;
     public $name;
+
+    public $attr = [
+        'department_id' => 'Department name',
+        'code' => 'Course code',
+        'name' => 'Course name'
+    ];
 
     public function mount(Request $request) {
 
@@ -58,25 +64,21 @@ class Course extends Component
             ]
         ];
 
-        $this->validate($rules);
-
-        $data = [
-            'department_id' => $this->department_id,
-            'code' => $this->code,
-            'name' =>  $this->name
-        ];
+        $this->validate($rules, [], $this->attr);
 
         try {
 
             $model = new CourseModel;
 
             $model->department_id = $this->department_id;
-            $model->code = $this->code;
-            $model->name =  $this->name;
+            $model->code = strtoupper($this->code);
+            $model->name = ucfirst($this->name);
 
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Course `' . ucwords($this->name) . '` created successfully'
+            $model->save();
+
+            $this->dispatch('alert');
+            session()->flash('alert', [
+                'message' => 'Saved.'
             ]);
 
             $this->department_id = '';
@@ -110,19 +112,19 @@ class Course extends Component
                 ]
             ];
 
-            $this->validate($rules);
+            $this->validate($rules, [], $this->attr);
 
             try {
 
                 $model->department_id = $this->department_id;
-                $model->code = $this->code;
-                $model->name = $this->name;
+                $model->code = strtoupper($this->code);
+                $model->name = ucfirst($this->name);
 
                 $model->save();
 
-                session()->flash('flash', [
-                    'status' => 'success',
-                    'message' => 'Course `' . ucwords($this->name) . '` updated successfully'
+                $this->dispatch('alert');
+                session()->flash('alert', [
+                    'message' => 'Updated.'
                 ]);
 
             } catch (\Exception $e) {
@@ -139,13 +141,7 @@ class Course extends Component
         $model = CourseModel::where('id', $this->id)->first();
 
         if($model) {
-
             $model->delete();
-
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Course `'.$model->name.'` deleted successfully'
-            ]);
             return redirect()->route('admin.programs.courses');
         } else {
             session()->flash('flash', [

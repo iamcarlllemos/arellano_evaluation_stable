@@ -16,8 +16,11 @@ class Criteria extends Component
     public $search;
 
     public $id;
-
     public $name;
+
+    public $attr = [
+        'name' => 'Criteria name'
+    ];
 
     public function mount(Request $request) {
 
@@ -33,7 +36,6 @@ class Criteria extends Component
         return view('livewire.placeholder');
     }
 
-
     public function create() {
 
         $rules = [
@@ -45,17 +47,17 @@ class Criteria extends Component
             ]
         ];
 
-        $this->validate($rules);
+        $this->validate($rules, [], $this->attr);
 
         try {
 
             $model = new CriteriaModel;
-            $model->name = $this->name;
+            $model->name = ucfirst($this->name);
             $model->save();
 
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Criteria `' . ucwords($this->name) . '` created successfully'
+            $this->dispatch('alert');
+            session()->flash('alert', [
+                'message' => 'Saved.'
             ]);
 
             $this->name = '';
@@ -85,16 +87,16 @@ class Criteria extends Component
                 ]
             ];
 
-            $this->validate($rules);
+            $this->validate($rules, [], $this->attr);
 
             try {
 
-                $model->name = $this->name;
+                $model->name = ucfirst($this->name);
                 $model->save();
 
-                session()->flash('flash', [
-                    'status' => 'success',
-                    'message' => 'Criteria `' . ucwords($this->name) . '` updated successfully'
+                $this->dispatch('alert');
+                session()->flash('alert', [
+                    'message' => 'Updated.'
                 ]);
 
             } catch (\Exception $e) {
@@ -113,13 +115,7 @@ class Criteria extends Component
         if($model) {
 
             $model->delete();
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Criteria `'.$model->name.'` deleted successfully'
-            ]);
-
             return redirect()->route('admin.programs.criteria');
-
         } else {
             session()->flash('flash', [
                 'status' => 'failed',
@@ -130,12 +126,12 @@ class Criteria extends Component
 
     public function render(Request $request) {
 
-        $action = $request->input('action') ?? '';
+        $action = $request->input('action');
 
         $criteria = CriteriaModel::
             when(strlen($this->search) >= 1, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
-            })->get() ?? [];
+            })->get();
 
         $data = [
             'criteria' => $criteria

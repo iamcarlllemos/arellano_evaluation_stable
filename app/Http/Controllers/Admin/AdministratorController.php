@@ -13,7 +13,7 @@ class AdministratorController extends Controller
     public function index(Request $request) {
 
         $action = $request->input('action') ?? '';
-        
+
         $get_data = [];
 
         if(in_array($action, ['update', 'delete'])) {
@@ -36,7 +36,7 @@ class AdministratorController extends Controller
                 'component' => 'admin.administrator',
                 'data' => [
                     'lazy' => false,
-                    'form' => [                    
+                    'form' => [
                         'action' => $action,
                         'index' => [
                             'title' => 'All Administrators',
@@ -86,13 +86,19 @@ class AdministratorController extends Controller
                                         'no_data' => 'No data found'
                                     ]
                                 ],
-                                'email' => [
-                                    'label' => 'Email',
-                                    'type' => 'email',
-                                    'placeholder' => 'Type ...',
+                                'branch' => [
+                                    'label' => 'Branch',
+                                    'type' => 'select',
                                     'required' => true,
                                     'disabled' => false,
                                     'css' => 'col-span-12 md:col-span-6',
+                                    'options' => [
+                                        'is_from_db' => true,
+                                        'group' => '',
+                                        'data' => $branches,
+                                        'no_data' => 'No data found'
+                                    ],
+                                    'css' => 'col-span-12 md:col-span-12',
                                 ],
                                 'username' => [
                                     'label' => 'Username',
@@ -220,7 +226,7 @@ class AdministratorController extends Controller
                                     'label' => 'First Name',
                                     'type' => 'text',
                                     'placeholder' => 'ex. John Paul',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-6',
                                 ],
@@ -228,7 +234,7 @@ class AdministratorController extends Controller
                                     'label' => 'Last Name',
                                     'type' => 'text',
                                     'placeholder' => 'ex. Llemos',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-6',
                                 ],
@@ -236,14 +242,14 @@ class AdministratorController extends Controller
                                     'label' => 'Email',
                                     'type' => 'email',
                                     'placeholder' => 'Type ...',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-6',
                                 ],
                                 'role' => [
                                     'label' => 'Role',
                                     'type' => 'select',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-6',
                                     'options' => [
@@ -259,7 +265,7 @@ class AdministratorController extends Controller
                                 'branch' => [
                                     'label' => 'Branch',
                                     'type' => 'select',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-6',
                                     'options' => [
@@ -274,7 +280,7 @@ class AdministratorController extends Controller
                                     'label' => 'Email',
                                     'type' => 'email',
                                     'placeholder' => 'Type ...',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-6',
                                 ],
@@ -282,7 +288,7 @@ class AdministratorController extends Controller
                                     'label' => 'Username',
                                     'type' => 'text',
                                     'placeholder' => 'Type...',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-12',
                                 ],

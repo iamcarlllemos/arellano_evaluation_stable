@@ -24,7 +24,7 @@
                                         {{$item['label']}}
                                         {!!$item['is_required'] == true ? '<span class="text-red-900">*</span>' : ''!!}
                                     </label>
-                                    <input type="{{$item['type']}}" wire:model="{{$key}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="{{$item['placeholder']}}">
+                                    <input type="{{$item['type']}}" wire:model.live="{{$key}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="{{$item['placeholder']}}">
                                     @error($key)
                                         <p class="text-xs text-red-500 font-bold mt-2">{{$message}}</p>
                                     @enderror
@@ -35,7 +35,7 @@
                                         {{$item['label']}}
                                         {!!$item['is_required'] == true ? '<span class="text-red-900">*</span>' : ''!!}
                                     </label>
-                                    <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" wire:model="{{$key}}">
+                                    <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" wire:model.live="{{$key}}">
                                         @if(count($item['options']['data']) > 0)
                                             @if($item['options']['is_from_db'])
                                                 <option value=""> - CHOOSE - </option>
@@ -71,7 +71,7 @@
                                                 <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG or GIF (MAX. 5MB)</p>
                                             </div>
-                                            <input id="dropzone-file" wire:model="{{$key}}" type="{{$item['type']}}" class="hidden" />
+                                            <input id="dropzone-file" wire:model.live="{{$key}}" type="{{$item['type']}}" class="hidden" />
                                         </label>
                                     </div>
                                     <div wire:loading wire:target="{{$key}}">Uploading...</div>
@@ -119,7 +119,7 @@
                                         {{$item['label']}}
                                         {!!$item['is_required'] == true ? '<span class="text-red-900">*</span>' : ''!!}
                                     </label>
-                                    <input type="{{$item['type']}}" wire:model="{{$key}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="{{$item['placeholder']}}">
+                                    <input type="{{$item['type']}}" wire:model.live="{{$key}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="{{$item['placeholder']}}">
                                     @error($key)
                                         <p class="text-xs text-red-500 font-bold mt-2">{{$message}}</p>
                                     @enderror
@@ -130,7 +130,7 @@
                                         {{$item['label']}}
                                         {!!$item['is_required'] == true ? '<span class="text-red-900">*</span>' : ''!!}
                                     </label>
-                                    <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" wire:model="{{$key}}">
+                                    <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" wire:model.live="{{$key}}">
                                         @if(count($item['options']['data']) > 0)
                                             @if($item['options']['is_from_db'])
                                                 <option value=""> - CHOOSE - </option>
@@ -171,7 +171,7 @@
                                                 <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG or GIF (MAX. 5MB)</p>
                                             </div>
-                                            <input id="dropzone-file" wire:model="{{$key}}" type="{{$item['type']}}" class="hidden" />
+                                            <input id="dropzone-file" wire:model.live="{{$key}}" type="{{$item['type']}}" class="hidden" />
                                         </label>
                                     </div>
                                     <div wire:loading wire:target="{{$key}}">Uploading...</div>
@@ -313,7 +313,7 @@
                         <div class="col-span-12 md:col-span-4 relative">
                             <div class="card-parent border-2 w-full p-4 bg-white shadow-xs rounded-lg h-[250px]" wire:ignore.self>
                                 <div class="absolute top-5 right-5 cursor-pointer">
-                                    <input type="checkbox" value="{{$template['id'] . ',' . $curriculum_templates->id}}" wire:model='link_multiple' value="1" class="cursor-pointer multi-select w-3 h-3">
+                                    <input type="checkbox" value="{{$template['id'] . ',' . $curriculum_templates->id}}" wire:model.live='link_multiple' value="1" class="cursor-pointer multi-select w-3 h-3">
                                 </div>
                                 <div class="text-normal font-bold">{{$curriculum_templates['subjects']->name}}</div>
                                 <div class="text-xs font-medium">{{$curriculum_templates['subjects']->code}}</div>
@@ -380,7 +380,7 @@
                                         {{$item['label']}}
                                         {!!$item['is_required'] == true ? '<span class="text-red-900">*</span>' : ''!!}
                                     </label>
-                                    <input type="{{$item['type']}}" wire:model="{{$key}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="{{$item['placeholder']}}" disabled>
+                                    <input type="{{$item['type']}}" wire:model.live="{{$key}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="{{$item['placeholder']}}" disabled>
                                     @error($key)
                                         <p class="text-xs text-red-500 font-bold mt-2">{{$message}}</p>
                                     @enderror
@@ -391,7 +391,7 @@
                                         {{$item['label']}}
                                         {!!$item['is_required'] == true ? '<span class="text-red-900">*</span>' : ''!!}
                                     </label>
-                                    <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" wire:model="{{$key}}" disabled>
+                                    <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" wire:model.live="{{$key}}" disabled>
                                         @if(count($item['options']['data']) > 0)
                                             @if($item['options']['is_from_db'])
                                                 <option value=""> - CHOOSE - </option>

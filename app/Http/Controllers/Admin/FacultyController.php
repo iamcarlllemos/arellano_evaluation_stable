@@ -5,18 +5,22 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Models\CourseModel;
+use App\Traits\Account;
+
 use App\Models\DepartmentModel;
 use App\Models\FacultyModel;
 
 class FacultyController extends Controller
 {
+
+    use Account;
+
     public function index(Request $request) {
 
         $action = $request->input('action') ?? '';
 
-        $role = auth()->user()->role;
-        $assigned_branch = auth()->user()->assigned_branch;
+        $role = $this->admin()->role;
+        $assigned_branch = $this->admin()->assigned_branch;
 
         $get_data = [];
 
@@ -38,7 +42,7 @@ class FacultyController extends Controller
             ->get();
 
         $departments = [];
-        
+
         if($role === 'admin') {
             foreach($departments_dirty as $department) {
                 $departments[] = [
@@ -49,7 +53,7 @@ class FacultyController extends Controller
         } else {
             foreach($departments_dirty as $department) {
                 $key = $department->branches->id;
-                
+
                 if(!isset($departments[$key])) {
                     $departments[$key] = (object) [
                         'id' => $key,
@@ -162,13 +166,37 @@ class FacultyController extends Controller
                                     'required' => true,
                                     'disabled' => false,
                                     'css' => 'col-span-12 md:col-span-6',
-                                ],  
+                                ],
                                 'image' => [
                                     'label' => 'Profile Image',
                                     'type' => 'file',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => false,
                                     'css' => 'col-span-12 md:col-span-12',
+                                ],
+                                'username' => [
+                                    'label' => 'Username',
+                                    'type' => 'text',
+                                    'placeholder' => 'Type ...',
+                                    'required' => true,
+                                    'disabled' => false,
+                                    'css' => 'col-span-12',
+                                ],
+                                'password' => [
+                                    'label' => 'Password',
+                                    'type' => 'password',
+                                    'placeholder' => '••••••••',
+                                    'required' => true,
+                                    'disabled' => false,
+                                    'css' => 'col-span-12 md:col-span-6',
+                                ],
+                                'password_repeat' => [
+                                    'label' => 'Repeat Password',
+                                    'type' => 'password',
+                                    'placeholder' => '••••••••',
+                                    'required' => true,
+                                    'disabled' => false,
+                                    'css' => 'col-span-12 md:col-span-6',
                                 ],
                             ]
                         ],
@@ -245,13 +273,37 @@ class FacultyController extends Controller
                                     'required' => true,
                                     'disabled' => false,
                                     'css' => 'col-span-12 md:col-span-6',
-                                ],  
+                                ],
                                 'image' => [
                                     'label' => 'Profile Image',
                                     'type' => 'file',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => false,
                                     'css' => 'col-span-12 md:col-span-12',
+                                ],
+                                'username' => [
+                                    'label' => 'Username',
+                                    'type' => 'text',
+                                    'placeholder' => 'Type ...',
+                                    'required' => true,
+                                    'disabled' => false,
+                                    'css' => 'col-span-12',
+                                ],
+                                'password' => [
+                                    'label' => 'Password',
+                                    'type' => 'password',
+                                    'placeholder' => '••••••••',
+                                    'required' => true,
+                                    'disabled' => false,
+                                    'css' => 'col-span-12 md:col-span-6',
+                                ],
+                                'password_repeat' => [
+                                    'label' => 'Repeat Password',
+                                    'type' => 'password',
+                                    'placeholder' => '••••••••',
+                                    'required' => true,
+                                    'disabled' => false,
+                                    'css' => 'col-span-12 md:col-span-6',
                                 ],
                             ]
                         ],
@@ -328,11 +380,11 @@ class FacultyController extends Controller
                                     'required' => true,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-6',
-                                ],  
+                                ],
                                 'image' => [
                                     'label' => 'Profile Image',
                                     'type' => 'file',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-12',
                                 ],

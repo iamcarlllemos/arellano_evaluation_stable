@@ -13,7 +13,7 @@ class DepartmentController extends Controller
     public function index(Request $request) {
 
         $action = $request->input('action') ?? '';
-        
+
         $get_data = [];
 
         if(in_array($action, ['update', 'delete'])) {
@@ -21,11 +21,11 @@ class DepartmentController extends Controller
             $id = $request->input('id');
 
             $data = DepartmentModel::where('id', $id);
-            
+
             if(!$data->exists()) {
                 return redirect()->route('programs.departments');
             }
-        } 
+        }
 
 
         $branches = BranchModel::with('departments')->get();
@@ -59,7 +59,7 @@ class DepartmentController extends Controller
                                     'required' => true,
                                     'disabled' => false,
                                     'css' => 'col-span-12',
-                                ],  
+                                ],
                                 'name' => [
                                     'label' => 'Department Name',
                                     'type' => 'text',
@@ -86,7 +86,7 @@ class DepartmentController extends Controller
                                     'required' => true,
                                     'disabled' => false,
                                     'css' => 'col-span-12',
-                                ],  
+                                ],
                                 'name' => [
                                     'label' => 'Department Name',
                                     'type' => 'text',
@@ -110,15 +110,15 @@ class DepartmentController extends Controller
                                         'data' => $branches,
                                         'no_data' => 'Create branch first.'
                                     ],
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12',
-                                ],  
+                                ],
                                 'name' => [
                                     'label' => 'Department Name',
                                     'type' => 'text',
                                     'placeholder' => 'Write something...',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12',
                                 ],
@@ -127,7 +127,7 @@ class DepartmentController extends Controller
                     ],
                 ]
             ]
-            
+
         ];
 
         return view('template', compact('data'));

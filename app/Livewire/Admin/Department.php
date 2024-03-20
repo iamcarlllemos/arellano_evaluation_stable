@@ -22,14 +22,19 @@ class Department extends Component
     use Account;
 
     public $form;
+
     public $select;
     public $search;
 
     public $id;
-    public $status;
 
     public $branch_id;
     public $name;
+
+    public $attr = [
+        'branch_id' => 'Branch name',
+        'name' => 'Department name'
+    ];
 
     public function mount(Request $request) {
         $id = $request->input('id');
@@ -46,45 +51,37 @@ class Department extends Component
 
     public function create() {
 
-        $branch_id = $this->branch_id;
-
         $rules = [
             'branch_id' => 'required|integer|exists:afears_branch,id',
             'name' => [
                 'required',
                 'string',
                 'min:4',
-                Rule::unique('afears_department')->where(function ($query) use ($branch_id) {
-                    return $query->where('branch_id', $branch_id);
+                Rule::unique('afears_department')->where(function ($query) {
+                    return $query->where('branch_id', $this->branch_id);
                 })
             ]
         ];
 
-
-        $this->status = 'failed';
-
-        $this->validate($rules);
-
-
-        $data = [
-            'branch_id' => htmlspecialchars($this->branch_id),
-            'name' =>  $this->name
-        ];
+        $this->validate($rules, [], $this->attr);
 
         try {
 
-            DepartmentModel::create($data);
+            $model = new DepartmentModel;
+            $model->branch_id = $this->branch_id;
+            $model->name = ucfirst($this->name);
 
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Department `' . ucwords($this->name) . '` created successfully'
+            $model->save();
+
+            $this->dispatch('alert');
+            session()->flash('alert', [
+                'message' => 'Saved.'
             ]);
 
             $this->branch_id = '';
             $this->name = '';
 
         } catch (\Exception $e) {
-
             session()->flash('flash', [
                 'status' => 'failed',
                 'message' => $e->getMessage()
@@ -110,22 +107,21 @@ class Department extends Component
                 ]
             ];
 
-            $this->validate($rules);
+            $this->validate($rules, [], $this->attr);
 
             try {
 
                 $model->branch_id = $this->branch_id;
-                $model->name = $this->name;
+                $model->name = ucfirst($this->name);
 
                 $model->save();
 
-                session()->flash('flash', [
-                    'status' => 'success',
-                    'message' => 'Department `' . ucwords($this->name) . '` updated successfully'
+                $this->dispatch('alert');
+                session()->flash('alert', [
+                    'message' => 'Updated.'
                 ]);
 
             } catch (\Exception $e) {
-
                 session()->flash('flash', [
                     'status' => 'failed',
                     'message' => $e->getMessage()
@@ -140,10 +136,6 @@ class Department extends Component
 
         if($model) {
             $model->delete();
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Department `'.$model->name.'` deleted successfully'
-            ]);
             return redirect()->route('admin.programs.departments');
         } else {
             session()->flash('flash', [
@@ -155,7 +147,7 @@ class Department extends Component
 
     public function render(Request $request) {
 
-        $action = $request->input('action') ?? '';
+        $action = $request->input('action');
 
         $role = $this->admin()->role;
         $assigned_branch = $this->admin()->assigned_branch;
@@ -171,9 +163,6 @@ class Department extends Component
                 $query->where('branch_id', $assigned_branch);
             })
             ->get();
-
-
-        $departments = $departments->isEmpty() ? [] : $departments;
 
         $branches = BranchModel::with('departments')
             ->when($role == 'admin', function($query) use ($assigned_branch) {

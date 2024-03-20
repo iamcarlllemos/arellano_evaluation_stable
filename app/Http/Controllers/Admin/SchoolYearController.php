@@ -12,7 +12,7 @@ class SchoolYearController extends Controller
     public function index(Request $request) {
 
         $action = $request->input('action') ?? '';
-        
+
         $get_data = [];
 
         if(in_array($action, ['update', 'delete'])) {
@@ -29,7 +29,7 @@ class SchoolYearController extends Controller
         $data = [
             'breadcrumbs' => 'Dashboard,programs,school year',
             'livewire' => [
-                'component' => 'admin.school-year',   
+                'component' => 'admin.school-year',
                 'data' => [
                     'lazy' => false,
                     'form' => [
@@ -186,7 +186,7 @@ class SchoolYearController extends Controller
                                 'label' => 'Description',
                                 'type' => 'text',
                                 'placeholder' => 'Type something...',
-                                'required' => true,
+                                'required' => false,
                                 'disabled' => true,
                                 'css' => 'col-span-12'
                             ],
@@ -207,7 +207,7 @@ class SchoolYearController extends Controller
                                     ],
                                     'no_data' => 'No school year set'
                                 ],
-                                'required' => true,
+                                'required' => false,
                                 'disabled' => true,
                                 'css' => 'col-span-6',
                             ],
@@ -223,7 +223,7 @@ class SchoolYearController extends Controller
                                     ],
                                     'no_data' => 'No semester being set'
                                 ],
-                                'required' => true,
+                                'required' => false,
                                 'disabled' => true,
                                 'css' => 'col-span-6',
                             ],
@@ -241,13 +241,13 @@ class SchoolYearController extends Controller
                                     ],
                                     'no_data' => 'No status being set'
                                 ],
-                                'required' => true,
+                                'required' => false,
                                 'disabled' => true,
                                 'css' => 'col-span-12',
                             ],
                         ]
                     ]
-                        
+
                     ],
                 ]
 

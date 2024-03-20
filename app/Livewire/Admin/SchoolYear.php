@@ -22,6 +22,14 @@ class SchoolYear extends Component
     public $semester;
     public $status;
 
+    public $attr = [
+        'name' => 'Subject name',
+        'start_year' => 'Start year',
+        'end_year' => 'End Year',
+        'semester' => 'Semester',
+        'status' => 'Status'
+    ];
+
     public function mount(Request $request) {
 
         $id = $request->input('id');
@@ -63,23 +71,22 @@ class SchoolYear extends Component
             'status' => 'required|in:0,1,2,3'
         ];
 
-        $this->validate($rules);
-
-        $data = [
-            'name' =>  htmlspecialchars($this->name),
-            'start_year' => htmlspecialchars($this->start_year),
-            'end_year' => htmlspecialchars($this->start_year + 1),
-            'semester' => htmlspecialchars($this->semester),
-            'status' => $this->status
-        ];
+        $this->validate($rules, [], $this->attr);
 
         try {
 
-            SchoolYearModel::create($data);
+            $model = new SchoolYearModel;
+            $model->name = $this->name;
+            $model->start_year = $this->start_year;
+            $model->end_year = $this->start_year + 1;
+            $model->semester = $this->semester;
+            $model->status = $this->status;
 
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'School Year `' . ucwords($this->name) . '` created successfully'
+            $model->save();
+
+            $this->dispatch('alert');
+            session()->flash('alert', [
+                'message' => 'Saved.'
             ]);
 
             $this->name = '';
@@ -88,18 +95,17 @@ class SchoolYear extends Component
             $this->status = '';
 
         } catch (\Exception $e) {
-
             session()->flash('flash', [
                 'status' => 'failed',
                 'message' => $e->getMessage()
             ]);
-        }       
+        }
     }
 
     public function update() {
 
         $model = SchoolYearModel::where('id', $this->id)->first();
-    
+
         if ($model) {
 
             $rules = [
@@ -122,9 +128,9 @@ class SchoolYear extends Component
                 ],
                 'status' => 'required|in:0,1,2,3'
             ];
-    
-            $this->validate($rules);
-            
+
+            $this->validate($rules, [], $this->attr);
+
             try {
 
                 $model->name = htmlspecialchars($this->name);
@@ -132,19 +138,18 @@ class SchoolYear extends Component
                 $model->status = $this->status;
 
                 $model->save();
-    
-                session()->flash('flash', [
-                    'status' => 'success',
-                    'message' => 'School year `' . ucwords($this->name) . '` updated successfully'
+
+                $this->dispatch('alert');
+                session()->flash('alert', [
+                    'message' => 'Updated.'
                 ]);
-    
+
             } catch (\Exception $e) {
-    
                 session()->flash('flash', [
                     'status' => 'failed',
                     'message' => $e->getMessage()
                 ]);
-            }    
+            }
         }
     }
 
@@ -154,10 +159,6 @@ class SchoolYear extends Component
 
         if($model) {
             $model->delete();
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'School year `'.$model->name.'` deleted successfully'
-            ]);
             return redirect()->route('admin.programs.school-year');
         } else {
             session()->flash('flash', [
@@ -167,16 +168,8 @@ class SchoolYear extends Component
         }
     }
     public function render(Request $request) {
-        
-        $action = $request->input('action') ?? '';
 
-        if($action == 'open') {
-            $view = $request->input('view');
-            if(in_array($view, ['courses'])) {
-                $id = $request->input('id');
-                $this->select = $id;
-            }
-        }
+        $action = $request->input('action');
 
         $school_year = SchoolYearModel::
             when(strlen($this->search) >= 1, function ($query) {
@@ -187,8 +180,6 @@ class SchoolYear extends Component
                         $query->whereRaw("CONCAT(start_year, '-', end_year) LIKE ?", ['%' . $this->search . '%']);
                     });
             })->get();
-            
-        $school_year = $school_year->isEmpty() ? [] : $school_year;
 
         $data = [
             'school_year' => $school_year

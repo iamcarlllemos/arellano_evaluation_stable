@@ -12,7 +12,7 @@ class CriteriaController extends Controller
     public function index(Request $request) {
 
         $action = $request->input('action') ?? '';
-        
+
         $get_data = [];
 
         if(in_array($action, ['update', 'delete'])) {
@@ -75,7 +75,7 @@ class CriteriaController extends Controller
                                     'label' => 'Name',
                                     'type' => 'text',
                                     'placeholder' => 'Write something...',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12'
                                 ]

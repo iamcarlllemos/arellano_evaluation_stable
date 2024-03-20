@@ -13,10 +13,14 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\BranchModel;
 use App\Models\FacultyModel;
 
+use App\Traits\Account;
+use Illuminate\Support\Facades\Hash;
+
 class Faculty extends Component
 {
 
     use WithFileUploads;
+    use Account;
 
     public $form;
     public $select;
@@ -28,13 +32,26 @@ class Faculty extends Component
     public $firstname;
     public $lastname;
     public $middlename;
-    public $birthday;
-    public $year_level;
     public $gender;
     public $image;
     public $email;
     public $username;
+    public $password;
+    public $password_repeat;
 
+    public $attr = [
+        'department_id' => 'Department name',
+        'employee_number' => 'Employee number',
+        'firstname' => 'First name',
+        'lastname' => 'Last name',
+        'middlename' => 'Middle name',
+        'gender' => 'Gender',
+        'image' => 'Profile photo',
+        'email' => 'Email',
+        'username' => 'Username',
+        'password' => 'Password',
+        'password_repeat' => 'Password repeat'
+    ];
 
     public function mount(Request $request) {
 
@@ -48,8 +65,6 @@ class Faculty extends Component
         $this->lastname = $data->lastname ?? '';
         $this->middlename = $data->middlename ?? '';
         $this->gender = $data->gender ?? '';
-        $this->birthday = $data->birthday ?? '';
-        $this->year_level = $data->year_level ?? '';
         $this->image = $data->image ?? '';
         $this->email = $data->email ?? '';
         $this->username = $data->username ?? '';
@@ -62,42 +77,57 @@ class Faculty extends Component
     public function create() {
 
         $rules = [
-            'employee_number' => 'required|unique:afears_faculty,employee_number',
             'department_id' => 'required|integer|exists:afears_department,id',
+            'employee_number' => 'required|unique:afears_faculty,employee_number',
             'firstname' => 'required|string',
             'lastname' => 'required|string',
             'middlename' => 'string',
             'email' => 'required|email|unique:afears_faculty,email',
             'gender' => 'required|integer|in:1,2,3',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:5000',
+            'image' => 'image|mimes:jpeg,png,jpg|max:2000',
+            'username' => 'required|unique:afears_faculty,username',
+            'password' => 'required|string|min:8|same:password_repeat',
+            'password_repeat' => 'required|string|min:8|same:password'
         ];
 
-        $this->validate($rules);
+        $this->validate($rules, [], $this->attr);
 
-        $temp_filename = time();
-        $extension =$this->image->getClientOriginalExtension();
+        if($this->image instanceof TemporaryUploadedFile) {
 
-        $filename = $temp_filename . '.' . $extension;
+            $rules = [
+                'image' => 'image|mimes:jpeg,png,jpg|max:2000'
+            ];
 
-        $data = [
-            'department_id' => $this->department_id,
-            'employee_number' => $this->employee_number,
-            'firstname' => $this->firstname,
-            'lastname' => $this->lastname,
-            'middlename' => $this->middlename,
-            'email' => $this->email,
-            'gender' => $this->gender,
-            'image' => $filename,
-        ];
+            $this->validate($rules, [], $this->attr);
+
+            $temp_filename = time();
+            $extension =$this->image->getClientOriginalExtension();
+
+            $filename = $temp_filename . '.' . $extension;
+
+            $this->image->storeAs('public/images/faculty', $filename);
+
+        }
 
         try {
 
-            FacultyModel::create($data);
-            $this->image->storeAs('public/images/faculty', $filename);
+            $model =  new FacultyModel;
+            $model->department_id = $this->department_id;
+            $model->employee_number = $this->employee_number;
+            $model->firstname = $this->firstname;
+            $model->lastname = $this->lastname;
+            $model->middlename = $this->middlename;
+            $model->email = $this->email;
+            $model->gender = $this->gender;
+            $model->image = $filename ?? null;
+            $model->username = $this->username;
+            $model->password = Hash::make($this->password);
 
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Faculty `' . ucwords($this->firstname . ' ' . $this->lastname) . '` created successfully'
+            $model->save();
+
+            $this->dispatch('alert');
+            session()->flash('alert', [
+                'message' => 'Saved.'
             ]);
 
             $this->department_id = '';
@@ -108,6 +138,8 @@ class Faculty extends Component
             $this->gender = '';
             $this->image = '';
             $this->email = '';
+            $this->password = '';
+            $this->password_repeat = '';
 
         } catch (\Exception $e) {
 
@@ -146,7 +178,7 @@ class Faculty extends Component
                 ],
             ];
 
-            $this->validate($rules);
+            $this->validate($rules, [], $this->attr);
 
             if($this->image instanceof TemporaryUploadedFile) {
 
@@ -154,7 +186,7 @@ class Faculty extends Component
                     'image' => 'required|image|mimes:jpeg,png,jpg|max:5000'
                 ];
 
-                $this->validate($rules);
+                $this->validate($rules, [], $this->attr);
 
                 Storage::disk('public')->delete('images/faculty/' . $model->image);
 
@@ -181,9 +213,9 @@ class Faculty extends Component
                 $model->email = $this->email;
                 $model->save();
 
-                session()->flash('flash', [
-                    'status' => 'success',
-                    'message' => 'Faculty `' . ucwords($this->firstname . ' ' . $this->lastname) . '` updated successfully'
+                $this->dispatch('alert');
+                session()->flash('alert', [
+                    'message' => 'Updated.'
                 ]);
 
             } catch (\Exception $e) {
@@ -202,10 +234,6 @@ class Faculty extends Component
 
         if($model) {
             $model->delete();
-            session()->flash('flash', [
-                'status' => 'success',
-                'message' => 'Faculty `' . ucwords($this->firstname . ' ' . $this->lastname) . '` deleted successfully'
-            ]);
             return redirect()->route('admin.accounts.faculty');
         } else {
             session()->flash('flash', [
@@ -216,10 +244,10 @@ class Faculty extends Component
     }
     public function render(Request $request) {
 
-        $action = $request->input('action') ?? '';
+        $action = $request->input('action');
 
-        $role = auth()->guard('admins')->user()->role;
-        $assigned_branch = auth()->guard('admins')->user()->assigned_branch;
+        $role = $this->admin()->role;
+        $assigned_branch = $this->admin()->assigned_branch;
 
         $faculty = FacultyModel::with(['departments.branches'])
             ->when(strlen($this->search) >= 1, function ($sQuery) {
@@ -252,13 +280,10 @@ class Faculty extends Component
             })
             ->get();
 
-        $faculty = $faculty->isEmpty() ? [] : $faculty;
-
         $data = [
             'branches' => $branches,
             'faculty' => $faculty
         ];
-
 
         return view('livewire.admin.faculty', compact('data'));
 
