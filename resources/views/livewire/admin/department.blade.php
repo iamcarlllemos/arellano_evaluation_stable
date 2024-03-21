@@ -210,7 +210,7 @@
                                 </svg>
                             </div>
                         </div>
-                </div>
+                    </div>
                 @endforeach
             @else
             <div class="col-span-12">
@@ -225,6 +225,9 @@
                 </div>
             </div>
             @endif
+            <div class="col-span-12 w-full block">
+                {{$data['departments']->links()}}
+            </div>
         </div>
     @endif
 </div>

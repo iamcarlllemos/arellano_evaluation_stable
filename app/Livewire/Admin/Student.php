@@ -15,13 +15,14 @@ use App\Traits\Account;
 
 use App\Models\BranchModel;
 use App\Models\StudentModel;
-
+use Livewire\WithPagination;
 
 class Student extends Component
 {
 
     use WithFileUploads;
     use Account;
+    use WithPagination;
 
     public $form;
 
@@ -61,6 +62,9 @@ class Student extends Component
         'password' => 'Password',
         'password_repeat' => 'Password repeat'
     ];
+
+    public $paginate_count;
+    protected $listeners = ['screen'];
 
     public function mount(Request $request) {
 
@@ -309,6 +313,23 @@ class Student extends Component
 
     }
 
+    public function screen($size) {
+        switch($size) {
+            case 'sm':
+                $this->paginate_count = 5;
+                break;
+            case 'md':
+                $this->paginate_count = 6;
+                break;
+            case 'lg':
+                $this->paginate_count = 9;
+                break;
+            case 'xl':
+                $this->paginate_count = 12;
+                break;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
@@ -343,7 +364,7 @@ class Student extends Component
                     $subQuery->where('branch_id', $assigned_branch);
                 });
             })
-            ->get();
+            ->paginate($this->paginate_count);
 
         $branches = BranchModel::with('departments')
             ->when($role == 'admin', function($query) use ($assigned_branch) {

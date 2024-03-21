@@ -13,6 +13,7 @@ use App\Traits\Account;
 
 use App\Models\BranchModel;
 use App\Models\DepartmentModel;
+use Livewire\WithPagination;
 
 class Department extends Component
 {
@@ -20,6 +21,7 @@ class Department extends Component
     use WithFileUploads;
     use ExecuteRule;
     use Account;
+    use WithPagination;
 
     public $form;
 
@@ -37,6 +39,9 @@ class Department extends Component
         'branch_id' => 'Branch name',
         'name' => 'Department name'
     ];
+
+    public $paginate_count;
+    protected $listeners = ['screen'];
 
     public function mount(Request $request) {
         $id = $request->input('id');
@@ -147,6 +152,23 @@ class Department extends Component
         }
     }
 
+    public function screen($size) {
+        switch($size) {
+            case 'sm':
+                $this->paginate_count = 5;
+                break;
+            case 'md':
+                $this->paginate_count = 6;
+                break;
+            case 'lg':
+                $this->paginate_count = 9;
+                break;
+            case 'xl':
+                $this->paginate_count = 12;
+                break;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
@@ -164,7 +186,7 @@ class Department extends Component
             ->when($role == 'admin', function($query) use ($assigned_branch) {
                 $query->where('branch_id', $assigned_branch);
             })
-            ->get();
+            ->paginate($this->paginate_count);
 
         $branches = BranchModel::with('departments')
             ->when($role == 'admin', function($query) use ($assigned_branch) {

@@ -12,11 +12,13 @@ use App\Models\BranchModel;
 use App\Models\CurriculumTemplateModel;
 use App\Models\FacultyModel;
 use App\Models\FacultyTemplateModel;
+use Livewire\WithPagination;
 
 class FacultyTemplate extends Component
 {
 
     use WithFileUploads;
+    use WithPagination;
 
     public $form;
 
@@ -40,6 +42,9 @@ class FacultyTemplate extends Component
     public $template;
     public $link_multiple = [];
     public object $curriculum_template;
+
+    public $paginate_count;
+    protected $listeners = ['screen'];
 
     public function mount(Request $request) {
 
@@ -82,8 +87,6 @@ class FacultyTemplate extends Component
 
             $this->template = $data;
         }
-
-
     }
 
     public function loadCurriculumTemplate() {
@@ -209,7 +212,23 @@ class FacultyTemplate extends Component
                 'template_id' => $template_id
             ]);
         }
+    }
 
+    public function screen($size) {
+        switch($size) {
+            case 'sm':
+                $this->paginate_count = 5;
+                break;
+            case 'md':
+                $this->paginate_count = 6;
+                break;
+            case 'lg':
+                $this->paginate_count = 9;
+                break;
+            case 'xl':
+                $this->paginate_count = 12;
+                break;
+        }
     }
 
     public function render(Request $request) {
@@ -240,17 +259,12 @@ class FacultyTemplate extends Component
                 $query->whereHas('departments.branches', function($subQuery) use ($assigned_branch) {
                     $subQuery->where('branch_id', $assigned_branch);
                 });
-            })
-            ->get();
-
-
-        $faculty = $faculty->isEmpty() ? [] : $faculty;
+            })->paginate($this->paginate_count);
 
         $branches = BranchModel::with('departments')
             ->when($role == 'admin', function($query) use ($assigned_branch) {
                 $query->where('id', $assigned_branch);
-            })
-            ->get();
+            })->get();
 
         $this->loadCurriculumTemplate();
 

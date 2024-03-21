@@ -7,10 +7,12 @@ use App\Models\SubjectModel;
 use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-
+use Livewire\WithPagination;
 
 class SchoolYear extends Component
 {
+
+    use WithPagination;
 
     public $form;
 
@@ -31,6 +33,9 @@ class SchoolYear extends Component
         'semester' => 'Semester',
         'status' => 'Status'
     ];
+
+    public $paginate_count;
+    protected $listeners = ['screen'];
 
     public function mount(Request $request) {
 
@@ -169,6 +174,24 @@ class SchoolYear extends Component
             ]);
         }
     }
+
+    public function screen($size) {
+        switch($size) {
+            case 'sm':
+                $this->paginate_count = 5;
+                break;
+            case 'md':
+                $this->paginate_count = 6;
+                break;
+            case 'lg':
+                $this->paginate_count = 9;
+                break;
+            case 'xl':
+                $this->paginate_count = 12;
+                break;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
@@ -181,7 +204,7 @@ class SchoolYear extends Component
                     ->orWhere(function($query) {
                         $query->whereRaw("CONCAT(start_year, '-', end_year) LIKE ?", ['%' . $this->search . '%']);
                     });
-            })->get();
+            })->paginate($this->paginate_count);
 
         $data = [
             'school_year' => $school_year

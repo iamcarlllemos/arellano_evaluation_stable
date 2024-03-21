@@ -9,6 +9,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+use Livewire\WithPagination;
 
 use App\Models\BranchModel;
 
@@ -17,6 +18,7 @@ class Branch extends Component
 {
 
     use WithFileUploads;
+    use WithPagination;
 
     public $form;
 
@@ -33,6 +35,9 @@ class Branch extends Component
         'name' => 'Branch name',
         'image' => 'Branch image',
     ];
+
+    public $paginate_count;
+    protected $listeners = ['screen'];
 
     public function mount(Request $request) {
 
@@ -198,11 +203,28 @@ class Branch extends Component
 
     }
 
+    public function screen($size) {
+        switch($size) {
+            case 'sm':
+                $this->paginate_count = 5;
+                break;
+            case 'md':
+                $this->paginate_count = 6;
+                break;
+            case 'lg':
+                $this->paginate_count = 9;
+                break;
+            case 'xl':
+                $this->paginate_count = 12;
+                break;
+        }
+    }
+
     public function render() {
 
         $data = BranchModel::when(strlen($this->search['type'] >= 1), function($query) {
             $query->where('name', 'like', '%' . $this->search['type'] . '%');
-        })->get();
+        })->paginate($this->paginate_count);
 
         return view('livewire.admin.branch', compact('data'));
     }

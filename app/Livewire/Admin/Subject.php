@@ -12,13 +12,14 @@ use App\Traits\Account;
 
 use App\Models\CourseModel;
 use App\Models\SubjectModel;
+use Livewire\WithPagination;
 
 class Subject extends Component
 {
 
     use ExecuteRule;
     use Account;
-
+    use WithPagination;
 
     public $form;
 
@@ -38,6 +39,9 @@ class Subject extends Component
         'code' => 'Subject code',
         'name' => 'Subject name'
     ];
+
+    public $paginate_count;
+    protected $listeners = ['screen'];
 
     public function mount(Request $request) {
 
@@ -155,6 +159,24 @@ class Subject extends Component
             ]);
         }
     }
+
+    public function screen($size) {
+        switch($size) {
+            case 'sm':
+                $this->paginate_count = 5;
+                break;
+            case 'md':
+                $this->paginate_count = 6;
+                break;
+            case 'lg':
+                $this->paginate_count = 9;
+                break;
+            case 'xl':
+                $this->paginate_count = 12;
+                break;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
@@ -184,7 +206,7 @@ class Subject extends Component
                 $query->whereHas('departments.branches', function($subQuery) use ($assigned_branch) {
                     $subQuery->where('id', $assigned_branch);
                 });
-            })->get();
+            })->paginate($this->paginate_count);
 
         $courses = [];
 

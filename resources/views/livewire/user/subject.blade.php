@@ -8,7 +8,7 @@
     </div>
     <div class="grid grid-cols-12 gap-4 mt-10" wire:poll>
         @forelse ($subjects as $item)
-            <div class="col-span-12 md:col-span-6 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">                        
+            <div class="col-span-12 md:col-span-6 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
                 <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relative w-full">
                     <img class="relative rounded-lg  object-cover brightness-50" src="{{asset('storage/images/branches/' . $item->courses->departments->branches->image)}}" alt="" />
                     <div class="p-5 absolute bottom-0 left-0 w-full">
@@ -58,5 +58,8 @@
                 </div>
             </div>
         @endforelse
+        <div class="col-span-12 w-full block">
+            {{$data['departments']->links()}}
+        </div>
     </div>
 </div>

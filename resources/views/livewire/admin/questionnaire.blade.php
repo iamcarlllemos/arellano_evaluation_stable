@@ -236,6 +236,9 @@
                 </div>
             </div>
             @endif
+            <div class="col-span-12 w-full block">
+                {{$data['questionnaire']->links()}}
+            </div>
         </div>
     @endif
 </div>

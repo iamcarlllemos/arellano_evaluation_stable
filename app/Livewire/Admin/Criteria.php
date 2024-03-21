@@ -22,9 +22,13 @@ class Criteria extends Component
     public $id;
     public $name;
 
+
     public $attr = [
         'name' => 'Criteria name'
     ];
+
+    public $paginate_count;
+    protected $listeners = ['screen'];
 
     public function mount(Request $request) {
 
@@ -128,6 +132,23 @@ class Criteria extends Component
         }
     }
 
+    public function screen($size) {
+        switch($size) {
+            case 'sm':
+                $this->paginate_count = 5;
+                break;
+            case 'md':
+                $this->paginate_count = 6;
+                break;
+            case 'lg':
+                $this->paginate_count = 9;
+                break;
+            case 'xl':
+                $this->paginate_count = 12;
+                break;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
@@ -138,11 +159,13 @@ class Criteria extends Component
             $criteria->where('name', 'like', '%' . $this->search['type'] . '%');
         }
 
-        $criteria = $criteria->paginate(5);
+        $criteria = $criteria->paginate($this->paginate_count);
 
         $data = [
             'criteria' => $criteria
         ];
+
+
 
         return view('livewire.admin.criteria', compact('data'));
     }

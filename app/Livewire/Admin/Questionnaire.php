@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 use App\Models\QuestionnaireModel;
-
+use Livewire\WithPagination;
 
 class Questionnaire extends Component
 {
+
+    use WithPagination;
 
     public $form;
 
@@ -23,10 +25,14 @@ class Questionnaire extends Component
     public $school_year_id;
     public $name;
 
+    public $paginate_count;
+
     public $attr = [
         'school_year_id' => 'School year',
         'name' => 'Questionnaire name'
     ];
+
+    protected $listeners = ['screen'];
 
     public function mount(Request $request) {
 
@@ -146,6 +152,23 @@ class Questionnaire extends Component
 
     }
 
+    public function screen($size) {
+        switch($size) {
+            case 'sm':
+                $this->paginate_count = 5;
+                break;
+            case 'md':
+                $this->paginate_count = 6;
+                break;
+            case 'lg':
+                $this->paginate_count = 9;
+                break;
+            case 'xl':
+                $this->paginate_count = 12;
+                break;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
@@ -153,7 +176,7 @@ class Questionnaire extends Component
         $questionnaire = QuestionnaireModel::with(['school_year'])
         ->when(strlen($this->search['type']) >= 1, function ($query) {
             $query->where('name', 'like', '%' . $this->search['type'] . '%');
-        })->get();
+        })->paginate($this->paginate_count);
 
 
         $data = [

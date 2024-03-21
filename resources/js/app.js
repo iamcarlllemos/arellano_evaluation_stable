@@ -139,6 +139,19 @@ function generate_color(element) {
     });
 }
 
+function get_size(size) {
+    if(size >= 320 && size <= 768 ) {
+        size = 'sm';
+    } else if(size > 768 && size <= 1280) {
+        size = 'md';
+    } else if(size > 1280 && size <= 1535) {
+        size = 'lg';
+    } else if(size >= 1536) {
+        size = 'xl';
+    }
+
+    return size;
+}
 
 Livewire.on('leaving', (data) => {
     if(data[0].has_saved) {
@@ -150,4 +163,16 @@ Livewire.on('leaving', (data) => {
         window.location.href= data[0].route;
     }
 
+});
+
+$(document).on('livewire:initialized', () => {
+    let size;
+    size = get_size($(window).width());
+    console.log(size);
+
+    Livewire.dispatch('screen', [size]);
+    $(window).resize(function() {
+        size = get_size($(window).width());
+        Livewire.dispatch('screen', [size]);
+    });
 });

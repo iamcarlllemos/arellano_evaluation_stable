@@ -15,12 +15,14 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Models\BranchModel;
 use App\Models\User;
+use Livewire\WithPagination;
 
 class Administrator extends Component
 {
 
     use WithFileUploads;
     use Account;
+    use WithPagination;
 
     public $form;
 
@@ -52,6 +54,9 @@ class Administrator extends Component
         'password' => 'Password',
         'password_repeat' => 'Password repeat'
     ];
+
+    public $paginate_count;
+    protected $listeners = ['screen'];
 
     public function mount(Request $request) {
 
@@ -219,6 +224,24 @@ class Administrator extends Component
             ]);
         }
     }
+
+    public function screen($size) {
+        switch($size) {
+            case 'sm':
+                $this->paginate_count = 5;
+                break;
+            case 'md':
+                $this->paginate_count = 6;
+                break;
+            case 'lg':
+                $this->paginate_count = 9;
+                break;
+            case 'xl':
+                $this->paginate_count = 12;
+                break;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
@@ -233,7 +256,8 @@ class Administrator extends Component
             $query->where('name', 'like', '%' . $this->search['type'] . '%')
                 ->OrWhere('email', 'like', '%' . $this->search['type'] . '%')
                 ->OrWhere('username', 'like', '%' . $this->search['type'] . '%');
-        })->where('id', '!=', $this->admin()->id)->get();
+        })->where('id', '!=', $this->admin()->id)
+        ->paginate($this->paginate_count);
 
         $data = [
             'branches' => BranchModel::with('departments')->get(),

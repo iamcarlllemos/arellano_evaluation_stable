@@ -503,6 +503,9 @@
                 </div>
             </div>
             @endif
+            <div class="col-span-12 w-full block">
+                {{$data['faculty']->links()}}
+            </div>
         </div>
     @endif
 </div>

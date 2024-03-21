@@ -230,6 +230,9 @@
                 </div>
             </div>
             @endif
+            <div class="col-span-12 w-full block">
+                {{$data['courses']->links()}}
+            </div>
         </div>
     @endif
 </div>

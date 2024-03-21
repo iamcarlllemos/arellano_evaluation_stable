@@ -11,11 +11,13 @@ use Livewire\Component;
 
 use App\Models\DepartmentModel;
 use App\Models\CourseModel;
+use Livewire\WithPagination;
 
 class Course extends Component
 {
 
     use Account;
+    use WithPagination;
 
     public $form;
 
@@ -35,6 +37,9 @@ class Course extends Component
         'code' => 'Course code',
         'name' => 'Course name'
     ];
+
+    public $paginate_count;
+    protected $listeners = ['screen'];
 
     public function mount(Request $request) {
 
@@ -153,6 +158,24 @@ class Course extends Component
             ]);
         }
     }
+
+    public function screen($size) {
+        switch($size) {
+            case 'sm':
+                $this->paginate_count = 5;
+                break;
+            case 'md':
+                $this->paginate_count = 6;
+                break;
+            case 'lg':
+                $this->paginate_count = 9;
+                break;
+            case 'xl':
+                $this->paginate_count = 12;
+                break;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
@@ -173,7 +196,7 @@ class Course extends Component
                     $subQuery->where('branch_id', $assigned_branch);
                 });
             })
-            ->get();
+            ->paginate($this->paginate_count);
 
         $departments_dirty = DepartmentModel::with('branches')
             ->when($role == 'admin', function($query) use ($assigned_branch) {
