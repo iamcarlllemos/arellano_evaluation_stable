@@ -80,13 +80,18 @@
                                     @enderror
                                 </div>
                             @elseif(in_array($item['type'], ['file']))
-                                <div class="{{$item['css']}}">
+                                <div class="{{$item['css']}}" wire:poll>
                                     <label for="{{$key}}" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase" style="font-size: 12px">
                                         {{$item['label']}}
                                         {!!($item['required']) ? '<span class="text-red-900">*</span>' : ''!!}
                                     </label>
                                     @if ($image && !method_exists($image, 'getClientOriginalExtension'))
                                         <img src="{{ asset('storage/images/branches/' . $image) }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
+                                        <div class="mt-2">
+                                            <x-button-danger wire:click='image_remove' wire:loading.attr="disabled">
+                                                {{ __('Remove')}}
+                                            </x-button-danger>
+                                        </div>
                                     @elseif(session()->has('flash') && session('flash')['status'] == 'success')
                                         <img src="{{ asset('storage/images/branches/' . $image) }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
                                     @endif

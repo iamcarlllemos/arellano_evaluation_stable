@@ -6,10 +6,12 @@ use App\Models\CriteriaModel;
 use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-
+use Livewire\WithPagination;
 
 class Criteria extends Component
 {
+
+    use WithPagination;
 
     public $form;
 
@@ -130,10 +132,13 @@ class Criteria extends Component
 
         $action = $request->input('action');
 
-        $criteria = CriteriaModel::
-            when(strlen($this->search['type']) >= 1, function ($query) {
-                $query->where('name', 'like', '%' . $this->search['type'] . '%');
-            })->get();
+        $criteria = CriteriaModel::query();
+
+        if (strlen($this->search['type']) >= 1) {
+            $criteria->where('name', 'like', '%' . $this->search['type'] . '%');
+        }
+
+        $criteria = $criteria->paginate(5);
 
         $data = [
             'criteria' => $criteria

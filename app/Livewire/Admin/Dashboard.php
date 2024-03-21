@@ -27,29 +27,29 @@ class Dashboard extends Component
     public function fetch_data() {
 
         $this->data['counts'] = [
-            'branch' => [
+            'branches' => [
                 'count' => BranchModel::count(),
-                'color' => $this->generate_colors()
+                'route' => 'admin.programs.branches'
             ],
-            'course' => [
+            'courses' => [
                 'count' => CourseModel::count(),
-                'color' => $this->generate_colors()
+                'route' => 'admin.programs.courses'
             ],
-            'department' => [
+            'departments' => [
                 'count' => DepartmentModel::count(),
-                'color' => $this->generate_colors()
+                'route' => 'admin.programs.departments'
             ],
-            'subject' => [
+            'subjects' => [
                 'count' => SubjectModel::count(),
-                'color' => $this->generate_colors()
+                'route' => 'admin.programs.subjects'
             ],
-            'faculty' => [
+            'faculties' => [
                 'count' => FacultyModel::count(),
-                'color' => $this->generate_colors()
+                'route' => 'admin.accounts.faculty'
             ],
-            'student' => [
+            'students' => [
                 'count' => StudentModel::count(),
-                'color' => $this->generate_colors()
+                'route' => 'admin.accounts.student'
             ],
         ];
     }

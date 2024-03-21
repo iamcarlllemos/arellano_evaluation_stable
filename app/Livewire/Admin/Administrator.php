@@ -26,7 +26,8 @@ class Administrator extends Component
 
     public $search = [
         'type' => '',
-        'select' => ''
+        'select' => '',
+        'role' => ''
     ];
 
     public $id;
@@ -222,7 +223,17 @@ class Administrator extends Component
 
         $action = $request->input('action');
 
-        $users = User::where('id', '!=', $this->admin()->id)->get();
+        // $users = User::where('id', '!=', $this->admin()->id)->get();
+
+        $users = User::when(!empty($this->search['select']), function($query) {
+            $query->where('assigned_branch', $this->search['select']);
+        })->when(!empty($this->search['role']), function($query) {
+            $query->where('role', $this->search['role']);
+        })->when(strlen($this->search['type']) > 1, function($query) {
+            $query->where('name', 'like', '%' . $this->search['type'] . '%')
+                ->OrWhere('email', 'like', '%' . $this->search['type'] . '%')
+                ->OrWhere('username', 'like', '%' . $this->search['type'] . '%');
+        })->where('id', '!=', $this->admin()->id)->get();
 
         $data = [
             'branches' => BranchModel::with('departments')->get(),
@@ -233,3 +244,4 @@ class Administrator extends Component
 
     }
 }
+

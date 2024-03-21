@@ -112,7 +112,7 @@ class Student extends Component
 
         try {
 
-            $this->image->storeAs('public/images/students', $filename);
+            $this->image->storeAs('public/images/student', $filename);
 
             $model = new StudentModel;
 
@@ -205,14 +205,14 @@ class Student extends Component
 
                 $this->validate($rules, [], $this->attr);
 
-                Storage::disk('public')->delete('images/students/' . $model->image);
+                Storage::disk('public')->delete('images/student/' . $model->image);
 
                 $temp_filename = time();
                 $extension = $this->image->getClientOriginalExtension();
 
                 $filename = $temp_filename . '.' . $extension;
 
-                $this->image->storeAs('public/images/students', $filename);
+                $this->image->storeAs('public/images/student', $filename);
                 $this->image = $filename;
                 $model->image = $filename;
 
@@ -274,6 +274,7 @@ class Student extends Component
         $model = StudentModel::where('id', $this->id)->first();
 
         if($model) {
+            Storage::disk('public')->delete('images/student/' . $model->image);
             $model->delete();
             return redirect()->route('admin.accounts.student');
         } else {
@@ -283,6 +284,31 @@ class Student extends Component
             ]);
         }
     }
+
+    public function image_remove() {
+
+        $rules = [
+            'id' => 'required|exists:afears_student,id'
+        ];
+
+        $this->validate($rules);
+
+        $model = StudentModel::find($this->id);
+
+        Storage::disk('public')->delete('images/student/' . $model->image);
+
+        $model->image = null;
+        $model->save();
+
+        $this->dispatch('alert');
+        session()->flash('alert', [
+            'message' => 'Image removed.'
+        ]);
+
+        $this->image = '';
+
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');

@@ -162,19 +162,39 @@ class Branch extends Component
         $model = BranchModel::where('id', $this->id)->first();
 
         if($model) {
-
             Storage::disk('public')->delete('images/branches/' . $model->image);
-
             $model->delete();
-
             return redirect()->route('admin.programs.branches');
-
         } else {
             session()->flash('flash', [
                 'status' => 'failed',
                 'message' => 'No records found for id `'.$this->id.'`. Unable to delete.'
             ]);
         }
+
+    }
+
+    public function image_remove() {
+
+        $rules = [
+            'id' => 'required|exists:afears_branch,id'
+        ];
+
+        $this->validate($rules);
+
+        $model = BranchModel::find($this->id);
+
+        Storage::disk('public')->delete('images/branches/' . $model->image);
+
+        $model->image = null;
+        $model->save();
+
+        $this->dispatch('alert');
+        session()->flash('alert', [
+            'message' => 'Image removed.'
+        ]);
+
+        $this->image = '';
 
     }
 

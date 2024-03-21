@@ -181,7 +181,7 @@ class StudentController extends Controller
                                 'email' => [
                                     'label' => 'Email',
                                     'type' => 'email',
-                                    'placeholder' => 'Type ...',
+                                    'placeholder' => 'ex. student@email.com',
                                     'required' => true,
                                     'disabled' => false,
                                     'css' => 'col-span-12 md:col-span-3',
@@ -189,7 +189,7 @@ class StudentController extends Controller
                                 'username' => [
                                     'label' => 'Username',
                                     'type' => 'text',
-                                    'placeholder' => 'Type...',
+                                    'placeholder' => 'ex. student01',
                                     'required' => true,
                                     'disabled' => false,
                                     'css' => 'col-span-12 md:col-span-3',
@@ -314,7 +314,7 @@ class StudentController extends Controller
                                 'email' => [
                                     'label' => 'Email',
                                     'type' => 'email',
-                                    'placeholder' => 'Type ...',
+                                    'placeholder' => 'ex. student@email.com',
                                     'required' => true,
                                     'disabled' => false,
                                     'css' => 'col-span-12 md:col-span-3',
@@ -322,7 +322,7 @@ class StudentController extends Controller
                                 'username' => [
                                     'label' => 'Username',
                                     'type' => 'text',
-                                    'placeholder' => 'Type...',
+                                    'placeholder' => 'ex. student01',
                                     'required' => true,
                                     'disabled' => false,
                                     'css' => 'col-span-12 md:col-span-3',
@@ -447,7 +447,7 @@ class StudentController extends Controller
                                 'email' => [
                                     'label' => 'Email',
                                     'type' => 'email',
-                                    'placeholder' => 'Type ...',
+                                    'placeholder' => 'ex. student@email.com',
                                     'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-3',
@@ -455,7 +455,7 @@ class StudentController extends Controller
                                 'username' => [
                                     'label' => 'Username',
                                     'type' => 'text',
-                                    'placeholder' => 'Type...',
+                                    'placeholder' => 'ex. student01',
                                     'required' => false,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-3',

@@ -156,9 +156,14 @@
                 <a wire:navigate href="?action=create" class="bg-slate-900 py-2 px-6 text-white text-sm font-bold rounded-md">Create</a>
             </div>
             <div class="w-100 md:flex md:gap-3 mt-10 md:mt-0">
+                <select wire:ignore.self wire:model.live='search.role' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full mb-5 md:mb-0">
+                    <option value=""> - All Roles - </option>
+                    <option value="admin">Administrator</option>
+                    <option value="superadmin">Super Administrator</option>
+                </select>
                 <select wire:ignore.self wire:model.live='search.select' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full mb-5 md:mb-0">
                     @if(count($data['branches']) > 0)
-                        <option value=""> - All - </option>
+                        <option value=""> - All Branches - </option>
                         @foreach($data['branches'] as $item)
                             <option value="{{$item->id}}">{{$item->name}}</option>
                         @endforeach

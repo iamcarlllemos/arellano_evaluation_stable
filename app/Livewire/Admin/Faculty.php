@@ -204,7 +204,6 @@ class Faculty extends Component
 
             }
 
-
             try {
 
                 $model->department_id = $this->department_id;
@@ -236,6 +235,7 @@ class Faculty extends Component
         $model = FacultyModel::where('id', $this->id)->first();
 
         if($model) {
+            Storage::disk('public')->delete('images/faculty/' . $model->image);
             $model->delete();
             return redirect()->route('admin.accounts.faculty');
         } else {
@@ -245,6 +245,31 @@ class Faculty extends Component
             ]);
         }
     }
+
+    public function image_remove() {
+
+        $rules = [
+            'id' => 'required|exists:afears_faculty,id'
+        ];
+
+        $this->validate($rules);
+
+        $model = FacultyModel::find($this->id);
+
+        Storage::disk('public')->delete('images/faculty/' . $model->image);
+
+        $model->image = null;
+        $model->save();
+
+        $this->dispatch('alert');
+        session()->flash('alert', [
+            'message' => 'Image removed.'
+        ]);
+
+        $this->image = '';
+
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');

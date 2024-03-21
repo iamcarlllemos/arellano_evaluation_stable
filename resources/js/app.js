@@ -1,7 +1,5 @@
 import './bootstrap'
 import 'jstree'
-// import '@selectize/selectize/dist/css/selectize.default.css'
-// import '@selectize/selectize/dist/js/selectize.min.js'
 import 'flowbite/dist/flowbite.min.js'
 
 import $ from 'jquery';
@@ -13,22 +11,10 @@ window.jstree_init = jstree_init;
 $(function () {
 
     dropdown();
-    hideAlert();
-    // scrollTopError();
-
     jstree_init();
+    multi_select();
 
-    $('.selectize').each(function () {
-        const dataMaxItems = $(this).data('max-items');
-        $(this).selectize({
-            plugins: ["clear_button"],
-            delimiter: " - ",
-            persist: false,
-            maxItems: dataMaxItems,
-        });
-    });
-
-    $('.selectize-input').addClass('bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500');
+    generate_color();
 
     $(document).on("reinitializeJstree", function () {
         $('.jstree').jstree('destroy');
@@ -38,8 +24,11 @@ $(function () {
     });
 
     $(document).on('click', '#toggleSidebar', function() {
-        const sidebar = $('.sidebar');
-        sidebar.toggleClass('');
+        $('.sidebar').toggleClass('-translate-x-full')
+    });
+
+    $('.random-bg').each(function() {
+        generate_color(this);
     });
 
 });
@@ -99,18 +88,6 @@ function read_more(elem) {
     });
 }
 
-function scrollTopError() {
-    $('#form-button').on('click', () => {
-        $('html, body').animate({ scrollTop: 0 }, 'slow');
-    })
-}
-
-function hideAlert() {
-    $(document).on('click', '#close-alert', function() {
-        $('#alert').fadeOut();
-    });
-}
-
 function dropdown() {
     $(document).on('click', '#dropdown-button', function() {
         $('.dropdown').not($(this).next('.dropdown')).addClass('hidden');
@@ -128,8 +105,6 @@ function dropdown() {
         }
     });
 }
-
-multi_select();
 
 function multi_select() {
     let selected_card = 0;
@@ -153,6 +128,17 @@ function multi_select() {
         selected_card = 0;
     });
 }
+
+function generate_color(element) {
+    $.ajax({
+        url: 'https://x-colors.yurace.pro/api/random/all?type=dark',
+        method: 'GET',
+        success: function(response) {
+            $(element).css('background-color', response.hex);
+        }
+    });
+}
+
 
 Livewire.on('leaving', (data) => {
     if(data[0].has_saved) {

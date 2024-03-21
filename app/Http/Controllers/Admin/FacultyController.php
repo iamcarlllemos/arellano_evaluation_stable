@@ -145,7 +145,7 @@ class FacultyController extends Controller
                                 'email' => [
                                     'label' => 'Email',
                                     'type' => 'email',
-                                    'placeholder' => 'Type ...',
+                                    'placeholder' => 'ex. faculty@email.com',
                                     'required' => true,
                                     'disabled' => false,
                                     'css' => 'col-span-12 md:col-span-6',
@@ -177,7 +177,7 @@ class FacultyController extends Controller
                                 'username' => [
                                     'label' => 'Username',
                                     'type' => 'text',
-                                    'placeholder' => 'Type ...',
+                                    'placeholder' => 'ex. faculty01',
                                     'required' => true,
                                     'disabled' => false,
                                     'css' => 'col-span-12',
@@ -252,7 +252,7 @@ class FacultyController extends Controller
                                 'email' => [
                                     'label' => 'Email',
                                     'type' => 'email',
-                                    'placeholder' => 'Type ...',
+                                    'placeholder' => 'ex. faculty@email.com',
                                     'required' => true,
                                     'disabled' => false,
                                     'css' => 'col-span-12 md:col-span-6',
@@ -284,7 +284,7 @@ class FacultyController extends Controller
                                 'username' => [
                                     'label' => 'Username',
                                     'type' => 'text',
-                                    'placeholder' => 'Type ...',
+                                    'placeholder' => 'ex. faculty01',
                                     'required' => true,
                                     'disabled' => false,
                                     'css' => 'col-span-12',
@@ -359,7 +359,7 @@ class FacultyController extends Controller
                                 'email' => [
                                     'label' => 'Email',
                                     'type' => 'email',
-                                    'placeholder' => 'Type ...',
+                                    'placeholder' => 'ex. faculty@email.com',
                                     'required' => true,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-6',

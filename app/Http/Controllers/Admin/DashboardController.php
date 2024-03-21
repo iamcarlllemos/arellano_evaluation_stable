@@ -13,7 +13,9 @@ class DashboardController extends Controller
             'breadcrumbs' => 'Dashboard, home',
             'livewire' => [
                 'component' => 'admin.dashboard',
-                'data' => []
+                'data' => [
+                    'lazy' => true,
+                ]
             ]
         ];
 

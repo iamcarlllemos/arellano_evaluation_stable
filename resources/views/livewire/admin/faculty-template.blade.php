@@ -479,7 +479,7 @@
                             </div>
                         </div>
                         <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relatives">
-                            <img class="rounded-lg w-full h-56 object-cover brightness-50" src="{{asset('storage/images/branches/' . $collection['departments']['branches']->image)}}" alt="" />
+                            <img class="rounded-lg w-full h-56 object-cover brightness-50" src="{{$collection['departments']['branches']->image ? asset('storage/images/branches/' . $collection['departments']['branches']->image) : 'https://ui-avatars.com/api/?name='.$collection['departments']['branches']->name.'&length=2&bold=true&color=ff0000&background=random'}}" alt="" />
                             <div class="p-5 absolute bottom-0 left-0">
                                 <h5 class="text-2xl font-black tracking-tight text-white uppercase whitespace-break-spaces line-clamp-1">{{ucwords($collection->firstname . ' ' . $collection->lastname)}}</h5>
                                 <p class="text-sm text-white font-bold line-clamp-2">{{$collection['departments']->name}}</p>

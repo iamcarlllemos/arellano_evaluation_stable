@@ -32,7 +32,7 @@
 
             <!-- Page Content -->
             <main>
-                <div id="sidebar" class="sidebar fixed top-0 left-0 z-40 md:w-80 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar" style="background-color: #192231">
+                <div id="sidebar" class="sidebar fixed top-0 left-0 z-40 md:w-80 h-screen transition-transform -translate-x-full sm:translate-x-0" style="background-color: #192231">
                     @livewire('admin.sidebar')
                 </div>
                 <div class="content md:ml-80">

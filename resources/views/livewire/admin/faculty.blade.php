@@ -80,9 +80,14 @@
                                         {!!($item['required']) ? '<span class="text-red-900">*</span>' : ''!!}
                                     </label>
                                     @if ($image && !method_exists($image, 'getClientOriginalExtension'))
-                                        <img src="{{ asset('storage/images/branches/' . $image) }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
+                                        <img src="{{ asset('storage/images/faculty/' . $image) }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
+                                        <div class="mt-2">
+                                            <x-button-danger wire:click='image_remove' wire:loading.attr="disabled">
+                                                {{ __('Remove')}}
+                                            </x-button-danger>
+                                        </div>
                                     @elseif(session()->has('flash') && session('flash')['status'] == 'success')
-                                        <img src="{{ asset('storage/images/branches/' . $image) }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
+                                        <img src="{{ asset('storage/images/faculty/' . $image) }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
                                     @endif
                                     @if(in_array($form['action'], ['create', 'update']))
                                         <div
