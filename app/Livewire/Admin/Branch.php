@@ -30,6 +30,7 @@ class Branch extends Component
 
     public $name;
     public $image;
+    public $initPaginate = false;
 
     public $attr = [
         'name' => 'Branch name',
@@ -51,7 +52,7 @@ class Branch extends Component
     }
 
     public function placeholder() {
-        return view('livewire.placeholder');
+        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -220,11 +221,20 @@ class Branch extends Component
         }
     }
 
+    public function initPaginate() {
+        if(!$this->initPaginate) {
+            $this->dispatch('initPaginate');
+            $this->initPaginate = true;
+        }
+    }
+
     public function render() {
 
         $data = BranchModel::when(strlen($this->search['type'] >= 1), function($query) {
             $query->where('name', 'like', '%' . $this->search['type'] . '%');
         })->paginate($this->paginate_count);
+
+        $this->initPaginate();
 
         return view('livewire.admin.branch', compact('data'));
     }

@@ -153,6 +153,17 @@ function get_size(size) {
     return size;
 }
 
+function screenSize() {
+    let size;
+    size = get_size($(window).width());
+
+    Livewire.dispatch('screen', [size]);
+    $(window).resize(function() {
+        size = get_size($(window).width());
+        Livewire.dispatch('screen', [size]);
+    });
+}
+
 Livewire.on('leaving', (data) => {
     if(data[0].has_saved) {
         const result = window.confirm("This page is asking you to confirm that you want to leave — saved informations you’ve entered may not be saved.");
@@ -166,13 +177,11 @@ Livewire.on('leaving', (data) => {
 });
 
 $(document).on('livewire:initialized', () => {
-    let size;
-    size = get_size($(window).width());
-    console.log(size);
+    screenSize();
+});
 
-    Livewire.dispatch('screen', [size]);
-    $(window).resize(function() {
-        size = get_size($(window).width());
-        Livewire.dispatch('screen', [size]);
-    });
+
+
+Livewire.on('initPaginate', () => {
+    screenSize();
 });

@@ -26,6 +26,7 @@ class Questionnaire extends Component
     public $name;
 
     public $paginate_count;
+    public $initPaginate = false;
 
     public $attr = [
         'school_year_id' => 'School year',
@@ -45,7 +46,7 @@ class Questionnaire extends Component
     }
 
     public function placeholder() {
-        return view('livewire.placeholder');
+        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -169,6 +170,13 @@ class Questionnaire extends Component
         }
     }
 
+    public function initPaginate() {
+        if(!$this->initPaginate) {
+            $this->dispatch('initPaginate');
+            $this->initPaginate = true;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
@@ -178,6 +186,7 @@ class Questionnaire extends Component
             $query->where('name', 'like', '%' . $this->search['type'] . '%');
         })->paginate($this->paginate_count);
 
+        $this->initPaginate();
 
         $data = [
             'questionnaire' => $questionnaire

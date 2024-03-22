@@ -44,6 +44,8 @@ class Faculty extends Component
     public $password;
     public $password_repeat;
 
+    public $initPaginate = false;
+
     public $attr = [
         'department_id' => 'Department name',
         'employee_number' => 'Employee number',
@@ -79,7 +81,7 @@ class Faculty extends Component
     }
 
     public function placeholder() {
-        return view('livewire.placeholder');
+        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -292,6 +294,13 @@ class Faculty extends Component
         }
     }
 
+    public function initPaginate() {
+        if(!$this->initPaginate) {
+            $this->dispatch('initPaginate');
+            $this->initPaginate = true;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
@@ -329,6 +338,8 @@ class Faculty extends Component
                 $query->where('id', $assigned_branch);
             })
             ->get();
+
+        $this->initPaginate();
 
         $data = [
             'branches' => $branches,

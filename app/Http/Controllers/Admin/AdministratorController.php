@@ -35,7 +35,7 @@ class AdministratorController extends Controller
             'livewire' => [
                 'component' => 'admin.administrator',
                 'data' => [
-                    'lazy' => false,
+                    'lazy' => true,
                     'form' => [
                         'action' => $action,
                         'index' => [

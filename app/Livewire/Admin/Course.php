@@ -32,6 +32,8 @@ class Course extends Component
     public $code;
     public $name;
 
+    public $initPaginate = false;
+
     public $attr = [
         'department_id' => 'Department name',
         'code' => 'Course code',
@@ -54,7 +56,7 @@ class Course extends Component
     }
 
     public function placeholder() {
-        return view('livewire.placeholder');
+        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -176,6 +178,13 @@ class Course extends Component
         }
     }
 
+    public function initPaginate() {
+        if(!$this->initPaginate) {
+            $this->dispatch('initPaginate');
+            $this->initPaginate = true;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
@@ -233,6 +242,8 @@ class Course extends Component
         }
 
         $departments = array_values($departments);
+
+        $this->initPaginate();
 
         $data = [
             'departments' => $departments,

@@ -34,6 +34,8 @@ class Subject extends Component
     public $code;
     public $name;
 
+    public $initPaginate = false;
+
     public $attr = [
         'course_id' => 'Course name',
         'code' => 'Subject code',
@@ -56,7 +58,7 @@ class Subject extends Component
     }
 
     public function placeholder() {
-        return view('livewire.placeholder');
+        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -177,6 +179,13 @@ class Subject extends Component
         }
     }
 
+    public function initPaginate() {
+        if(!$this->initPaginate) {
+            $this->dispatch('initPaginate');
+            $this->initPaginate = true;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
@@ -237,6 +246,8 @@ class Subject extends Component
         }
 
         $courses = array_values($courses);
+
+        $this->initPaginate();
 
         $data = [
             'courses' => $courses,

@@ -26,6 +26,8 @@ class SchoolYear extends Component
     public $semester;
     public $status;
 
+    public $initPaginate = false;
+
     public $attr = [
         'name' => 'Subject name',
         'start_year' => 'Start year',
@@ -52,7 +54,7 @@ class SchoolYear extends Component
     }
 
     public function placeholder() {
-        return view('livewire.placeholder');
+        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -192,6 +194,13 @@ class SchoolYear extends Component
         }
     }
 
+    public function initPaginate() {
+        if(!$this->initPaginate) {
+            $this->dispatch('initPaginate');
+            $this->initPaginate = true;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
@@ -205,6 +214,8 @@ class SchoolYear extends Component
                         $query->whereRaw("CONCAT(start_year, '-', end_year) LIKE ?", ['%' . $this->search . '%']);
                     });
             })->paginate($this->paginate_count);
+
+        $this->initPaginate();
 
         $data = [
             'school_year' => $school_year

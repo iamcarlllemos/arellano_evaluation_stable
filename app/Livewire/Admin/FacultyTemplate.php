@@ -44,6 +44,7 @@ class FacultyTemplate extends Component
     public object $curriculum_template;
 
     public $paginate_count;
+    public $initPaginate = false;
     protected $listeners = ['screen'];
 
     public function mount(Request $request) {
@@ -138,7 +139,7 @@ class FacultyTemplate extends Component
     }
 
     public function placeholder() {
-        return view('livewire.placeholder');
+        return view('livewire.admin.placeholder');
     }
 
     public function toggleLinkMultiple($isTrue) {
@@ -231,6 +232,13 @@ class FacultyTemplate extends Component
         }
     }
 
+    public function initPaginate() {
+        if(!$this->initPaginate) {
+            $this->dispatch('initPaginate');
+            $this->initPaginate = true;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action') ?? '';
@@ -267,6 +275,7 @@ class FacultyTemplate extends Component
             })->get();
 
         $this->loadCurriculumTemplate();
+        $this->initPaginate();
 
         $data = [
             'branches' => $branches,

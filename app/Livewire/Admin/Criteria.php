@@ -22,6 +22,7 @@ class Criteria extends Component
     public $id;
     public $name;
 
+    public $initPaginate = false;
 
     public $attr = [
         'name' => 'Criteria name'
@@ -41,7 +42,7 @@ class Criteria extends Component
     }
 
     public function placeholder() {
-        return view('livewire.placeholder');
+        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -149,6 +150,13 @@ class Criteria extends Component
         }
     }
 
+    public function initPaginate() {
+        if(!$this->initPaginate) {
+            $this->dispatch('initPaginate');
+            $this->initPaginate = true;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
@@ -161,11 +169,11 @@ class Criteria extends Component
 
         $criteria = $criteria->paginate($this->paginate_count);
 
+        $this->initPaginate();
+
         $data = [
             'criteria' => $criteria
         ];
-
-
 
         return view('livewire.admin.criteria', compact('data'));
     }

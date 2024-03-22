@@ -43,6 +43,8 @@ class Administrator extends Component
     public $password;
     public $password_repeat;
 
+    public $initPaginate = false;
+
     public $attr = [
         'firstname' => 'First name',
         'lastname' => 'Last name',
@@ -78,7 +80,7 @@ class Administrator extends Component
     }
 
     public function placeholder() {
-        return view('livewire.placeholder');
+        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -242,11 +244,16 @@ class Administrator extends Component
         }
     }
 
+    public function initPaginate() {
+        if(!$this->initPaginate) {
+            $this->dispatch('initPaginate');
+            $this->initPaginate = true;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
-
-        // $users = User::where('id', '!=', $this->admin()->id)->get();
 
         $users = User::when(!empty($this->search['select']), function($query) {
             $query->where('assigned_branch', $this->search['select']);
@@ -258,6 +265,8 @@ class Administrator extends Component
                 ->OrWhere('username', 'like', '%' . $this->search['type'] . '%');
         })->where('id', '!=', $this->admin()->id)
         ->paginate($this->paginate_count);
+
+        $this->initPaginate();
 
         $data = [
             'branches' => BranchModel::with('departments')->get(),

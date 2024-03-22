@@ -47,6 +47,8 @@ class Student extends Component
     public $password;
     public $password_repeat;
 
+    public $initPaginate = false;
+
     public $attr = [
         'course_id' => 'Course name',
         'student_number' => 'Student number',
@@ -86,7 +88,7 @@ class Student extends Component
     }
 
     public function placeholder() {
-        return view('livewire.placeholder');
+        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -330,6 +332,13 @@ class Student extends Component
         }
     }
 
+    public function initPaginate() {
+        if(!$this->initPaginate) {
+            $this->dispatch('initPaginate');
+            $this->initPaginate = true;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
@@ -371,6 +380,8 @@ class Student extends Component
                 $query->where('id', $assigned_branch);
             })
             ->get();
+
+        $this->initPaginate();
 
         $data = [
             'branches' => $branches,

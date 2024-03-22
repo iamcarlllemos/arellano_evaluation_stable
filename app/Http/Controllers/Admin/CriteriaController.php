@@ -32,7 +32,7 @@ class CriteriaController extends Controller
             'livewire' => [
                 'component' => 'admin.criteria',
                 'data' => [
-                    'lazy' => false,
+                    'lazy' => true,
                     'form' => [
                         'action' => $action,
                         'index' => [

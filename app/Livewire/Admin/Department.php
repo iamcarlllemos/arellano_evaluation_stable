@@ -35,6 +35,8 @@ class Department extends Component
     public $branch_id;
     public $name;
 
+    public $initPaginate = false;
+
     public $attr = [
         'branch_id' => 'Branch name',
         'name' => 'Department name'
@@ -53,7 +55,7 @@ class Department extends Component
     }
 
     public function placeholder() {
-        return view('livewire.placeholder');
+        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -169,6 +171,13 @@ class Department extends Component
         }
     }
 
+    public function initPaginate() {
+        if(!$this->initPaginate) {
+            $this->dispatch('initPaginate');
+            $this->initPaginate = true;
+        }
+    }
+
     public function render(Request $request) {
 
         $action = $request->input('action');
@@ -193,6 +202,8 @@ class Department extends Component
                 $query->where('id', $assigned_branch);
             })
             ->get();
+
+        $this->initPaginate();
 
         $data = [
             'branches' => $branches,
