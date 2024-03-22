@@ -72,7 +72,7 @@ class StudentController extends Controller
             'livewire' => [
                 'component' => 'admin.student',
                 'data' => [
-                    'lazy' => false,
+                    'lazy' => true,
                     'form' => [
                         'action' => $action,
                         'index' => [

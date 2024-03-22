@@ -36,7 +36,7 @@ class DepartmentController extends Controller
             'livewire' => [
                 'component' => 'admin.department',
                 'data' => [
-                    'lazy' => false,
+                    'lazy' => true,
                     'form' => [
                         'action' => $action,
                         'index' => [

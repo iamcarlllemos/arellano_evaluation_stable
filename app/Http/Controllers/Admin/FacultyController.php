@@ -74,7 +74,7 @@ class FacultyController extends Controller
             'livewire' => [
                 'component' => 'admin.faculty',
                 'data' => [
-                    'lazy' => false,
+                    'lazy' => true,
                     'form' => [
                         'title' => [
                             'index' => 'All Faculties',

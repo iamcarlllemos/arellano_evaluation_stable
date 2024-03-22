@@ -30,7 +30,7 @@ class BranchController extends Controller
             'livewire' => [
                 'component' => 'admin.branch',
                 'data' => [
-                    'lazy' => false,
+                    'lazy' => true,
                     'form' => [
                         'action' => $action,
                         'index' => [

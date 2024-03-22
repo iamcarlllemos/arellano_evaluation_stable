@@ -159,6 +159,8 @@ class Criteria extends Component
 
     public function render(Request $request) {
 
+        sleep(2);
+
         $action = $request->input('action');
 
         $criteria = CriteriaModel::query();

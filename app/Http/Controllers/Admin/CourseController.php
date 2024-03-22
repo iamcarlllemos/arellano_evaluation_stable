@@ -75,7 +75,7 @@ class CourseController extends Controller
             'livewire' => [
                 'component' => 'admin.course',
                 'data' => [
-                    'lazy' => false,
+                    'lazy' => true,
                     'form' => [
                         'action' => $action,
                         'index' => [

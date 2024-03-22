@@ -31,7 +31,7 @@ class SchoolYearController extends Controller
             'livewire' => [
                 'component' => 'admin.school-year',
                 'data' => [
-                    'lazy' => false,
+                    'lazy' => true,
                     'form' => [
                         'action' => $action,
                         'index' => [

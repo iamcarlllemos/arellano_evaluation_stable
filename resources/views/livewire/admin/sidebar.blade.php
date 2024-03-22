@@ -1,5 +1,7 @@
 <div>
-    <img src="{{asset('/images/logo-banner.png')}}" alt="" srcset="" class="px-3 w-100 h-[100px] md:h-[110px] mt-8 mb-5">
+    <div>
+        <img src="{{asset('/images/logo-banner.png')}}" alt="" srcset="" class="px-3 w-100 h-[100px] md:h-[110px] mt-8 mb-5">
+    </div>
     @persist('scrollbar')
     <div class="overflow-y-auto py-2" wire:scroll style="height: calc(100vh - 160px)">
         <ul class="list ms-6">

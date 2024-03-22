@@ -45,7 +45,7 @@ class QuestionnaireController extends Controller
             'livewire' => [
                 'component' => 'admin.questionnaire',
                 'data' => [
-                    'lazy' => false,
+                    'lazy' => true,
                     'form' => [
                         'title' => [
                             'index' => 'All Questionnaires',

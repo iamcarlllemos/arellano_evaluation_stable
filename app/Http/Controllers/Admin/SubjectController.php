@@ -80,7 +80,7 @@ class SubjectController extends Controller
             'livewire' => [
                 'component' => 'admin.subject',
                 'data' => [
-                    'lazy' => false,
+                    'lazy' => true,
                     'form' => [
                         'action' => $action,
                         'index' => [
