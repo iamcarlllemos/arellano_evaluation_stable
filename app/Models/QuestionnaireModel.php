@@ -26,6 +26,7 @@ class QuestionnaireModel extends Model
     public function questionnaire_item() {
         return $this->hasMany(QuestionnaireItemModel::class, 'questionnaire_id', 'id');
     }
+
     public function sluggable(): array {
         return [
             'slug' => [

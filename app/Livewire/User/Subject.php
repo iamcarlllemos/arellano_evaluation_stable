@@ -38,7 +38,7 @@ class Subject extends Component
                 Rule::exists('afears_school_year')->where(function($query) use($evaluate, $semester) {
                     $query->where('id', $evaluate)
                         ->where('semester', $semester)
-                        ->where('status', 1);
+                        ->where('status', '1');
                 })
             ],
             'semester' => [
@@ -47,8 +47,8 @@ class Subject extends Component
             ]
         ];
 
-        $validate = Validator::make($input, $rules);
 
+        $validate = Validator::make($input, $rules);
 
         if($validate->fails()) {
             return redirect()->route('user.dashboard');
@@ -59,8 +59,8 @@ class Subject extends Component
         $user_data = StudentModel::find($user_id);
         $course = $user_data->course_id;
         $year = $user_data->year_level;
-    
-    
+
+
         $data = CurriculumTemplateModel::with('subjects.courses.departments.branches')
             ->where('course_id', $course)
             ->where('year_level', $year)

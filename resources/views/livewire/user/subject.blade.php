@@ -7,15 +7,15 @@
         </div>
     </div>
     <div class="grid grid-cols-12 gap-4 mt-10" wire:poll>
-        @forelse ($subjects as $item)
-            <div class="col-span-12 md:col-span-6 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
-                <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relative w-full">
-                    <img class="relative rounded-lg  object-cover brightness-50" src="{{asset('storage/images/branches/' . $item->courses->departments->branches->image)}}" alt="" />
+        @forelse ($subjects as $collection)
+            <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-3 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
+                <div class="h-[300px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relative w-full">
+                    <img class="rounded-lg w-full h-full object-cover brightness-50" src="{{$collection->courses->departments->branches->image ? asset('storage/images/branches/' . $collection->courses->departments->branches->image) : 'https://ui-avatars.com/api/?name='.$collection->courses->departments->branches->name.'&length=2&bold=true&background=random&color=fff'}}" alt="" />
                     <div class="p-5 absolute bottom-0 left-0 w-full">
-                        <h5 class="text-2xl font-bold tracking-tight text-white uppercase whitespace-break-spaces line-clamp-1">{{$item->subjects->name}}</h5>
-                        <p class="text text-white font-bold line-clamp-2">{{$item->subjects->code}}</p>
+                        <h5 class="text-2xl font-bold tracking-tight text-white uppercase whitespace-break-spaces line-clamp-1">{{$collection->subjects->name}}</h5>
+                        <p class="text text-white font-bold line-clamp-2">{{$collection->subjects->code}}</p>
                         <div wire:ignore>
-                            @if ($item->is_exists)
+                            @if ($collection->is_exists)
                                 <span class="uppercase px-4 mt-3 p-2 inline-flex justify-center items-center bg-green-100 text-green-800 text-xs font-medium rounded-full dark:bg-green-900 dark:text-green-300">
                                     <span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
                                     Response recorded
@@ -27,13 +27,13 @@
                                 </span>
                             @endif
                             <hr class="my-4">
-                            @if (!$item->is_exists)
+                            @if (!$collection->is_exists)
                                 <div class="mt-3 flex justify-end">
-                                    <a wire:navigate href="{{route('user.evaluate', ['evaluate' => $evaluate, 'template' => $item->id, 'semester' => $semester, 'step' => 1])}}" class=" bg-blue-100 text-blue-800 p-2 px-4 text-sm font-bold rounded-lg uppercase">Start</a>
+                                    <a wire:navigate href="{{route('user.evaluate', ['evaluate' => $evaluate, 'template' => $collection->id, 'semester' => $semester, 'step' => 1])}}" class=" bg-blue-100 text-blue-800 p-2 px-4 text-sm font-bold rounded-lg uppercase">Start</a>
                                 </div>
                             @else
                                 <div class="mt-3 flex justify-end">
-                                    <a wire:navigate href="{{route('user.evaluate', ['evaluate' => $evaluate, 'template' => $item->id, 'semester' => $semester, 'step' => 1])}}" class=" bg-orange-100 text-orange-800 p-2 px-4 text-sm font-bold rounded-lg uppercase">View Response</a>
+                                    <a wire:navigate href="{{route('user.evaluate', ['evaluate' => $evaluate, 'template' => $collection->id, 'semester' => $semester, 'step' => 1])}}" class=" bg-orange-100 text-orange-800 p-2 px-4 text-sm font-bold rounded-lg uppercase">View Response</a>
                                 </div>
                             @endif
                         </div>
@@ -58,8 +58,5 @@
                 </div>
             </div>
         @endforelse
-        <div class="col-span-12 w-full block">
-            {{$data['departments']->links()}}
-        </div>
     </div>
 </div>

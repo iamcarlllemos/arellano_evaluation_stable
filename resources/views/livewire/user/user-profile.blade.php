@@ -7,7 +7,7 @@
             </div>
             <div class="block md:flex items-center px-5 border-b rounded-t dark:border-gray-600 gap-5 pb-4">
                 <div>
-                    <img src="{{asset('storage/images/students/'.$user->image)}}" class="w-[150px] h-[150px] rounded-lg">
+                    <img src="{{$user->image ? asset('storage/images/student/' . $user->image) : 'https://ui-avatars.com/api/?name='.$user->firstname.'&length=2&bold=true&color=ff0000&background=random'}}" class="rounded-lg w-[150px] h-[150px]">
                 </div>
                 <div class="mb-3">
                     <ul class="list-none mt-3">

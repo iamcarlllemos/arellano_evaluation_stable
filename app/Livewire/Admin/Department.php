@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -13,7 +14,6 @@ use App\Traits\Account;
 
 use App\Models\BranchModel;
 use App\Models\DepartmentModel;
-use Livewire\WithPagination;
 
 class Department extends Component
 {

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {
@@ -22,6 +21,7 @@ class SubjectController extends Controller
         $init['response'] = [
             'step' => 1,
         ];
+
         session($init);
 
         return view('user.template', compact('data'));

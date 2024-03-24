@@ -228,11 +228,11 @@
                                 <div class="font-medium text-sm">Year Level: <span class="underline">{{to_ordinal($template['year'], 'year')}}</span></div>
                                 <div class="font-medium text-sm">Semester: <span class="underline">{{to_ordinal($template['semester'], 'semester')}}</span></div>
                                 <hr class="mt-2 mb-3">
-                                @script
+                                @push('scripts')
                                     <script>
                                         jstree_init();
                                     </script>
-                                @endscript
+                                @endpush
                                 <div class="jstree mt-2">
                                     <ul>
                                         @foreach ($template['subjects'] as $template)

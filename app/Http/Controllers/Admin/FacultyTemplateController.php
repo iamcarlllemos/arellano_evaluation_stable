@@ -45,7 +45,7 @@ class FacultyTemplateController extends Controller
             'livewire' => [
                 'component' => 'admin.faculty-template',
                 'data' => [
-                    'lazy' => true,
+                    'lazy' => false,
                     'form' => [
                         'title' => [
                             'index' => 'All Faculty Templates',

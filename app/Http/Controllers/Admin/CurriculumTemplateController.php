@@ -34,7 +34,7 @@ class CurriculumTemplateController extends Controller
             'livewire' => [
                 'component' => 'admin.curriculum-template',
                 'data' => [
-                    'lazy' => true,
+                    'lazy' => false,
                     'form' => [
                         'title' => [
                             'index' => 'All Curriculum Templates',

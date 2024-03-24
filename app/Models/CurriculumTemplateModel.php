@@ -29,6 +29,6 @@ class CurriculumTemplateModel extends Model
     public function subjects() {
         return $this->belongsTo(SubjectModel::class, 'subject_id');
     }
-    
+
 
 }

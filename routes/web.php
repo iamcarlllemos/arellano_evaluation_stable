@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\CriteriaController;
 use App\Http\Controllers\Admin\QuestionnaireController;
 use App\Http\Controllers\Admin\QuestionnaireItemController;
 use App\Http\Controllers\Admin\FacultyTemplateController;
+use App\Http\Controllers\Admin\ResultsController;
 
 
 use App\Http\Controllers\Admin\StudentController;
@@ -60,6 +61,7 @@ Route::prefix('admin')->middleware('admins')->group(function() {
     Route::middleware('role:superadmin')->prefix('programs')->group(function() {
         Route::get('/branches', [BranchController::class, 'index'])->name('admin.programs.branches');
         Route::get('/school-year', [SchoolYearController::class, 'index'])->name('admin.programs.school-year');
+        Route::get('/school-year/results', [ResultsController::class, 'index'])->name('admin.programs.results');
         Route::get('/criteria', [CriteriaController::class, 'index'])->name('admin.programs.criteria');
         Route::get('/questionnaire', [QuestionnaireController::class, 'index'])->name('admin.programs.questionnaire');
         Route::get('/questionnaire/{slug}', [QuestionnaireItemController::class, 'index'])->name('admin.programs.questionnaire.item');
@@ -82,7 +84,7 @@ Route::prefix('user')->group(function() {
     Route::post('login', [UserLoginController::class, 'login'])->name('user.login');
     Route::any('logout', [UserLoginController::class, 'logout'])->name('user.logout');
 
-    Route::middleware('students')->group(function() {
+    Route::middleware('users')->group(function() {
         Route::get('dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
         Route::get('subject', [UserSubjectController::class, 'index'])->name('user.subject');
         Route::get('subject/evaluate/start', [UserEvaluateController::class, 'index'])->name('user.evaluate');

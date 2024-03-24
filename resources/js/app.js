@@ -11,7 +11,6 @@ window.jstree_init = jstree_init;
 $(function () {
 
     dropdown();
-    jstree_init();
     multi_select();
 
     generate_color();
@@ -178,6 +177,7 @@ Livewire.on('leaving', (data) => {
 
 $(document).on('livewire:initialized', () => {
     screenSize();
+    jstree_init();
 });
 
 

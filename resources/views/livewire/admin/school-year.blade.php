@@ -203,12 +203,16 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="border h-56 border-gray-200 rounded-lg shadow bg-slate-800 dark:border-gray-700 relative">
-                        <div class="p-5 absolute bottom-0 left-0">
+                    <div class="h-[300px] border border-gray-200 rounded-lg shadow bg-slate-800 dark:border-gray-700 relative">
+                        <div class="p-5 absolute bottom-0 left-0 w-full">
                             <h5 class="text-2xl font-bold tracking-tight text-white uppercase whitespace-break-spaces line-clamp-1">{{$school_year->name}}</h5>
-                            <p class="text-sm text-white font-bold line-clamp-2">{{$school_year->start_year . '-' . $school_year->end_year . ' ('.to_ordinal($school_year->semester, 'year').')'}}</p>
-                            <div class="mt-2">
+                            <p class="text-sm text-white font-bold line-clamp-2">{{$school_year->start_year . '-' . $school_year->end_year . ' ('.to_ordinal($school_year->semester, 'semester').')'}}</p>
+                            <div class="my-3">
                                 {!!to_status($school_year->status)!!}
+                            </div>
+                            <hr>
+                            <div class="flex justify-end mt-3">
+                                <a wire:navigate  href="{{route('admin.programs.results', ['id' => $school_year->id])}}" class=" bg-blue-100 text-blue-800 p-2 px-4 text-sm mt-3 font-bold rounded-lg">View Results</a>
                             </div>
                         </div>
                         <div class="absolute top-6 left-5 p-4 rounded-full text-slate-100 backdrop-blur-sm bg-white/30">

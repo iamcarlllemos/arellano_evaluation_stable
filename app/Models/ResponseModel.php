@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ResponseModel extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'afears_response';
 
     protected $fillable = [

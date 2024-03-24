@@ -19,4 +19,8 @@ class ResponseItemModel extends Model
 
     public $timestamps = false;
 
+    public function questionnaire() {
+        return $this->hasOne(QuestionnaireItemModel::class, 'id',  'questionnaire_id');
+    }
+
 }

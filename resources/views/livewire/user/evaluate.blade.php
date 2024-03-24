@@ -45,25 +45,23 @@
         </ol>
 
     </div>
-    <pre>
-    </pre>
     <div class="bg-white border shadow rounded-lg mt-5 p-8">
         @if (session()->has('response') && session('response')['step'] == 1)
             <h4 class="text-2xl font-bold">Faculty Name &amp; Schedule</h4>
             <p class="my-2 text-sm font-medium">Note: Please ensure that the faculty and schedule align with the details provided in your registration form. This evaluation will be part of your <span class="uppercase font-bold underline">clearance requirements</span>.</p>
             <form wire:submit="move(2)" class="mt-10">
                 <div class="grid gap-4 mb-4 grid-cols-12">
-                    @foreach($form[$form['action']]['data'] as $key => $item) 
+                    @foreach($form[$form['action']]['data'] as $key => $item)
                         @if(in_array($item['type'], ['text', 'email', 'date', 'time', 'password']))
                             <div class="{{$item['css']}}">
-                                <label for="{{$key}}" 
-                                    class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase" 
+                                <label for="{{$key}}"
+                                    class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase"
                                     style="font-size: 12px">
-                                    {{$item['label']}} 
+                                    {{$item['label']}}
                                     {!!($item['required']) ? '<span class="text-red-900">*</span>' : ''!!}
                                 </label>
-                                <input type="{{$item['type']}}" wire:model.live="{{$key}}" 
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                                <input type="{{$item['type']}}" wire:model="{{$key}}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     placeholder="{{$item['placeholder']}}"
                                     {{($item['disabled']) ? 'disabled' : '' }}
                                     >
@@ -77,9 +75,9 @@
                                     {{$item['label']}}
                                     {!!($item['required']) ? '<span class="text-red-900">*</span>' : ''!!}
                                 </label>
-                                <select 
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                    wire:model.live="{{$key}}"
+                                <select
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    wire:model="{{$key}}"
                                     {{($item['disabled']) ? 'disabled' : ''}}>
                                     @if(count($item['options']['data']) > 0)
                                         @if($item['options']['is_from_db'])
@@ -119,7 +117,7 @@
                                     <img src="{{ asset('storage/images/branches/' . $image) }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
                                 @elseif(session()->has('flash') && session('flash')['status'] == 'success')
                                     <img src="{{ asset('storage/images/branches/' . $image) }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
-                                @endif       
+                                @endif
                                 <div class="flex items-center justify-center w-full mt-3">
                                     <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                         <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -129,20 +127,20 @@
                                             <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                                             <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG or GIF (MAX. 5MB)</p>
                                         </div>
-                                        <input 
-                                            id="dropzone-file" 
-                                            wire:model.live="{{$key}}" 
-                                            type="{{$item['type']}}" 
-                                            class="hidden" 
+                                        <input
+                                            id="dropzone-file"
+                                            wire:model="{{$key}}"
+                                            type="{{$item['type']}}"
+                                            class="hidden"
                                             {{($item['disabled']) ? 'disabled' : ''}}
                                         />
                                     </label>
-                                </div>                  
+                                </div>
                                 <div wire:loading wire:target="{{$key}}">Uploading...</div>
                                 @if ($image && method_exists($image, 'getClientOriginalExtension') && in_array($image->getClientOriginalExtension(), ['png', 'jpg', 'jpeg']))
                                     <label for="{{$key}}" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase mt-5" style="font-size: 12px">Image Preview</label>
-                                    <img src="{{ $image->temporaryUrl() }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">    
-                                @endif    
+                                    <img src="{{ $image->temporaryUrl() }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
+                                @endif
                                 @error($key)
                                     <p class="text-xs text-red-500 font-bold mt-2">{{$message}}</p>
                                 @enderror
@@ -152,7 +150,7 @@
                 </div>
                 <label class="text-gray-700 mt-2 font-bold" style="font-size: 14px">Note: Make sure schedule is <span class="uppercase underline">appropriate</span> to your registration form.</label>
                 <div class="flex justify-end mt-10">
-                    <button 
+                    <button
                         class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
                         Next
@@ -201,26 +199,26 @@
                                         <div class="text-sm font-medium text-justify">{{$questionnaire['name']}}</div>
                                         <div class="flex items-center">
                                             <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model.live="responses.{{$questionnaire['id']}}" value="4" class="">
+                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="4" class="">
                                             </div>
-                                        
+
                                             <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model.live="responses.{{$questionnaire['id']}}" value="3" class="">
+                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="3" class="">
                                             </div>
-                                        
+
                                             <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model.live="responses.{{$questionnaire['id']}}" value="2" class="">
+                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="2" class="">
                                             </div>
-                                        
+
                                             <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model.live="responses.{{$questionnaire['id']}}" value="1" class="">
+                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="1" class="">
                                             </div>
                                         </div>
                                     </div>
                                     @if(in_array($questionnaire['id'], session('error') ?? []))
                                         <label class="text-red-900 uppercase font-bold mt-3" style="font-size:12px">*This field is required</label>
                                     @enderror
-                                    
+
                                 </div>
                             @endforeach
                         </div>
@@ -232,14 +230,14 @@
                                 </svg>
                                 <span class="sr-only">Info</span>
                                 <div>
-                                <span class="font-medium">No records found.</span>
+                                <span class="font-medium">Currently no survery questionnaires added.</span>
                                 </div>
                             </div>
                         </div>
                     @endforelse
                 </form>
                 <div class="flex justify-between mt-10">
-                    <button 
+                    <button
                         wire:click='move(1)'
                         class="inline-flex items-center border border-sky-700 text-slate-900 bg-transparent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
@@ -260,10 +258,10 @@
                 </div>
                 <div class="bg-white p-4 border shadow-lg rounded-b text-sm font-medium">
                     <ul>
-                        <li>Name: {{$faculty['name']}}</li>
-                        <li>Subject: {{$faculty['subject']}}</li>
-                        <li>Schedule: {{$faculty['schedule']}} </li>
-                        <li>Academic Year: {{'SY ' . $faculty['academic_year']}}</li>
+                        <li>Name: </li>
+                        <li>Subject: </li>
+                        <li>Schedule:  </li>
+                        <li>Academic Year:</li>
                     </ul>
                 </div>
             </div>
@@ -306,26 +304,25 @@
                                         <div class="text-sm font-medium text-justify">{{$questionnaire['name']}}</div>
                                         <div class="flex items-center">
                                             <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model.live="responses.{{$questionnaire['id']}}" value="4" disabled>
+                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="4" disabled>
                                             </div>
-                                        
+
                                             <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model.live="responses.{{$questionnaire['id']}}" value="3" disabled>
+                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="3" disabled>
                                             </div>
-                                        
+
                                             <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model.live="responses.{{$questionnaire['id']}}" value="2" disabled>
+                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="2" disabled>
                                             </div>
-                                        
+
                                             <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model.live="responses.{{$questionnaire['id']}}" value="1" disabled>
+                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="1" disabled>
                                             </div>
                                         </div>
                                     </div>
-                                    @if(in_array($questionnaire['id'], session('error') ?? []))
+                                    @if(in_array($questionnaire['id'], session('error') ?? ['dum']))
                                         <label class="text-red-900 uppercase font-bold mt-3" style="font-size:12px">*This field is required</label>
-                                    @enderror
-                                    
+                                    @endif
                                 </div>
                             @endforeach
                         </div>
@@ -337,30 +334,34 @@
                                 </svg>
                                 <span class="sr-only">Info</span>
                                 <div>
-                                <span class="font-medium">No records found.</span>
+                                <span class="font-medium">Currently no survery questionnaires added.</span>
                                 </div>
                             </div>
                         </div>
                     @endforelse
                     <div class="mb-4 mt-5">
                         <div class="p-4 text-sm text-blue-800 border-t border-r border-l rounded-t-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400">
-                            <h1 class="text-1xl font-bold uppercase">User Comments <span class="text-xs">(optional)</span></h1>
+                            <h1 class="text-1xl font-bold uppercase">User Comments</h1>
                         </div>
                         <div class="bg-white p-4 border shadow-lg rounded-b text-sm font-medium">
-                            <textarea 
-                                wire:model.live='comments'
-                                name="comments" 
-                                id="comnents" 
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 resize-none" rows="8" 
+                            <textarea
+                                wire:model='comments'
+                                name="comments"
+                                id="comnents"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 resize-none" rows="8"
                                 placeholder="Write something..."
                                 {{session('response')['faculty']['is_preview'] ? 'disabled' : '' }}
-                                ></textarea>
+                                >
+                            </textarea>
+                            @if(session('error') && session('error')[0] == 'comment')
+                                <label class="text-red-900 uppercase font-bold mt-3" style="font-size:12px">*This field is required</label>
+                            @endif
                         </div>
                     </div>
                 </form>
-                
+
                 <div class="flex justify-{{session('response')['faculty']['is_preview'] ? 'end' : 'between'}} mt-10">
-                    <button 
+                    <button
                         wire:click='move(2)'
                         class="inline-flex items-center border border-sky-700 text-slate-900 bg-transparent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 {{session('response')['faculty']['is_preview'] ? 'hidden' : '456'}}"
                         >
@@ -379,7 +380,7 @@
                 <h6 class="text-md mt-1 mb-3 font-medium">Your response has been recorded.</h6>
                 <hr class="my-3">
                 <p class="text-sm text-slate-900 font-medium">Thank you for completing the faculty evaluation. Your feedback is valuable in enhancing the teaching and learning experience. Your participation contributes to the continuous improvement of our educational environment. We appreciate your time and thoughtful responses.</p>
-                <p class="mt-3 text-sm text-slate-900 font-medium">Please note: The QR code provided below serves as a means to trace your response. It can be utilized as evidence of your submission, a prerequisite for clearance requirements.</p>                            
+                <p class="mt-3 text-sm text-slate-900 font-medium">Please note: The QR code provided below serves as a means to trace your response. It can be utilized as evidence of your submission, a prerequisite for clearance requirements.</p>
                 <div class="mt-5">
                     {{session('response')['faculty']['qr_code']}}
                 </div>
@@ -388,7 +389,7 @@
                     <p class="text-xs uppercase font-bold text-slate-800">Submitted {{session('response')['faculty']['date_submitted']}}</p>
                 </div>
                 <div class="flex justify-between mt-10">
-                    <button 
+                    <button
                         wire:click='move(3)'
                         class="inline-flex items-center border border-sky-700 text-slate-900 bg-transparent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
