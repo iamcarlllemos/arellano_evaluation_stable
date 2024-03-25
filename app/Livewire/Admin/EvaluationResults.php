@@ -11,8 +11,15 @@ use Livewire\Component;
 class EvaluationResults extends Component
 {
     public $form;
-
     public $view;
+
+    public $display = [
+        'wm' => false,
+        'sqm' => false,
+        'std' => false,
+        'itrprtn' => false,
+        'comments' => false
+    ];
 
     public function mount() {
 
@@ -21,6 +28,12 @@ class EvaluationResults extends Component
         $faculty = $this->form['faculty'];
         $template = $this->form['template'];
         $subject = $this->form['subject'];
+
+        if(!session()->has('settings')) {
+            $this->result_settings();
+        }
+
+        $this->display = session('settings')['evaluation_result_display'];
 
         if($action == 'view') {
 
@@ -60,6 +73,11 @@ class EvaluationResults extends Component
                         'id' => $item['id'],
                         'criteria_name' => $item['criteria']['name'],
                         'total_responses' => 0,
+                        'averages' => [
+                            'mean' => 0,
+                            'squared_mean' => 0,
+                            'standard_deviation' => 0,
+                        ],
                         'comments' => $comments,
                         'items' => []
                     ];
@@ -99,7 +117,7 @@ class EvaluationResults extends Component
             }
 
             // compute weighted mean
-           foreach ($evaluation_result as &$criteria) {
+           foreach ($evaluation_result as $key => &$criteria) {
                 foreach ($criteria['items'] as &$item) {
                     $tally = [];
                     foreach ($item['tally'] as $key => $value) {
@@ -139,6 +157,22 @@ class EvaluationResults extends Component
                 }
             }
 
+            // compute average mean
+            foreach($evaluation_result as $key => $results) {
+                $mean = 0;
+                $squared = 0;
+                $std = 0;
+                foreach($results['items'] as $items) {
+                    $mean += $items['weighted_mean'];
+                    $squared += $items['mean_squared'];
+                    $std += $items['standard_deviation'];
+                }
+                $evaluation_result[$key]['averages']['mean'] = $mean / $results['total_responses'];
+                $evaluation_result[$key]['averages']['squared_mean'] = $squared / $results['total_responses'];
+                $evaluation_result[$key]['averages']['standard_deviation'] = $std / $results['total_responses'];
+                $evaluation_result[$key]['averages']['interpretation'] = $this->interpretation($squared / $results['total_responses']);
+            }
+
             $evaluation_result = array_values($evaluation_result);
 
             $view = [
@@ -159,6 +193,7 @@ class EvaluationResults extends Component
                             });
                     })
                     ->get()[0],
+
                 'evaluation_result' => $evaluation_result,
             ];
 
@@ -206,8 +241,19 @@ class EvaluationResults extends Component
         }
     }
 
+    public function result_settings() {
+        $to_save = [
+            'settings' => [
+                'evaluation_result_display' => $this->display
+            ]
+        ];
+
+        session($to_save);
+    }
+
     public function render()
     {
+
 
         $dirty_departments = DepartmentModel::with('branches')->get();
 
