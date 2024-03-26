@@ -1,13 +1,14 @@
 import './bootstrap'
 import 'jstree'
 import 'flowbite/dist/flowbite.min.js'
-import print from 'print-js'
+import ApexCharts from 'apexcharts'
 
 import $ from 'jquery';
 
 window.$ = $;
 window.read_more = read_more;
 window.jstree_init = jstree_init;
+window.ApexCharts = ApexCharts;
 
 $(function () {
 

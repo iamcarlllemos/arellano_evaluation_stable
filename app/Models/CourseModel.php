@@ -15,10 +15,13 @@ class CourseModel extends Model
         'name',
         'code'
     ];
-    
+
     public function departments() {
         return $this->belongsTo(DepartmentModel::class, 'department_id', 'id');
     }
-    
-  
+
+    public function template() {
+        return $this->hasMany(CurriculumTemplateModel::class, 'course_id');
+    }
+
 }

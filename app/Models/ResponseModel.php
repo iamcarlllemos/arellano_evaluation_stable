@@ -25,4 +25,9 @@ class ResponseModel extends Model
     public function items() {
         return $this->hasMany(ResponseItemModel::class, 'response_id', 'id');
     }
+
+    public function students() {
+        return $this->belongsTo(StudentModel:: class, 'user_id');
+    }
+
 }

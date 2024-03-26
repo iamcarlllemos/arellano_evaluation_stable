@@ -6,11 +6,15 @@ use App\Models\DepartmentModel;
 use App\Models\FacultyModel;
 use App\Models\QuestionnaireModel;
 use App\Models\ResponseModel;
-use Illuminate\Support\Facades\Validator;
+use App\Models\StudentModel;
 use Livewire\Component;
+use App\Traits\Censored;
 
 class EvaluationResults extends Component
 {
+
+    use Censored;
+
     public $form;
     public $view;
     public $key;
@@ -77,7 +81,7 @@ class EvaluationResults extends Component
             $questionnaire = QuestionnaireModel::with('questionnaire_item.criteria')
             ->where('school_year_id', $id)->get()[0];
 
-            $responses = ResponseModel::with('items.questionnaire.criteria')
+            $responses = ResponseModel::with('students', 'items.questionnaire.criteria')
                 ->where('evaluation_id', $id)
                 ->where('template_id', $template)
                 ->where('faculty_id', $faculty)->get();
@@ -96,13 +100,29 @@ class EvaluationResults extends Component
                     ];
                 }
 
-                $comments[] = $response['comment'];
+
+                $student_name = $response['students']['firstname']. ' ' . $response['students']['lastname'];
+                $comments[] = [
+                    'commented_by' => $this->applyCensored($student_name),
+                    'comment' => $response['comment']
+                ];
             }
 
             $evaluation_result = [
                 'total_responses' => 0,
                 'total_items' => 0,
                 'comments' => $comments,
+                'respondents' => [
+                    'total_respondents' => 0,
+                    'respondents' => 0,
+                    'not_responded' => 0
+                ],
+                'total_interpretation' => [
+                    '1' => 0,
+                    '2' => 0,
+                    '3' => 0,
+                    '4' => 0
+                ],
                 'averages' => [
                     'mean' => 0,
                     'squared_mean' => 0,
@@ -197,13 +217,16 @@ class EvaluationResults extends Component
                 foreach ($criteria['items'] as &$item) {
                     $interpretation = $this->interpretation($item['weighted_mean']);
                     $item['interpretation'] = $interpretation;
+                    $evaluation_result['total_interpretation'][$interpretation]++;
                 }
             }
 
             // compute average mean
+
             $mean = 0;
             $squared = 0;
             $std = 0;
+
             foreach($evaluation_result['stats'] as $key => $results) {
 
                 foreach($results['items'] as $items) {
@@ -231,6 +254,7 @@ class EvaluationResults extends Component
             }
 
             $evaluation_result['stats'] = array_values($evaluation_result['stats']);
+            $evaluation_result['respondents'] = $this->respondents();
 
             $view = [
                 'faculty' => FacultyModel::with([
@@ -267,41 +291,13 @@ class EvaluationResults extends Component
 
     public function interpretation($value) {
         if($value >= 0 && $value <= 1.49) {
-            return '
-            <div class="flex justify-center items-center px-4 py-3 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-                <div class="text-sm font-bold uppercase text-center">
-                    Disagree
-                </div>
-                </button>
-            </div>
-            ';
+            return 1;
         } else if($value >= 1.50 && $value <= 2.49) {
-            return '
-            <div class="flex justify-center items-center px-4 py-3 text-orange-800 rounded-lg bg-orange-50 dark:bg-gray-800 dark:text-orange-400" role="alert">
-                <div class="text-sm font-bold uppercase text-center">
-                    Neutral
-                </div>
-                </button>
-            </div>
-            ';
+            return 2;
         } else if ($value >= 2.50 && $value <= 3.49){
-            return '
-            <div class="flex justify-center items-center px-4 py-3 text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-400" role="alert">
-                <div class="text-sm font-bold uppercase text-center">
-                    Agree
-                </div>
-                </button>
-            </div>
-            ';
+            return 3;
         } else if($value >= 3.50) {
-            return '
-            <div class="flex justify-center items-center px-4 py-3 text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
-                <div class="text-sm font-bold uppercase text-center">
-                    Strongly Agree
-                </div>
-                </button>
-            </div>
-            ';
+            return 4;
         }
     }
 
@@ -313,6 +309,30 @@ class EvaluationResults extends Component
         ];
 
         session($to_save);
+    }
+
+    public function respondents() {
+        $total_respondents = StudentModel::with('courses.template')
+            ->whereHas('courses.template', function($query) {
+                $query->where('id', $this->form['template'])
+                    ->where('subject_id', $this->form['subject']);
+            })
+            ->get()->count();
+
+        $respondents = ResponseModel::where('evaluation_id', $this->form['id'])
+            ->where('template_id', $this->form['template'])
+            ->get()->count();
+
+        $not_responded = $total_respondents - $respondents;
+
+        $data = [
+            'total_respondents' => $total_respondents,
+            'respondents' => $respondents,
+            'not_responded' => $not_responded
+        ];
+
+        return $data;
+
     }
 
     public function render()
