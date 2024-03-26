@@ -6,12 +6,15 @@ use App\Models\DepartmentModel;
 use App\Models\FacultyModel;
 use App\Models\QuestionnaireModel;
 use App\Models\ResponseModel;
+use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 
 class EvaluationResults extends Component
 {
     public $form;
     public $view;
+    public $key;
+    public $toKey;
 
     public $display = [
         'wm' => false,
@@ -21,7 +24,41 @@ class EvaluationResults extends Component
         'comments' => false
     ];
 
-    public function mount() {
+    public function generate_random_code($length = 8) {
+        $characters = 'abcdefghijklmnopqrstuvwxyz';
+        $randomWord = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomWord .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        $this->key = $randomWord;
+    }
+
+    public function delete_responses() {
+        $rules = [
+            'key' => 'required',
+            'toKey' => 'required|same:key'
+        ];
+
+        $this->validate($rules, [
+            'toKey.same' => 'Entered code must match with the given code.'
+        ], [
+            'toKey' => 'Code'
+        ]);
+
+        $eval_id = $this->form['id'];
+        $temp_id = $this->form['template'];
+        $fac_id = $this->form['faculty'];
+        $subj_id = $this->form['subject'];
+
+        ResponseModel::where('evaluation_id', $eval_id)
+            ->where('template_id', $temp_id)
+            ->where('faculty_id', $fac_id)
+            ->delete();
+
+        return redirect()->route('admin.programs.results', ['id' => $eval_id, 'action' => 'view', 'faculty' => $fac_id, 'template' => $temp_id, 'subject' => $subj_id]);
+    }
+
+    public function result_view() {
 
         $action = $this->form['action'];
         $id = $this->form['id'];
@@ -36,7 +73,6 @@ class EvaluationResults extends Component
         $this->display = session('settings')['evaluation_result_display'];
 
         if($action == 'view') {
-
 
             $questionnaire = QuestionnaireModel::with('questionnaire_item.criteria')
             ->where('school_year_id', $id)->get()[0];
@@ -63,31 +99,37 @@ class EvaluationResults extends Component
                 $comments[] = $response['comment'];
             }
 
-            $evaluation_result = [];
+            $evaluation_result = [
+                'total_responses' => 0,
+                'total_items' => 0,
+                'comments' => $comments,
+                'averages' => [
+                    'mean' => 0,
+                    'squared_mean' => 0,
+                    'standard_deviation' => 0,
+                    'descriptive_interpretation' => 0,
+                ],
+                'stats' => [],
+            ];
 
             // bind tally of responses to designated questionnaires
             foreach ($questionnaire['questionnaire_item'] as $item) {
                 $key = $item['criteria_id'];
-                if (!isset($evaluation_result[$key])) {
-                    $evaluation_result[$key] = [
+                if (!isset($evaluation_result['stats'][$key])) {
+                    $evaluation_result['stats'][$key] = [
                         'id' => $item['id'],
                         'criteria_name' => $item['criteria']['name'],
-                        'total_responses' => 0,
-                        'averages' => [
-                            'mean' => 0,
-                            'squared_mean' => 0,
-                            'standard_deviation' => 0,
-                        ],
-                        'comments' => $comments,
                         'items' => []
                     ];
                 }
 
+                $evaluation_result['total_items']++;
+
                 foreach ($sorted_responses as $response) {
                     if ($response['questionnaire_id'] == $item['id']) {
-                        $evaluation_result[$key]['total_responses'] = count($responses);
-                        if (!isset($evaluation_result[$key]['items'][$response['questionnaire_id']])) {
-                            $evaluation_result[$key]['items'][$response['questionnaire_id']] = [
+                        $evaluation_result['total_responses'] = count($responses);
+                        if (!isset($evaluation_result['stats'][$key]['items'][$response['questionnaire_id']])) {
+                            $evaluation_result['stats'][$key]['items'][$response['questionnaire_id']] = [
                                 'id' => $item['id'],
                                 'response_id' => $response['response_id'],
                                 'name' => $item['item'],
@@ -105,44 +147,45 @@ class EvaluationResults extends Component
                             ];
                         }
 
-                        $evaluation_result[$key]['items'][$response['questionnaire_id']]['tally'][$response['response_rating']]++;
+                        $evaluation_result['stats'][$key]['items'][$response['questionnaire_id']]['tally'][$response['response_rating']]++;
                     }
                 }
+
             }
 
             // reset indexed values
-            $evaluation_result = array_values($evaluation_result);
-            foreach ($evaluation_result as &$criteria) {
+            $evaluation_result['stats'] = array_values($evaluation_result['stats']);
+            foreach ($evaluation_result['stats'] as &$criteria) {
                 $criteria['items'] = array_values($criteria['items']);
             }
 
             // compute weighted mean
-           foreach ($evaluation_result as $key => &$criteria) {
+           foreach ($evaluation_result['stats'] as $key => &$criteria) {
                 foreach ($criteria['items'] as &$item) {
                     $tally = [];
                     foreach ($item['tally'] as $key => $value) {
                         $tally[$key] = $key * $value;
                     }
-                    $total = array_sum($tally) / (int) $criteria['total_responses'];
+                    $total = array_sum($tally) / (int) $evaluation_result['total_responses'];
                     $item['weighted_mean'] = $total;
                 }
             }
 
             // compute mean squared
-            foreach ($evaluation_result as &$criteria) {
+            foreach ($evaluation_result['stats'] as &$criteria) {
                 foreach ($criteria['items'] as &$item) {
                     $tally = [];
                     foreach ($item['tally'] as $key => &$value) {
                         $squared = ($key * $key);
                         $tally[$key] = $squared * $value;
                     }
-                    $total = array_sum($tally) / (int) $criteria['total_responses'];
+                    $total = array_sum($tally) / (int) $evaluation_result['total_responses'];
                     $item['mean_squared'] = $total;
                 }
             }
 
             // compute standard deviation
-            foreach ($evaluation_result as &$criteria) {
+            foreach ($evaluation_result['stats'] as &$criteria) {
                 foreach ($criteria['items'] as &$item) {
                     $sd = sqrt((int)$item['mean_squared'] - (int) $item['weighted_mean']);
                     $item['standard_deviation'] = $sd;
@@ -150,7 +193,7 @@ class EvaluationResults extends Component
             }
 
             // put the interpretation
-            foreach ($evaluation_result as &$criteria) {
+            foreach ($evaluation_result['stats'] as &$criteria) {
                 foreach ($criteria['items'] as &$item) {
                     $interpretation = $this->interpretation($item['weighted_mean']);
                     $item['interpretation'] = $interpretation;
@@ -158,22 +201,36 @@ class EvaluationResults extends Component
             }
 
             // compute average mean
-            foreach($evaluation_result as $key => $results) {
-                $mean = 0;
-                $squared = 0;
-                $std = 0;
+            $mean = 0;
+            $squared = 0;
+            $std = 0;
+            foreach($evaluation_result['stats'] as $key => $results) {
+
                 foreach($results['items'] as $items) {
                     $mean += $items['weighted_mean'];
                     $squared += $items['mean_squared'];
                     $std += $items['standard_deviation'];
                 }
-                $evaluation_result[$key]['averages']['mean'] = $mean / $results['total_responses'];
-                $evaluation_result[$key]['averages']['squared_mean'] = $squared / $results['total_responses'];
-                $evaluation_result[$key]['averages']['standard_deviation'] = $std / $results['total_responses'];
-                $evaluation_result[$key]['averages']['interpretation'] = $this->interpretation($squared / $results['total_responses']);
+
+                if($evaluation_result['total_responses'] > 0) {
+                    $evaluation_result['averages'] = [
+                        'mean' => $mean / $evaluation_result['total_items'],
+                        'squared_mean' => $squared / $evaluation_result['total_items'],
+                        'standard_deviation' => $std / $evaluation_result['total_items'],
+                        'descriptive_interpretation' => $this->interpretation($squared / $evaluation_result['total_items'])
+                    ];
+                } else {
+                    $evaluation_result['averages'] = [
+                        'mean' => 0,
+                        'squared_mean' => 0,
+                        'standard_deviation' => 0,
+                        'descriptive_interpretation' => 'No responses yet.'
+                    ];
+                }
+
             }
 
-            $evaluation_result = array_values($evaluation_result);
+            $evaluation_result['stats'] = array_values($evaluation_result['stats']);
 
             $view = [
                 'faculty' => FacultyModel::with([
@@ -199,6 +256,13 @@ class EvaluationResults extends Component
 
             $this->view = $view;
         }
+    }
+
+    public function mount() {
+
+        $this->result_view();
+        $this->generate_random_code();
+
     }
 
     public function interpretation($value) {
@@ -253,7 +317,6 @@ class EvaluationResults extends Component
 
     public function render()
     {
-
 
         $dirty_departments = DepartmentModel::with('branches')->get();
 

@@ -1,6 +1,7 @@
 import './bootstrap'
 import 'jstree'
 import 'flowbite/dist/flowbite.min.js'
+import print from 'print-js'
 
 import $ from 'jquery';
 
@@ -179,8 +180,6 @@ $(document).on('livewire:initialized', () => {
     screenSize();
     jstree_init();
 });
-
-
 
 Livewire.on('initPaginate', () => {
     screenSize();

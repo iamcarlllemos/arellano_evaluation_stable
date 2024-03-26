@@ -18,6 +18,7 @@
     "dependencies": {
         "alpinejs": "^3.13.7",
         "flowbite": "^2.3.0",
-        "jstree": "^3.3.16"
+        "jstree": "^3.3.16",
+        "print-js": "^1.6.0"
     }
 }
