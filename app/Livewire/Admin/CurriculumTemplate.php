@@ -49,7 +49,6 @@ class CurriculumTemplate extends Component
     public function loadDepartments($id = null) {
 
         if($id == null) {
-
             $role = $this->admin()->role;
             $assigned_branch = $this->admin()->assigned_branch;
 
@@ -128,8 +127,8 @@ class CurriculumTemplate extends Component
 
         $this->loadDepartments();
 
-        $action = $request->input('action');
-        $id = $request->input('id');
+        $action = $this->form['action'];
+        $id = $this->form['id'];
         $data = CurriculumTemplateModel::first();
 
         if($data) {
@@ -191,10 +190,6 @@ class CurriculumTemplate extends Component
                 $this->courses = $courses;
             }
         }
-    }
-
-    public function placeholder() {
-        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -269,9 +264,11 @@ class CurriculumTemplate extends Component
         }
     }
 
-    public function render(Request $request) {
+    public function placeholder() {
+        return view('livewire.admin.placeholder');
+    }
 
-        $action = $request->input('action');
+    public function render(Request $request) {
 
         $keywords = [
             'course' => $this->search['course'] ?? 0,

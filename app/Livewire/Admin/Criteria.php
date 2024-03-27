@@ -10,7 +10,6 @@ use Livewire\WithPagination;
 
 class Criteria extends Component
 {
-
     use WithPagination;
 
     public $form;
@@ -33,17 +32,13 @@ class Criteria extends Component
 
     public function mount(Request $request) {
 
-        $id = $request->input('id');
+        $id = $this->form['id'];
         $data = CriteriaModel::find($id);
 
         $this->id = $id;
         $this->name = $data->name ?? null;
-
     }
 
-    public function placeholder() {
-        return view('livewire.admin.placeholder');
-    }
 
     public function create() {
 
@@ -157,11 +152,11 @@ class Criteria extends Component
         }
     }
 
+    public function placeholder() {
+        return view('livewire.admin.placeholder');
+    }
+
     public function render(Request $request) {
-
-        sleep(2);
-
-        $action = $request->input('action');
 
         $criteria = CriteriaModel::query();
 

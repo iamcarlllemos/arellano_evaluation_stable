@@ -11,20 +11,14 @@ class CriteriaController extends Controller
 {
     public function index(Request $request) {
 
-        $action = $request->input('action') ?? '';
-
-        $get_data = [];
+        $action = $request->input('action');
+        $id = $request->input('id');
 
         if(in_array($action, ['update', 'delete'])) {
-
-            $id = $request->input('id');
-
             $data = CriteriaModel::where('id', $id);
-
             if(!$data->exists()) {
-                return redirect()->route('programs.criteria');
+                return redirect()->route('admin.programs.criteria');
             }
-
         }
 
         $data = [
@@ -34,6 +28,7 @@ class CriteriaController extends Controller
                 'data' => [
                     'lazy' => true,
                     'form' => [
+                        'id' => $id,
                         'action' => $action,
                         'index' => [
                             'title' => 'All Criterias',

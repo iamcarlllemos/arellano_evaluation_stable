@@ -16,20 +16,14 @@ class StudentController extends Controller
 
     public function index(Request $request) {
 
-        $action = $request->input('action') ?? '';
-
-        $get_data = [];
+        $id = $request->input('id');
+        $action = $request->input('action');
 
         if(in_array($action, ['update', 'delete'])) {
-
-            $id = $request->input('id');
-
             $data = StudentModel::where('id', $id);
-
             if(!$data->exists()) {
-                return redirect()->route('accounts.student');
+                return redirect()->route('admin.accounts.student');
             }
-
         }
 
         $role = $this->admin()->role;
@@ -74,6 +68,7 @@ class StudentController extends Controller
                 'data' => [
                     'lazy' => true,
                     'form' => [
+                        'id' => $id,
                         'action' => $action,
                         'index' => [
                             'title' => 'All Students',

@@ -14,16 +14,11 @@ class CurriculumTemplateController extends Controller
 {
     public function index(Request $request) {
 
-        $action = $request->input('action') ?? '';
-
-        $get_data = [];
+        $id = $request->input('id');
+        $action = $request->input('action');
 
         if(in_array($action, ['update', 'delete'])) {
-
-            $id = $request->input('id');
-
             $data = CurriculumTemplateModel::where('id', $id);
-
             if(!$data->exists()) {
                 return redirect()->route('linking.curriculum-template');
             }
@@ -34,7 +29,7 @@ class CurriculumTemplateController extends Controller
             'livewire' => [
                 'component' => 'admin.curriculum-template',
                 'data' => [
-                    'lazy' => false,
+                    'lazy' => true,
                     'form' => [
                         'title' => [
                             'index' => 'All Curriculum Templates',
@@ -48,6 +43,7 @@ class CurriculumTemplateController extends Controller
                             'update' => 'Apply changed to selected curriculum template.',
                             'delete' => 'Permanently delete selected curriculum template.',
                         ],
+                        'id' => $id,
                         'action' => $action,
                         'data' => [
                             'year_level' => [

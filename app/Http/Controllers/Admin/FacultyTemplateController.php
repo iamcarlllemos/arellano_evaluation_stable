@@ -13,20 +13,16 @@ class FacultyTemplateController extends Controller
 {
     public function index(Request $request) {
 
-        $action = $request->input('action') ?? '';
+        $id = $request->input('id');
+        $action = $request->input('action');
 
         $get_data = [];
 
         if(in_array($action, ['update', 'delete', 'template', 'connect'])) {
-
-            $id = $request->input('id');
-
             $data = FacultyModel::where('id', $id);
-
             if(!$data->exists()) {
-                return redirect()->route('linking.faculty-template');
+                return redirect()->route('admin.linking.faculty-template');
             }
-
         }
 
         $dirty = DepartmentModel::with('branches')->get();
@@ -45,7 +41,7 @@ class FacultyTemplateController extends Controller
             'livewire' => [
                 'component' => 'admin.faculty-template',
                 'data' => [
-                    'lazy' => false,
+                    'lazy' => true,
                     'form' => [
                         'title' => [
                             'index' => 'All Faculty Templates',
@@ -61,6 +57,7 @@ class FacultyTemplateController extends Controller
                             'delete' => 'Permanently delete selected faculty template.',
                             'template' => 'Connect to faculty to different curriculum template.'
                         ],
+                        'id' => $id,
                         'action' => $action,
                         'data' => [
                             'employee_number' => [

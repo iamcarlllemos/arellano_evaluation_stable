@@ -31,26 +31,19 @@ class FacultyTemplate extends Component
     public $search ;
 
     public $id;
-    public $department_id;
-    public $employee_number;
-    public $firstname;
-    public $lastname;
-    public $middlename;
-    public $gender;
-    public $image;
-    public $email;
+
     public $template;
     public $link_multiple = [];
-    public object $curriculum_template;
+    public $curriculum_template;
 
     public $paginate_count;
     public $initPaginate = false;
     protected $listeners = ['screen'];
 
-    public function mount(Request $request) {
+    public function mount() {
 
-        $action = $request->input('action');
-        $id = $request->input('id');
+        $action = $this->form['action'];
+        $id = $this->form['id'];
 
         $this->id = $id;
 
@@ -138,11 +131,8 @@ class FacultyTemplate extends Component
             $this->curriculum_template = $curriculum_template;
     }
 
-    public function placeholder() {
-        return view('livewire.admin.placeholder');
-    }
-
     public function toggleLinkMultiple($isTrue) {
+
         $dirty = $this->link_multiple;
 
         $cleaned = [];
@@ -169,6 +159,7 @@ class FacultyTemplate extends Component
                 }
 
             }
+
             if($isTrue) {
                 FacultyTemplateModel::insert($cleaned);
 
@@ -179,6 +170,7 @@ class FacultyTemplate extends Component
                     ->whereIn('template_id', $templateIds)
                     ->delete();
             }
+
             $this->link_multiple = [];
         }
     }
@@ -239,9 +231,11 @@ class FacultyTemplate extends Component
         }
     }
 
-    public function render(Request $request) {
+    public function placeholder() {
+        return view('livewire.admin.placeholder');
+    }
 
-        $action = $request->input('action') ?? '';
+    public function render(Request $request) {
 
         $role = auth()->guard('admins')->user()->role;
         $assigned_branch = auth()->guard('admins')->user()->assigned_branch;

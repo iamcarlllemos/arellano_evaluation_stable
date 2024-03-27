@@ -12,19 +12,13 @@ class QuestionnaireController extends Controller
 {
     public function index(Request $request) {
 
-        $action = $request->input('action') ?? '';
-
-        $get_data = [];
+        $action = $request->input('action');
+        $slug = $request->input('slug');
 
         if(in_array($action, ['update', 'delete'])) {
-
-            $slug = $request->input('slug');
-
             $data = QuestionnaireModel::where('slug', $slug);
-
-
             if(!$data->exists()) {
-                return redirect()->route('programs.questionnaire');
+                return redirect()->route('admin.programs.questionnaire');
             }
 
         }
@@ -47,18 +41,7 @@ class QuestionnaireController extends Controller
                 'data' => [
                     'lazy' => true,
                     'form' => [
-                        'title' => [
-                            'index' => 'All Questionnaires',
-                            'create' => 'Create Questionnaire',
-                            'update' => 'Update Questionnaire',
-                            'delete' => 'Delete Questionnaire'
-                        ],
-                        'subtitle' => [
-                            'index' => 'List of all questionnaires created.',
-                            'create' => 'Create or add new questionnaire.',
-                            'update' => 'Apply changed to selected questionnaire.',
-                            'delete' => 'Permanently delete selected questionnaire'
-                        ],
+                        'slug' => $slug,
                         'action' => $action,
                         'index' => [
                             'title' => 'All Questionnaires',

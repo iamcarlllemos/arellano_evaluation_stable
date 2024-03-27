@@ -17,7 +17,8 @@ class FacultyController extends Controller
 
     public function index(Request $request) {
 
-        $action = $request->input('action') ?? '';
+        $id = $request->input('id');
+        $action = $request->input('action');
 
         $role = $this->admin()->role;
         $assigned_branch = $this->admin()->assigned_branch;
@@ -25,13 +26,9 @@ class FacultyController extends Controller
         $get_data = [];
 
         if(in_array($action, ['update', 'delete'])) {
-
-            $id = $request->input('id');
-
             $data = FacultyModel::where('id', $id);
-
             if(!$data->exists()) {
-                return redirect()->route('accounts.student');
+                return redirect()->route('admin.accounts.student');
             }
         }
 
@@ -76,18 +73,7 @@ class FacultyController extends Controller
                 'data' => [
                     'lazy' => true,
                     'form' => [
-                        'title' => [
-                            'index' => 'All Faculties',
-                            'create' => 'Create Faculty',
-                            'update' => 'Update Faculty',
-                            'delete' => 'Delete Faculty'
-                        ],
-                        'subtitle' => [
-                            'index' => 'List of all faculties created.',
-                            'create' => 'Create or add new faculty.',
-                            'update' => 'Apply changed to selected faculty.',
-                            'delete' => 'Permanently delete selected faculty'
-                        ],
+                        'id' => $id,
                         'action' => $action,
                         'index' => [
                             'title' => 'All Faculties',

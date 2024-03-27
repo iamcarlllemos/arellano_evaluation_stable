@@ -19,7 +19,6 @@ class ResultsController extends Controller
             return redirect()->route('admin.programs.school-year');
         }
 
-
         $action = $request->input('action');
         $faculty = $request->input('faculty');
         $template = $request->input('template');

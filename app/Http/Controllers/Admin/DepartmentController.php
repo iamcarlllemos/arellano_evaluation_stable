@@ -12,21 +12,15 @@ class DepartmentController extends Controller
 {
     public function index(Request $request) {
 
-        $action = $request->input('action') ?? '';
-
-        $get_data = [];
+        $id = $request->input('id');
+        $action = $request->input('action');
 
         if(in_array($action, ['update', 'delete'])) {
-
-            $id = $request->input('id');
-
             $data = DepartmentModel::where('id', $id);
-
             if(!$data->exists()) {
-                return redirect()->route('programs.departments');
+                return redirect()->route('admin.programs.departments');
             }
         }
-
 
         $branches = BranchModel::with('departments')->get();
 
@@ -38,6 +32,7 @@ class DepartmentController extends Controller
                 'data' => [
                     'lazy' => true,
                     'form' => [
+                        'id' => $id,
                         'action' => $action,
                         'index' => [
                             'title' => 'All Departments',

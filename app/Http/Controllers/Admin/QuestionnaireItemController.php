@@ -26,8 +26,9 @@ class QuestionnaireItemController extends Controller
             'livewire' => [
                 'component' => 'admin.questionnaire-item',
                 'data' => [
-                    'lazy' => false,
+                    'lazy' => true,
                     'form' => [
+                        'id' => $id,
                         'data' => [
                             'questionnaire_id' => [
                                 'label' => 'Questionnaire ',

@@ -17,23 +17,17 @@ class CourseController extends Controller
 
     public function index(Request $request) {
 
-        $action = $request->input('action') ?? '';
+        $id = $request->input('id');
+        $action = $request->input('action');
 
         $role = $this->admin()->role;
         $assigned_branch = $this->admin()->assigned_branch;
 
-        $get_data = [];
-
         if(in_array($action, ['update', 'delete'])) {
-
-            $id = $request->input('id');
-
             $data = CourseModel::where('id', $id);
-
             if(!$data->exists()) {
-                return redirect()->route('programs.departments');
+                return redirect()->route('admin.programs.departments');
             }
-
         }
 
         $departments_dirty = DepartmentModel::with('branches')
@@ -54,7 +48,6 @@ class CourseController extends Controller
         } else {
             foreach($departments_dirty as $department) {
                 $key = $department->branches->id;
-
                 if(!isset($departments[$key])) {
                     $departments[$key] = (object) [
                         'id' => $key,
@@ -77,6 +70,7 @@ class CourseController extends Controller
                 'data' => [
                     'lazy' => true,
                     'form' => [
+                        'id' => $id,
                         'action' => $action,
                         'index' => [
                             'title' => 'All Courses',

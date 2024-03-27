@@ -37,16 +37,12 @@ class Questionnaire extends Component
 
     public function mount(Request $request) {
 
-        $slug = $request->input('slug');
+        $slug = $this->form['slug'];
         $data = QuestionnaireModel::where('slug', $slug)->first();
 
         $this->id = $data->id ?? '';
         $this->school_year_id = $data->school_year_id ?? '';
         $this->name = $data->name ?? '';
-    }
-
-    public function placeholder() {
-        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -177,14 +173,16 @@ class Questionnaire extends Component
         }
     }
 
+    public function placeholder() {
+        return view('livewire.admin.placeholder');
+    }
+
     public function render(Request $request) {
 
-        $action = $request->input('action');
-
         $questionnaire = QuestionnaireModel::with(['school_year'])
-        ->when(strlen($this->search['type']) >= 1, function ($query) {
-            $query->where('name', 'like', '%' . $this->search['type'] . '%');
-        })->paginate($this->paginate_count);
+            ->when(strlen($this->search['type']) >= 1, function ($query) {
+                $query->where('name', 'like', '%' . $this->search['type'] . '%');
+            })->paginate($this->paginate_count);
 
         $this->initPaginate();
 

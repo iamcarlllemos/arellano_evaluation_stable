@@ -18,23 +18,18 @@ class SubjectController extends Controller
 
     public function index(Request $request) {
 
-        $action = $request->input('action') ?? '';
+        $id = $request->input('id');
+        $action = $request->input('action');
 
         $role = $this->admin()->role;
         $assigned_branch = $this->admin()->assigned_branch;
 
-        $get_data = [];
 
         if(in_array($action, ['update', 'delete'])) {
-
-            $id = $request->input('id');
-
             $data = SubjectModel::where('id', $id);
-
             if(!$data->exists()) {
                 return redirect()->route('programs.departments');
             }
-
         }
 
         $dirty = CourseModel::with(['departments.branches'])->get();
@@ -82,6 +77,7 @@ class SubjectController extends Controller
                 'data' => [
                     'lazy' => true,
                     'form' => [
+                        'id' => $id,
                         'action' => $action,
                         'index' => [
                             'title' => 'All Subjects',

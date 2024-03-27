@@ -28,25 +28,10 @@ class QuestionnaireItem extends Component
         'item' => 'Questionnaire item'
     ];
 
-    public function mount(Request $request) {
-
-        $slug = explode('/', $request->getRequestUri());
-        $slug = end($slug);
-
-        $this->slug = $slug;
-
-        $data = QuestionnaireModel::where('slug', $slug)->first();
-
-        $this->id = $data->id ?? '';
-        $this->questionnaire_id = $data->id ?? '';
-
-        $this->loadItems();
-    }
-
     public function loadItems() {
 
         $dirty_data = QuestionnaireModel::with(['questionnaire_item.criteria'])
-            ->where('slug', $this->slug)->get();
+            ->where('id', $this->id)->get();
 
         $cleaned_data = [];
 
@@ -70,7 +55,7 @@ class QuestionnaireItem extends Component
 
     }
 
-    public function save(Request $request) {
+    public function save() {
 
         if(empty($this->questionnaire_item_id)) {
             $this->is_update = false;
@@ -203,6 +188,18 @@ class QuestionnaireItem extends Component
         $this->is_update = false;
         $this->criteria_id = '';
         $this->item = '';
+    }
+
+    public function mount() {
+
+        $id = $this->form['id'];
+
+        $data = QuestionnaireModel::where('id', $id)->first();
+
+        $this->id = $data->id ?? '';
+        $this->questionnaire_id = $data->id ?? '';
+
+        $this->loadItems();
     }
 
     public function render(Request $request) {
