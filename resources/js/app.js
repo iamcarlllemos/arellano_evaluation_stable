@@ -96,10 +96,19 @@ function dropdown() {
             position: 'absolute',
             inset: '0px auto auto 0px',
             margin: '0px',
-            transform: 'translate3d(-140.5px, 34px, 0px)'
+            top: 0,
+            left: '50%',
+            transform: 'translate3d(-100%, 30px, 0px)',
+            zIndex: 9
         });
-    });
+        if ($(window).width() < 640) {
+            $(this).next('.dropdown').css({
+                transform: 'translate3d(-50%, 30px, 0px)'
+            });
+        } else {
 
+        }
+    });
     $(document).on('click', function(event) {
         if (!$(event.target).closest('#dropdown-button, .dropdown').length) {
             $('.dropdown').addClass('hidden');

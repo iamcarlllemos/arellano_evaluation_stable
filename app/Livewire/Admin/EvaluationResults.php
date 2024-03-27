@@ -247,7 +247,7 @@ class EvaluationResults extends Component
                         'mean' => 0,
                         'squared_mean' => 0,
                         'standard_deviation' => 0,
-                        'descriptive_interpretation' => 'No responses yet.'
+                        'descriptive_interpretation' => 0
                     ];
                 }
 
