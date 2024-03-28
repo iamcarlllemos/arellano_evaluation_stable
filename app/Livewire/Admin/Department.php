@@ -45,17 +45,13 @@ class Department extends Component
     public $paginate_count;
     protected $listeners = ['screen'];
 
-    public function mount(Request $request) {
-        $id = $request->input('id');
+    public function mount() {
+        $id = $this->form['id'];
         $data = DepartmentModel::find($id);
 
         $this->id = $id;
         $this->branch_id = $data->branch_id ?? '';
         $this->name = $data->name ?? '';
-    }
-
-    public function placeholder() {
-        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -178,9 +174,11 @@ class Department extends Component
         }
     }
 
-    public function render(Request $request) {
+    public function placeholder() {
+        return view('livewire.admin.placeholder');
+    }
 
-        $action = $request->input('action');
+    public function render(Request $request) {
 
         $role = $this->admin()->role;
         $assigned_branch = $this->admin()->assigned_branch;

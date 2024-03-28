@@ -68,9 +68,9 @@ class Student extends Component
     public $paginate_count;
     protected $listeners = ['screen'];
 
-    public function mount(Request $request) {
+    public function mount() {
 
-        $id = $request->input('id');
+        $id = $this->form['id'];
         $data = StudentModel::find($id);
 
         $this->id = $id;
@@ -85,10 +85,6 @@ class Student extends Component
         $this->image = $data->image ?? '';
         $this->email = $data->email ?? '';
         $this->username = $data->username ?? '';
-    }
-
-    public function placeholder() {
-        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -339,9 +335,12 @@ class Student extends Component
         }
     }
 
-    public function render(Request $request) {
 
-        $action = $request->input('action');
+    public function placeholder() {
+        return view('livewire.admin.placeholder');
+    }
+
+    public function render(Request $request) {
 
         $role = $this->admin()->role;
         $assigned_branch = $this->admin()->assigned_branch;

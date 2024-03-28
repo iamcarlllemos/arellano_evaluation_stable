@@ -3,14 +3,11 @@
 namespace App\Livewire\Admin;
 
 use Livewire\Component;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
 use App\Traits\Account;
 
-use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\BranchModel;
@@ -60,10 +57,10 @@ class Administrator extends Component
     public $paginate_count;
     protected $listeners = ['screen'];
 
-    public function mount(Request $request) {
+    public function mount() {
 
-        $id = $request->input('id');
-        $action = $request->input('action');
+        $id = $this->form['id'];
+        $action = $this->form['action'];
         $data = User::find($id);
 
         if(in_array($action, ['update', 'delete'])) {
@@ -77,10 +74,6 @@ class Administrator extends Component
         $this->role = $data->role ?? '';
         $this->branch = $data->assigned_branch ?? '';
         $this->username = $data->username ?? '';
-    }
-
-    public function placeholder() {
-        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -251,9 +244,11 @@ class Administrator extends Component
         }
     }
 
-    public function render(Request $request) {
+    public function placeholder() {
+        return view('livewire.admin.placeholder');
+    }
 
-        $action = $request->input('action');
+    public function render() {
 
         $users = User::when(!empty($this->search['select']), function($query) {
             $query->where('assigned_branch', $this->search['select']);

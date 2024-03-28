@@ -332,11 +332,13 @@ class EvaluationResults extends Component
         ];
 
         return $data;
-
     }
 
-    public function render()
-    {
+    public function placeholder() {
+        return view('livewire.admin.placeholder');
+    }
+
+    public function render() {
 
         $dirty_departments = DepartmentModel::with('branches')->get();
 
@@ -358,7 +360,7 @@ class EvaluationResults extends Component
             }
         }
 
-        $faculty = FacultyModel::with('templates.curriculum_template.subjects.courses.departments.branches')->get();
+        $faculty = FacultyModel::with('departments.branches','templates.curriculum_template.subjects.courses.departments.branches')->get();
 
         $data = [
             'departments' => $departments,

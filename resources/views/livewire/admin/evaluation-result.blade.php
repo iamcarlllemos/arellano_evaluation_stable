@@ -650,62 +650,49 @@
                 <input wire:ignore.self type="search" wire:model.live="search.type" class="bg-transparent rounded-md w-full" placeholder="Search here...">
             </div>
         </div>
-        <div class="mt-10">
+        <div class="mt-10 relative w-full h-full">
             <div class="relative shadow-md sm:rounded-lg">
-                <table class="w-full overflow-x-hidden text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th class="px-6 py-3 whitespace-nowrap">
-                                Profile
-                            </th>
-                            <th class="px-6 py-3 whitespace-nowrap">
-                                Employee Number
-                            </th>
-                            <th class="px-6 py-3 whitespace-nowrap">
-                                Faculty Name
-                            </th>
-                            <th class="px-6 py-3 whitespace-nowrap">
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($data['faculty'] as $collection)
-                            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                <td class="px-6 py-4 font-bold text-slate-900 whitespace-nowrap dark:text-white">
-                                    <img src="{{$collection->image ? asset('storage/images/faculty/' . $collection->image) : 'https://ui-avatars.com/api/?name='.$collection->firstname.'&length=2&bold=true&color=ff0000&background=random'}}" class="rounded-lg w-[50px] h-[50px]">
-                                </td>
-                                <th scope="row" class="px-6 py-4 font-bold text-slate-900 whitespace-nowrap dark:text-white">
-                                    {{'#' . $collection->employee_number}}
-                                </th>
-                                <td class="px-6 py-4 font-bold text-slate-900 whitespace-nowrap dark:text-white">
-                                    {{ucwords($collection->firstname . ' ' . $collection->lastname)}}
-                                </td>
-                                <td class="px-6 py-4 font-bold whitespace-nowrap dark:text-white relative">
-                                    <button id="dropdown-button" class="bg-slate-800 px-4 py-2">
-                                        View
-                                    </button>
-                                    <div wire:ignore.self id="drodown" class="dropdown absolute w-100 top-[100px] right-[100px] z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
-                                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-                                            <div class="mt-2">
-                                                <label for="" class="text-xs px-3 mt-3 uppercase">Select subjects</label>
-                                            </div>
-                                            <hr class="mt-2">
-                                            @foreach ($collection->templates as $template)
-                                                <li class="text-xs">
-                                                    <a wire:navigate href="{{route('admin.programs.results', ['id' => $form['id'], 'action' => 'view', 'faculty' => $collection->id, 'template' => $template->curriculum_template[0]->id, 'subject' => $template->curriculum_template[0]->subject_id])}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                        {{$template->curriculum_template[0]->subjects->name}}
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                        @endforelse
-                    </tbody>
-                </table>
+                <div wire:poll class="grid grid-cols-12 gap-3 mt-10">
+
+                    @forelse ($data['faculty'] as $collection)
+                        <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-3 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
+                            <div wire:ignore.self class="absolute z-10 top-5 right-3 text-teal-50 w-100">
+                                <button id="dropdown-button" >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                                    </svg>
+                                </button>
+                                <div wire:ignore.self id="drodown" class="dropdown absolute top-[100px] right-[100px] z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
+                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                                        <div class="mt-2">
+                                            <label for="" class="text-xs px-3 mt-3 uppercase">Select subjects</label>
+                                        </div>
+                                        <hr class="mt-2">
+                                        @foreach ($collection->templates as $template)
+                                            <li class="text-xs whitespace-nowrap">
+                                                <a wire:navigate href="{{route('admin.programs.results', ['id' => $form['id'], 'action' => 'view', 'faculty' => $collection->id, 'template' => $template->curriculum_template[0]->id, 'subject' => $template->curriculum_template[0]->subject_id])}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                    {{$template->curriculum_template[0]->subjects->name}}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relatives">
+                                <img class="rounded-lg w-full h-56 object-cover brightness-50" src="{{$collection['departments']['branches']->image ? asset('storage/images/branches/' . $collection['departments']['branches']->image) : 'https://ui-avatars.com/api/?name='.$collection['departments']['branches']->name.'&length=2&bold=true&color=ff0000&background=random'}}" alt="" />
+                                <div class="p-5 absolute bottom-0 left-0">
+                                    <h5 class="text-2xl font-black tracking-tight text-white uppercase whitespace-break-spaces line-clamp-1">{{ucwords($collection->firstname . ' ' . $collection->lastname)}}</h5>
+                                    <p class="text-sm text-white font-bold line-clamp-2">{{'@' . $collection->username}}</p>
+                                    <p class="text-sm text-white font-bold line-clamp-2">{{$collection->email}}</p>
+                                </div>
+                                <div class="absolute top-6 border-2 border-sky-500 left-5 rounded-full text-slate-100 backdrop-blur-sm bg-white/30">
+                                    <img src="{{$collection->image ? asset('storage/images/student/' . $collection->image) : 'https://ui-avatars.com/api/?name='.$collection->firstname.'&length=2&bold=true&color=ff0000&background=random'}}" class="rounded-full w-[100px] h-[100px]">
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                    @endforelse
+                </div>
             </div>
         </div>
     @endif

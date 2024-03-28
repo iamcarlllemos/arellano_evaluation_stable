@@ -63,9 +63,9 @@ class Faculty extends Component
     public $paginate_count;
     protected $listeners = ['screen'];
 
-    public function mount(Request $request) {
+    public function mount() {
 
-        $id = $request->input('id');
+        $id = $this->form['id'];
         $data = FacultyModel::find($id);
 
         $this->id = $id;
@@ -78,10 +78,6 @@ class Faculty extends Component
         $this->image = $data->image ?? '';
         $this->email = $data->email ?? '';
         $this->username = $data->username ?? '';
-    }
-
-    public function placeholder() {
-        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -301,9 +297,11 @@ class Faculty extends Component
         }
     }
 
-    public function render(Request $request) {
+    public function placeholder() {
+        return view('livewire.admin.placeholder');
+    }
 
-        $action = $request->input('action');
+    public function render(Request $request) {
 
         $role = $this->admin()->role;
         $assigned_branch = $this->admin()->assigned_branch;

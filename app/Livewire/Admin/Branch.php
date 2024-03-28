@@ -40,19 +40,15 @@ class Branch extends Component
     public $paginate_count;
     protected $listeners = ['screen'];
 
-    public function mount(Request $request) {
+    public function mount() {
 
-        $id = $request->input('id');
+        $id = $this->form['id'];
         $data = BranchModel::find($id);
 
         $this->id = $id;
         $this->name = $data->name ?? '';
         $this->image = $data->image ?? '';
 
-    }
-
-    public function placeholder() {
-        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -226,6 +222,10 @@ class Branch extends Component
             $this->dispatch('initPaginate');
             $this->initPaginate = true;
         }
+    }
+
+    public function placeholder() {
+        return view('livewire.admin.placeholder');
     }
 
     public function render() {

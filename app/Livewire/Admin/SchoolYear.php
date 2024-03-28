@@ -39,9 +39,9 @@ class SchoolYear extends Component
     public $paginate_count;
     protected $listeners = ['screen'];
 
-    public function mount(Request $request) {
+    public function mount() {
 
-        $id = $request->input('id');
+        $id = $this->form['id'];
 
         $data = SchoolYearModel::find($id);
 
@@ -51,10 +51,6 @@ class SchoolYear extends Component
         $this->semester = $data->semester ?? '';
         $this->status = $data->status ?? '';
 
-    }
-
-    public function placeholder() {
-        return view('livewire.admin.placeholder');
     }
 
     public function create() {
@@ -201,9 +197,11 @@ class SchoolYear extends Component
         }
     }
 
-    public function render(Request $request) {
+    public function placeholder() {
+        return view('livewire.admin.placeholder');
+    }
 
-        $action = $request->input('action');
+    public function render(Request $request) {
 
         $school_year = SchoolYearModel::
             when(strlen($this->search['type']) >= 1, function ($query) {

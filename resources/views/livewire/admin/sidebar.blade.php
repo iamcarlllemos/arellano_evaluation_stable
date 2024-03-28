@@ -192,26 +192,6 @@
                         </a>
                     </li>
                     <li class="ps-3 border-l-2 border-sky-950 hover:border-sky-400 transition ease-in-out duration-400">
-                        <a wire:navigate.hover href="#" class="p-2 w-100 flex items-center gap-3 text-slate-400 hover:text-sky-400">
-                            <div class="p-2 rounded-lg bg-slate-800">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                                </svg>
-                            </div>
-                            <span class="text-xs uppercase font-bold" style="font-size: 10px;">Reports</span>
-                        </a>
-                    </li>
-                    <li class="ps-3 border-l-2 border-sky-950 hover:border-sky-400 transition ease-in-out duration-400">
-                        <a wire:navigate.hover href="#" class="p-2 w-100 flex items-center gap-3 text-slate-400 hover:text-sky-400">
-                            <div class="p-2 rounded-lg bg-slate-800">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m6.75 7.5 3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0 0 21 18V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v12a2.25 2.25 0 0 0 2.25 2.25Z" />
-                                </svg>
-                            </div>
-                            <span class="text-xs uppercase font-bold" style="font-size: 10px;">Terminal</span>
-                        </a>
-                    </li>
-                    <li class="ps-3 border-l-2 border-sky-950 hover:border-sky-400 transition ease-in-out duration-400">
                         <a wire:navigate.hover href="{{ route('admin.logout') }}" class="p-2 w-100 flex items-center gap-3 text-slate-400 hover:text-sky-400">
                             <div class="p-2 rounded-lg bg-slate-800">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">

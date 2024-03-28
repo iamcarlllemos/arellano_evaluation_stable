@@ -13,7 +13,7 @@ class UserProfile extends Component
 
     public function mount() {
         $id = auth()->guard('users')->user()->id;
-        $data = StudentModel::with('courses')->first();
+        $data = StudentModel::with('courses')->where('id', $id)->first();
         return $this->user = $data;
     }
 

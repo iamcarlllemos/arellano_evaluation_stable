@@ -61,7 +61,6 @@ class Evaluate extends Component
         }
 
         return true;
-
     }
 
     public function move($step) {
@@ -71,23 +70,21 @@ class Evaluate extends Component
             $this->step = $step;
             session()->put('response', $data);
         } else if($step == 2) {
-            $this->remember_responses();
-            $this->get_questionnaires();
-            $this->step02();
-            $data = session('response');
-            $data['step'] = $step;
-            $this->step = $step;
-            session()->put('response', $data);
+            $this->step02($step);
         } else if($step == 3) {
-            $this->get_questionnaires();
-            $this->is_responded(3);
-            $this->step03($step, $this->responses);
+            $this->step03($step);
         } else if($step == 4) {
             $this->step04($step);
         }
     }
 
-    public function step02() {
+    public function step02($step) {
+
+        $attr = [
+            'faculty_id' => 'Faculty',
+            'start_time' => 'Scheduled start time',
+            'end_time' => 'Scheduled end time'
+        ];
 
         $rules = [
             'faculty_id' => 'required|exists:afears_faculty,id|integer',
@@ -95,11 +92,12 @@ class Evaluate extends Component
             'end_time' => 'required',
         ];
 
-        $this->validate($rules);
+        $this->validate($rules, [], $attr);
 
         $response = session('response');
 
         if(array_key_exists('faculty', $response)) {
+            $response['step'] = $step;
             $response['faculty'] = [
                 'is_preview' => false,
                 'user_id' => auth()->guard('users')->user()->id,
@@ -109,11 +107,12 @@ class Evaluate extends Component
                 'semester' => $this->semester,
                 'start_time' => $this->start_time,
                 'end_time' => $this->end_time,
+                'comment' => $this->comments
             ];
             session()->put('response', $response);
         } else {
             $data['response'] = [
-                'step' => 2,
+                'step' => $step,
                 'faculty' => [
                     'is_preview' => false,
                     'user_id' => auth()->guard('users')->user()->id,
@@ -123,15 +122,20 @@ class Evaluate extends Component
                     'semester' => $this->semester,
                     'start_time' => $this->start_time,
                     'end_time' => $this->end_time,
+                    'comment' => $this->comments
                 ]
             ];
 
             session($data);
+
         }
+
+        $this->remember_responses();
+        $this->get_questionnaires();
     }
 
-    public function step03($step, $responses) {
-        $dirty_item_id = array_keys($responses);
+    public function step03($step) {
+        $dirty_item_id = array_keys($this->responses);
 
         $questionnaire_id = $this->questionnaire->id;
         $data = QuestionnaireItemModel::where('questionnaire_id', $questionnaire_id)->get();
@@ -143,15 +147,18 @@ class Evaluate extends Component
         if(!empty($imposter)) {
             session()->flash('error', $imposter);
             $data = session('response');
-            $data['record'] = $responses;
+            $data['record'] = $this->responses;
             session()->put('response', $data);
         } else {
             $data = session('response');
             $data['step'] = $step;
-            $data['record'] = $responses;
+            $data['record'] = $this->responses;
             session()->put('response', $data);
             $this->faculty_info(session('response.faculty'));
         }
+
+        $this->get_questionnaires();
+        $this->is_responded($step);
 
     }
 
@@ -301,14 +308,12 @@ class Evaluate extends Component
 
     public function go_back() {
         $data = session('response');
-        if (count($data) > 1) {
+        if (count($data) > 1 && !$data['faculty']['is_preview']) {
             $this->dispatch('leaving', ['has_saved' => true, 'route' => route('user.subject', ['evaluate' => $this->evaluate, 'semester' => $this->semester])]);
             $this->get_questionnaires();
         } else {
-            $this->dispatch('leaving', ['has_saved' => true, 'route' => route('user.subject', ['evaluate' => $this->evaluate, 'semester' => $this->semester])]);
-            $this->get_questionnaires();
+            return redirect()->route('user.subject', ['evaluate' => $this->evaluate, 'semester' => $this->semester]);
         }
-
     }
 
     public function mount(Request $request) {
@@ -397,9 +402,7 @@ class Evaluate extends Component
         }
     }
 
-    public function render()
-    {
-        // session()->forget('response');
+    public function render() {
         return view('livewire.user.evaluate');
     }
 }

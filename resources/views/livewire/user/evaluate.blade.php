@@ -258,10 +258,10 @@
                 </div>
                 <div class="bg-white p-4 border shadow-lg rounded-b text-sm font-medium">
                     <ul>
-                        <li>Name: </li>
-                        <li>Subject: </li>
-                        <li>Schedule:  </li>
-                        <li>Academic Year:</li>
+                        <li>Name: {{$faculty['name']}}</li>
+                        <li>Subject: {{$faculty['subject']}}</li>
+                        <li>Schedule: {{$faculty['schedule']}} </li>
+                        <li>Academic Year: {{$faculty['academic_year']}}</li>
                     </ul>
                 </div>
             </div>
