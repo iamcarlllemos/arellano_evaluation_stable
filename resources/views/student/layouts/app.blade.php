@@ -25,9 +25,9 @@
             <main>
                 <div class="">
                     <div class="">
-                        @livewire('user.sidebar')
+                        @livewire('student.sidebar')
                         <div class="content sm:ml-[320px]">
-                            @livewire('user.navbar')
+                            @livewire('student.navbar')
                             @if(!isset($slot))
                                 @yield('content')
                             @else
@@ -42,6 +42,6 @@
         @stack('modals')
 
         @livewireScripts
-        
+
     </body>
 </html>

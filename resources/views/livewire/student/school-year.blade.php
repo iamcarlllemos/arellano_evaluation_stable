@@ -10,7 +10,7 @@
                     </div>
                     <hr class="my-4">
                     <div class="mt-3 flex justify-end">
-                        <a wire:navigate href="{{route('user.subject', ['evaluate' => $school_year->id, 'semester' => $school_year->semester])}}" class=" bg-blue-100 text-blue-800 p-2 px-4 text-sm font-bold rounded-lg">Open</a>
+                        <a wire:navigate href="{{route('student.subject', ['evaluate' => $school_year->id, 'semester' => $school_year->semester])}}" class=" bg-blue-100 text-blue-800 p-2 px-4 text-sm font-bold rounded-lg">Open</a>
                     </div>
                 </div>
                 <div class="absolute top-6 left-5 p-4 rounded-full text-slate-100 backdrop-blur-sm bg-white/30">

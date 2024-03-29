@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\User;
+namespace App\Livewire\Student;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -100,7 +100,7 @@ class Evaluate extends Component
             $response['step'] = $step;
             $response['faculty'] = [
                 'is_preview' => false,
-                'user_id' => auth()->guard('users')->user()->id,
+                'user_id' => auth()->guard('students')->user()->id,
                 'evaluation_id' => $this->evaluate,
                 'faculty_id' => $this->faculty_id,
                 'template_id' => $this->template_id,
@@ -115,7 +115,7 @@ class Evaluate extends Component
                 'step' => $step,
                 'faculty' => [
                     'is_preview' => false,
-                    'user_id' => auth()->guard('users')->user()->id,
+                    'user_id' => auth()->guard('students')->user()->id,
                     'evaluation_id' => $this->evaluate,
                     'faculty_id' => $this->faculty_id,
                     'template_id' => $this->template_id,
@@ -241,7 +241,7 @@ class Evaluate extends Component
 
     public function is_responded($step) {
 
-        $user_id = auth()->guard('users')->user()->id;
+        $user_id = auth()->guard('students')->user()->id;
         $response_items = ResponseModel::with('items')->where('user_id', $user_id)
             ->where('evaluation_id', $this->evaluate)
             ->where('template_id', $this->template_id)
@@ -312,7 +312,7 @@ class Evaluate extends Component
             $this->dispatch('leaving', ['has_saved' => true, 'route' => route('user.subject', ['evaluate' => $this->evaluate, 'semester' => $this->semester])]);
             $this->get_questionnaires();
         } else {
-            return redirect()->route('user.subject', ['evaluate' => $this->evaluate, 'semester' => $this->semester]);
+            return redirect()->route('student.subject', ['evaluate' => $this->evaluate, 'semester' => $this->semester]);
         }
     }
 
@@ -358,7 +358,7 @@ class Evaluate extends Component
         $validate = Validator::make($input, $rules);
 
         if($validate->fails()) {
-            return redirect()->route('user.dashboard');
+            return redirect()->route('student.dashboard');
         }
 
 
@@ -403,6 +403,6 @@ class Evaluate extends Component
     }
 
     public function render() {
-        return view('livewire.user.evaluate');
+        return view('livewire.student.evaluate');
     }
 }

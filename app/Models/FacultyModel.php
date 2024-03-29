@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class FacultyModel extends Model
+class FacultyModel extends Authenticatable
 {
     use HasFactory;
 
@@ -19,6 +19,10 @@ class FacultyModel extends Model
         'gender',
         'image',
         'email',
+    ];
+
+    protected $hidden = [
+        'password',
     ];
 
     public function departments() {

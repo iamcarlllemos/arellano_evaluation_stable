@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 
@@ -11,7 +11,7 @@ class SubjectController extends Controller
         $data = [
             'breadcrumbs' => 'Dashboard,evaluate',
             'livewire' => [
-                'component' => 'user.subject',
+                'component' => 'student.subject',
                 'data' => [
 
                 ]
@@ -24,6 +24,6 @@ class SubjectController extends Controller
 
         session($init);
 
-        return view('user.template', compact('data'));
+        return view('student.template', compact('data'));
     }
 }

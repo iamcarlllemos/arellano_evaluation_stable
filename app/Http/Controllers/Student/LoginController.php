@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Models\StudentModel;
-use Auth;
 
 class LoginController extends Controller
 {
 
     public function index() {
-        return view('user.login');
+        return view('student.login');
     }
 
     public function login(Request $request) {
@@ -22,21 +21,21 @@ class LoginController extends Controller
 
         $credentials = $request->only('username', 'password');
 
-        if(Auth::guard('users')->attempt($credentials)) {
-            $user = Auth::guard('users')->user();
+        if(Auth::guard('students')->attempt($credentials)) {
+            $user = Auth::guard('students')->user();
             if($user) {
-                Auth::guard('users')->login($user);
-                return redirect()->route('user.dashboard');
+                Auth::guard('students')->login($user);
+                return redirect()->route('student.dashboard');
             } else {
                 return redirect()->back()->with('error', 'User not found');
             }
-        } 
+        }
 
         return redirect()->back()->with('error', 'username or password is invalid');
     }
 
     public function logout() {
-        Auth::guard('users')->logout();
+        Auth::guard('students')->logout();
         return redirect()->route('user.login');
     }
 

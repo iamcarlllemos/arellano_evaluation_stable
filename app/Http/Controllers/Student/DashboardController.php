@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -8,15 +8,15 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public function index() {
-        
+
         $data = [
             'breadcrumbs' => 'Dashboard,home',
             'livewire' => [
-                'component' => 'user.dashboard',
+                'component' => 'student.dashboard',
                 'data' => []
             ]
         ];
 
-        return view('user.template', compact('data'));
+        return view('student.template', compact('data'));
     }
 }

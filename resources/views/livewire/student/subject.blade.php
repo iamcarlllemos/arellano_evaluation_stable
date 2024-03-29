@@ -3,7 +3,7 @@
     <p class="text-sm font-medium mt-1 text-slate-900">Lists of all subjects related to this school year's semester.</p>
     <div class="w-100 flex justify-between items-center gap-2">
         <div class="mt-[29px]">
-            <a wire:navigate href="{{route('user.dashboard')}}" class="bg-slate-900 py-2 px-6 text-white text-sm font-bold rounded-md">Go Back</a>
+            <a wire:navigate href="{{route('student.dashboard')}}" class="bg-slate-900 py-2 px-6 text-white text-sm font-bold rounded-md">Go Back</a>
         </div>
     </div>
     <div class="grid grid-cols-12 gap-4 mt-10" wire:poll>
@@ -29,11 +29,11 @@
                             <hr class="my-4">
                             @if (!$collection->is_exists)
                                 <div class="mt-3 flex justify-end">
-                                    <a wire:navigate href="{{route('user.evaluate', ['evaluate' => $evaluate, 'template' => $collection->id, 'semester' => $semester])}}" class=" bg-blue-100 text-blue-800 p-2 px-4 text-sm font-bold rounded-lg uppercase">Start</a>
+                                    <a wire:navigate href="{{route('student.evaluate', ['evaluate' => $evaluate, 'template' => $collection->id, 'semester' => $semester])}}" class=" bg-blue-100 text-blue-800 p-2 px-4 text-sm font-bold rounded-lg uppercase">Start</a>
                                 </div>
                             @else
                                 <div class="mt-3 flex justify-end">
-                                    <a wire:navigate href="{{route('user.evaluate', ['evaluate' => $evaluate, 'template' => $collection->id, 'semester' => $semester])}}" class=" bg-orange-100 text-orange-800 p-2 px-4 text-sm font-bold rounded-lg uppercase">View Response</a>
+                                    <a wire:navigate href="{{route('student.evaluate', ['evaluate' => $evaluate, 'template' => $collection->id, 'semester' => $semester])}}" class=" bg-orange-100 text-orange-800 p-2 px-4 text-sm font-bold rounded-lg uppercase">View Response</a>
                                 </div>
                             @endif
                         </div>

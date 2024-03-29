@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,8 +11,8 @@ class EvaluateController extends Controller
 {
     public function index(Request $request) {
 
-        $course = auth()->guard('users')->user()->course_id;
-        $year = auth()->guard('users')->user()->year_level;
+        $course = auth()->guard('students')->user()->course_id;
+        $year = auth()->guard('students')->user()->year_level;
         $semester = $request->input('semester');
 
         $dirty_faculty = FacultyModel::with('templates.curriculum_template.courses.departments.branches')->where(function($query) use($course, $year, $semester) {
@@ -46,7 +46,7 @@ class EvaluateController extends Controller
         $data = [
             'breadcrumbs' => 'Dashboard,evaluate',
             'livewire' => [
-                'component' => 'user.evaluate',
+                'component' => 'student.evaluate',
                 'data' => [
                     'lazy' => false,
                     'form' => [
@@ -91,6 +91,6 @@ class EvaluateController extends Controller
             ],
         ];
 
-        return view('user.template', compact('data'));
+        return view('student.template', compact('data'));
     }
 }

@@ -19,10 +19,10 @@ use App\Http\Controllers\Admin\FacultyController;
 use App\Http\Controllers\Admin\AdministratorController;
 use App\Http\Controllers\Admin\CurriculumTemplateController;
 
-use App\Http\Controllers\User\LoginController as UserLoginController;
-use App\Http\Controllers\User\DashboardController as UserDashboardController;
-use App\Http\Controllers\User\SubjectController as UserSubjectController;
-use App\Http\Controllers\User\EvaluateController as UserEvaluateController;
+use App\Http\Controllers\Student\LoginController as StudentLoginController;
+use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
+use App\Http\Controllers\Student\SubjectController as StudentSubjectController;
+use App\Http\Controllers\Student\EvaluateController as StudentEvaluateController;
 
 
 
@@ -79,15 +79,15 @@ Route::prefix('admin')->middleware('admins')->group(function() {
     });
 });
 
-Route::prefix('user')->group(function() {
-    Route::get('login', [UserLoginController::class, 'index'])->name('user.index');
-    Route::post('login', [UserLoginController::class, 'login'])->name('user.login');
-    Route::any('logout', [UserLoginController::class, 'logout'])->name('user.logout');
+Route::prefix('student')->group(function() {
+    Route::get('login', [StudentLoginController::class, 'index'])->name('student.index');
+    Route::post('login', [StudentLoginController::class, 'login'])->name('student.login');
+    Route::any('logout', [StudentLoginController::class, 'logout'])->name('student.logout');
 
-    Route::middleware('users')->group(function() {
-        Route::get('dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
-        Route::get('subject', [UserSubjectController::class, 'index'])->name('user.subject');
-        Route::get('subject/evaluate/start', [UserEvaluateController::class, 'index'])->name('user.evaluate');
+    Route::middleware('students')->group(function() {
+        Route::get('dashboard', [StudentDashboardController::class, 'index'])->name('student.dashboard');
+        Route::get('subject', [StudentSubjectController::class, 'index'])->name('student.subject');
+        Route::get('subject/evaluate/start', [StudentEvaluateController::class, 'index'])->name('student.evaluate');
     });
 });
 

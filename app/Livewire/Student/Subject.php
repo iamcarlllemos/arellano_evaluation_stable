@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\User;
+namespace App\Livewire\Student;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -51,10 +51,10 @@ class Subject extends Component
         $validate = Validator::make($input, $rules);
 
         if($validate->fails()) {
-            return redirect()->route('user.dashboard');
+            return redirect()->route('student.dashboard');
         }
 
-        $user_id = auth()->guard('users')->user()->id;
+        $user_id = auth()->guard('students')->user()->id;
 
         $user_data = StudentModel::find($user_id);
         $course = $user_data->course_id;
@@ -80,6 +80,6 @@ class Subject extends Component
 
     public function render()
     {
-        return view('livewire.user.subject');
+        return view('livewire.student.subject');
     }
 }

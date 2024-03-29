@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\User;
+namespace App\Livewire\Student;
 
 use Livewire\Component;
 use App\Models\SchoolYearModel;
@@ -15,6 +15,6 @@ class SchoolYear extends Component
     }
 
     public function render() {
-        return view('livewire.user.school-year');
+        return view('livewire.student.school-year');
     }
 }
