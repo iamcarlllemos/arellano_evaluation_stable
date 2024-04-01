@@ -139,6 +139,18 @@
                             </a>
                         </li>
                     @endif
+                    @if(auth()->guard('admins')->user()->role === 'superadmin')
+                        <li class="ps-3 border-l-2 border-sky-950 hover:border-sky-400 transition ease-in-out duration-400">
+                            <a wire:navigate.hover href="{{route('admin.programs.validate-responses')}}" class="p-2 w-100 flex items-center gap-3 text-slate-400 hover:text-sky-400">
+                                <div class="p-2 rounded-lg bg-slate-800">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Zm3.75 11.625a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                                    </svg>
+                                </div>
+                                <span class="text-xs uppercase font-bold" style="font-size: 10px;">Validate Responses</span>
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </li>
             <li class="py-3">

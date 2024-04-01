@@ -34,6 +34,7 @@ class EvaluationResults extends Component
         for ($i = 0; $i < $length; $i++) {
             $randomWord .= $characters[rand(0, strlen($characters) - 1)];
         }
+
         $this->key = $randomWord;
     }
 

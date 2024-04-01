@@ -18,7 +18,7 @@ use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\FacultyController;
 use App\Http\Controllers\Admin\AdministratorController;
 use App\Http\Controllers\Admin\CurriculumTemplateController;
-
+use App\Http\Controllers\Admin\ValidateResponsesController;
 use App\Http\Controllers\Student\LoginController as StudentLoginController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use App\Http\Controllers\Student\SubjectController as StudentSubjectController;
@@ -69,6 +69,7 @@ Route::prefix('admin')->middleware('admins')->group(function() {
         Route::get('/branches', [BranchController::class, 'index'])->name('admin.programs.branches');
         Route::get('/school-year', [SchoolYearController::class, 'index'])->name('admin.programs.school-year');
         Route::get('/school-year/results', [ResultsController::class, 'index'])->name('admin.programs.results');
+        Route::get('/validate/response', [ValidateResponsesController::class, 'index'])->name('admin.programs.validate-responses');
         Route::get('/criteria', [CriteriaController::class, 'index'])->name('admin.programs.criteria');
         Route::get('/questionnaire', [QuestionnaireController::class, 'index'])->name('admin.programs.questionnaire');
         Route::get('/questionnaire/{slug}', [QuestionnaireItemController::class, 'index'])->name('admin.programs.questionnaire.item');

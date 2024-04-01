@@ -383,6 +383,7 @@
                 <p class="mt-3 text-sm text-slate-900 font-medium">Please note: The QR code provided below serves as a means to trace your response. It can be utilized as evidence of your submission, a prerequisite for clearance requirements.</p>
                 <div class="mt-5">
                     {{session('response')['faculty']['qr_code']}}
+                    <a href="javascript:void(0)" wire:click='download_qr' class="text-xs uppercase mt-2 underline text-sky-800">Download Qr</a>
                 </div>
                 <div class="mt-5">
                     <p class="text-xs uppercase font-bold">Reference: #{{session('response')['faculty']['reference']}}</p>

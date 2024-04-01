@@ -14,7 +14,6 @@ use App\Models\FacultyModel;
 use App\Models\FacultyTemplateModel;
 use App\Models\SchoolYearModel;
 
-use App\Models\CurriculumTemplateModel;
 use App\Models\ResponseModel;
 use App\Models\ResponseItemModel;
 
@@ -314,6 +313,17 @@ class Evaluate extends Component
         } else {
             return redirect()->route('student.subject', ['evaluate' => $this->evaluate, 'semester' => $this->semester]);
         }
+    }
+
+    public function download_qr() {
+        return response()->streamDownload(function() {
+            $reference  = session('response')['faculty']['reference'];
+            echo QrCode::size(200)
+                ->format('png')
+                ->generate($reference);
+        }, 'qr_code', [
+            'Content-Type' => 'image/png'
+        ]);
     }
 
     public function mount(Request $request) {

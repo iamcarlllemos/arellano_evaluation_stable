@@ -177,11 +177,6 @@
                 <input wire:ignore.self type="search" wire:model.live="search.type" class="bg-transparent rounded-md w-full" placeholder="Search here...">
             </div>
         </div>
-        @if(session()->has('flash'))
-            <div class="mt-10">
-                @include('components.alert')
-            </div>
-        @endif
         <div wire:poll class="grid grid-cols-12 gap-3 mt-10">
             @if (count($data['school_year']) > 0)
                 @foreach($data['school_year'] as $school_year)
