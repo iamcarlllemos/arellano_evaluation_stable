@@ -309,7 +309,7 @@ class Evaluate extends Component
     public function go_back() {
         $data = session('response');
         if (count($data) > 1 && !$data['faculty']['is_preview']) {
-            $this->dispatch('leaving', ['has_saved' => true, 'route' => route('user.subject', ['evaluate' => $this->evaluate, 'semester' => $this->semester])]);
+            $this->dispatch('leaving', ['has_saved' => true, 'route' => route('student.subject', ['evaluate' => $this->evaluate, 'semester' => $this->semester])]);
             $this->get_questionnaires();
         } else {
             return redirect()->route('student.subject', ['evaluate' => $this->evaluate, 'semester' => $this->semester]);

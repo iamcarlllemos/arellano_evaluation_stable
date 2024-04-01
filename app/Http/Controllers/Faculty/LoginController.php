@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Student;
+namespace App\Http\Controllers\Faculty;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +11,7 @@ class LoginController extends Controller
 {
 
     public function index() {
-        return view('student.login');
+        return view('faculty.login');
     }
 
     public function login(Request $request) {
@@ -29,11 +29,11 @@ class LoginController extends Controller
 
         $credentials = $request->only('username', 'password');
 
-        if(Auth::guard('students')->attempt($credentials)) {
-            $user = Auth::guard('students')->user();
+        if(Auth::guard('faculty')->attempt($credentials)) {
+            $user = Auth::guard('faculty')->user();
             if($user) {
-                Auth::guard('students')->login($user);
-                return redirect()->route('student.dashboard');
+                Auth::guard('faculty')->login($user);
+                return redirect()->route('faculty.dashboard');
             } else {
                 return redirect()->back()->with('error', 'User not found');
             }
@@ -43,8 +43,8 @@ class LoginController extends Controller
     }
 
     public function logout() {
-        Auth::guard('students')->logout();
-        return redirect()->route('student.login');
+        Auth::guard('faculty')->logout();
+        return redirect()->route('faculty.login');
     }
 
 }

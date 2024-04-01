@@ -19,6 +19,8 @@ class FacultyModel extends Authenticatable
         'gender',
         'image',
         'email',
+        'username',
+        'password',
     ];
 
     protected $hidden = [

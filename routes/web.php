@@ -24,6 +24,13 @@ use App\Http\Controllers\Student\DashboardController as StudentDashboardControll
 use App\Http\Controllers\Student\SubjectController as StudentSubjectController;
 use App\Http\Controllers\Student\EvaluateController as StudentEvaluateController;
 
+use App\Http\Controllers\Faculty\LoginController as FacultyLoginController;
+use App\Http\Controllers\Faculty\DashboardController as FacultyDashboardController;
+use App\Http\Controllers\Faculty\SubjectController as FacultySubjectController;
+use App\Http\Controllers\Faculty\EvaluateController as FacultyEvaluateController;
+
+
+
 
 
 
@@ -91,3 +98,17 @@ Route::prefix('student')->group(function() {
     });
 });
 
+Route::prefix('faculty')->group(function() {
+    Route::get('login', [FacultyLoginController::class, 'index'])->name('faculty.index');
+    Route::post('login', [FacultyLoginController::class, 'login'])->name('faculty.login');
+    Route::any('logout', [FacultyLoginController::class, 'logout'])->name('faculty.logout');
+
+    Route::middleware('faculty')->group(function() {
+        Route::get('dashboard', [FacultyDashboardController::class, 'index'])->name('faculty.dashboard');
+        Route::get('subject', [FacultySubjectController::class, 'index'])->name('faculty.subject');
+        Route::get('subject/evaluate', [FacultyEvaluateController::class, 'index'])->name('faculty.evaluation-results');
+    });
+});
+
+
+#
