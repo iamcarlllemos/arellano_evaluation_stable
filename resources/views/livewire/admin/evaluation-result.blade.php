@@ -674,7 +674,7 @@
                                                 </a>
                                             </li>
                                         @empty
-                                            <li class="text-xs whitespace-nowrap text-red-700">
+                                            <li class="text-xs whitespace-nowrap text-red-700 px-4 py-2">
                                                 No records found
                                             </li>
                                         @endforelse
