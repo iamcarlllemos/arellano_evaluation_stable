@@ -241,7 +241,7 @@ class EvaluationResults extends Component
                         'mean' => $mean / $evaluation_result['total_items'],
                         'squared_mean' => $squared / $evaluation_result['total_items'],
                         'standard_deviation' => $std / $evaluation_result['total_items'],
-                        'descriptive_interpretation' => $this->interpretation($squared / $evaluation_result['total_items'])
+                        'descriptive_interpretation' => $this->interpretation($mean / $evaluation_result['total_items'])
                     ];
                 } else {
                     $evaluation_result['averages'] = [
