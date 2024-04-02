@@ -187,7 +187,7 @@
                     </div>
                     <div class="h-56 bg-slate-800 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relatives">
                         <div class="p-5 absolute bottom-2 left-0">
-                            <h5 class="text-2xl font-bold tracking-tight text-white uppercase whitespace-break-spaces line-clamp-1">{{$criteria->name}}</h5>
+                            <h5 class="text-2xl font-bold tracking-tight text-white uppercase whitespace-break-spaces line-clamp-2">{{$criteria->name}}</h5>
                         </div>
                         <div class="absolute top-6 left-5 p-4 rounded-full text-slate-100 backdrop-blur-sm bg-white/30">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
