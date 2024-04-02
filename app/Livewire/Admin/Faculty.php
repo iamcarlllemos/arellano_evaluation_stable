@@ -144,6 +144,7 @@ class Faculty extends Component
             $this->gender = '';
             $this->image = '';
             $this->email = '';
+            $this->username = '';
             $this->password = '';
             $this->password_repeat = '';
 
