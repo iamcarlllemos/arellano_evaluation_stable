@@ -651,7 +651,7 @@
             </div>
         </div>
         <div class="mt-10 relative w-full h-full">
-            <div class="relative shadow-md sm:rounded-lg">
+            <div class="relative sm:rounded-lg">
                 <div wire:poll class="grid grid-cols-12 gap-3 mt-10">
                     @forelse ($data['faculty'] as $collection)
                         <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-3 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
