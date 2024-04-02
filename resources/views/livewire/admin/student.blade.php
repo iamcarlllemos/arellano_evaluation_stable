@@ -211,7 +211,7 @@
                                 <p class="text-sm text-white font-bold line-clamp-2">{{$collection->email}}</p>
                             </div>
                             <div class="absolute top-6 border-2 border-sky-500 left-5 rounded-full text-slate-100 backdrop-blur-sm bg-white/30">
-                                <img src="{{$collection->image ? asset('storage/images/student/' . $collection->image) : 'https://ui-avatars.com/api/?name='.$collection->firstname.'&length=2&bold=true&color=ff0000&background=random'}}" class="rounded-full w-[100px] h-[100px]">
+                                <img src="{{$collection->image ? asset('storage/images/student/' . $collection->image) : 'https://ui-avatars.com/api/?name='.$collection->firstname.'&length=2&bold=true&color=ff0000&background=random'}}" class="rounded-full w-[100px] h-[100px] object-cover object-center">
                             </div>
                         </div>
                     </div>
