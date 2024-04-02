@@ -675,7 +675,9 @@
                                             </li>
                                         @empty
                                             <li class="text-xs whitespace-nowrap">
-                                                No subjects found
+                                                <a wire:navigate href="{{route('admin.programs.results', ['id' => $form['id'], 'action' => 'view', 'faculty' => $collection->id, 'template' => $template->curriculum_template[0]->id, 'subject' => $template->curriculum_template[0]->subject_id])}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+
+                                                </a>
                                             </li>
                                         @endforelse
                                     </ul>
