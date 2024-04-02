@@ -11,4 +11,5 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    build: {chunkSizeWarningLimit: 200}
 });
