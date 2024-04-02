@@ -1,5 +1,4 @@
 import './bootstrap'
-import 'jstree'
 import ApexCharts from 'apexcharts'
 
 import $ from 'jquery';
