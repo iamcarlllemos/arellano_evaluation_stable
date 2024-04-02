@@ -1,6 +1,7 @@
 import './bootstrap'
 import 'jstree'
-import ApexCharts from 'apexcharts'
+// import 'flowbite/dist/flowbite.min.js'
+// import ApexCharts from 'apexcharts'
 
 import $ from 'jquery';
 
