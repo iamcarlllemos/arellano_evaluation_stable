@@ -663,7 +663,7 @@
                                 </button>
                                 <div wire:ignore.self id="drodown" class="dropdown absolute top-[100px] right-[100px] z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
                                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200 w-full" aria-labelledby="dropdownDefaultButton">
-                                        <div class="mt-2">
+                                        <div class="mt-2 w-full">
                                             <label for="" class="text-xs px-3 mt-3 uppercase">Select subjects</label>
                                         </div>
                                         <hr class="mt-2">
