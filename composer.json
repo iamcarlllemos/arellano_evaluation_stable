@@ -12,7 +12,6 @@
         "laravel/jetstream": "^5.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "libern/qr-code-reader": "^1.0",
         "livewire/livewire": "^3.0",
         "simplesoftwareio/simple-qrcode": "^4.2"
     },
