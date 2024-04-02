@@ -86,14 +86,14 @@
                                         {!!($item['required']) ? '<span class="text-red-900">*</span>' : ''!!}
                                     </label>
                                     @if ($image && !method_exists($image, 'getClientOriginalExtension'))
-                                        <img src="{{ asset('storage/images/student/' . $image) }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
+                                        <img src="{{ asset('storage/images/student/' . $image) }}" class="w-[200px] h-[150px] object-fill object-center rounded-lg">
                                         <div class="mt-2">
                                             <x-button-danger wire:click='image_remove' wire:loading.attr="disabled">
                                                 {{ __('Remove')}}
                                             </x-button-danger>
                                         </div>
                                     @elseif(session()->has('flash') && session('flash')['status'] == 'success')
-                                        <img src="{{ asset('storage/images/student/' . $image) }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
+                                        <img src="{{ asset('storage/images/student/' . $image) }}" class="w-[200px] h-[150px] object-fill object-center rounded-lg">
                                     @endif
                                     @if(in_array($form['action'], ['create', 'update']))
                                         <div
@@ -134,7 +134,7 @@
                                     @endif
                                     @if ($image && method_exists($image, 'getClientOriginalExtension') && in_array($image->getClientOriginalExtension(), ['png', 'jpg', 'jpeg']))
                                         <label for="{{$key}}" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase mt-5" style="font-size: 12px">Image Preview</label>
-                                        <img src="{{ $image->temporaryUrl() }}" class="w-[200px] h-[150px] object-cover object-center rounded-lg">
+                                        <img src="{{ $image->temporaryUrl() }}" class="w-[200px] h-[150px] object-fill object-center rounded-lg">
                                     @endif
                                     @error($key)
                                         <p class="text-xs text-red-500 font-bold mt-2">{{$message}}</p>
