@@ -675,8 +675,8 @@
                                             </li>
                                         @empty
                                             <li class="text-xs whitespace-nowrap">
-                                                <a wire:navigate href="{{route('admin.programs.results', ['id' => $form['id'], 'action' => 'view', 'faculty' => $collection->id, 'template' => $template->curriculum_template[0]->id, 'subject' => $template->curriculum_template[0]->subject_id])}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-
+                                                <a wire:navigate href="javascript:void(0)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-red-600">
+                                                    No records found
                                                 </a>
                                             </li>
                                         @endforelse
