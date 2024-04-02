@@ -7,10 +7,8 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
-                'resources/js/apexchart.js'
             ],
             refresh: true,
         }),
     ],
-    build: {chunkSizeWarningLimit: 1000}
 });
