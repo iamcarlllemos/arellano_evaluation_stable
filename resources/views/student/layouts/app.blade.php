@@ -49,3 +49,4 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
 </html>
+/home/yuri/Documents/projects/stable/arellano_evaluation/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php
