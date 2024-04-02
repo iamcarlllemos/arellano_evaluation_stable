@@ -98,7 +98,7 @@ class Student extends Component
             'gender' => 'required|integer|in:1,2,3,4',
             'birthday' => 'required',
             'year_level' => 'required|integer|in:1,2',
-            'image' => 'required|image|mimes:jpeg,png,jpg|max:2000',
+            'image' => 'image|mimes:jpeg,png,jpg|max:2000',
             'email' => 'required|email|unique:afears_student,email',
             'username' => 'required|string|unique:afears_student,username',
             'password' => 'required|string|min:8|same:password_repeat',
