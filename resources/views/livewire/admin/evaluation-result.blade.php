@@ -667,13 +667,17 @@
                                             <label for="" class="text-xs px-3 mt-3 uppercase">Select subjects</label>
                                         </div>
                                         <hr class="mt-2">
-                                        @foreach ($collection->templates as $template)
+                                        @forelse ($collection->templates as $template)
                                             <li class="text-xs whitespace-nowrap">
                                                 <a wire:navigate href="{{route('admin.programs.results', ['id' => $form['id'], 'action' => 'view', 'faculty' => $collection->id, 'template' => $template->curriculum_template[0]->id, 'subject' => $template->curriculum_template[0]->subject_id])}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                                     {{$template->curriculum_template[0]->subjects->name}}
                                                 </a>
                                             </li>
-                                        @endforeach
+                                        @empty
+                                            <li class="text-xs whitespace-nowrap">
+                                                No subjects found
+                                            </li>
+                                        @endforelse
                                     </ul>
                                 </div>
                             </div>
