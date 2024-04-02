@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('gender');
             $table->string('birthday');
             $table->integer('year_level');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('email')->unique();
             $table->string('username')->unique();
             $table->string('password');
