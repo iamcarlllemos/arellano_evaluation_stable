@@ -2,7 +2,7 @@
     <div class="greetings hidden md:block w-full">
         <div class="text-xl font-extrabold uppercase">Administrator Panel</div>
     </div>
-    <div class="menu w-full md:w-100 md:pe-4 flex justify-center md:justify-end items-center gap-10">
+    <div class="menu w-full md:w-100 md:pe-4 flex justify-end md:justify-end items-center gap-10">
         <ul class="list inline-flex items-center gap-5">
             <li>
                 <div class="sm:flex sm:items-center sm:ms-6">

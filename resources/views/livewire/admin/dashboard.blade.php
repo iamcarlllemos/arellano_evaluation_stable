@@ -6,7 +6,7 @@
                 <p class="text-sm font-medium mt-1 text-slate-900">Here are the latest updates.</p>
             </div>
             <div class="mt-8">
-                <div class="grid grid-cols-12 gap-3">
+                <div class="grid grid-cols-12 gap-3" wire:poll>
                     @forelse ($data['counts'] as $key => $value)
                     <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-3 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
                         <div wire:ignore.self class="absolute z-10 top-5 right-3 text-teal-50">
@@ -33,7 +33,6 @@
                         </div>
                     </div>
                     @empty
-
                     @endforelse
                 </div>
             </div>

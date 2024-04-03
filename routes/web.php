@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\FacultyController;
 use App\Http\Controllers\Admin\AdministratorController;
 use App\Http\Controllers\Admin\CurriculumTemplateController;
+use App\Http\Controllers\Admin\SmtpController;
 use App\Http\Controllers\Admin\ValidateResponsesController;
 use App\Http\Controllers\Student\LoginController as StudentLoginController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
@@ -78,6 +79,10 @@ Route::prefix('admin')->middleware('admins')->group(function() {
     Route::middleware('role:admin,superadmin')->prefix('linking')->group(function() {
         Route::get('/curriculum-template', [CurriculumTemplateController::class, 'index'])->name('admin.linking.curriculum-template');
         Route::get('/faculty-template', [FacultyTemplateController::class, 'index'])->name('admin.linking.faculty-template');
+    });
+
+    Route::middleware('role:superadmin')->prefix('settings')->group(function() {
+        Route::get('/smtp', [SmtpController::class, 'index'])->name('admin.settings.smtp');
     });
 
     Route::prefix('accounts')->group(function() {
