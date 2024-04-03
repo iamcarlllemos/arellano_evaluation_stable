@@ -413,13 +413,13 @@
                 <div class="sm:flex sm:justify-between mt-10">
                     <button
                         wire:click='move(3)'
-                        class="w-full sm:w-100 items-center border border-sky-700 text-slate-900 bg-transparent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        class="w-full sm:w-auto  items-center border border-sky-700 text-slate-900 bg-transparent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
                         Previous
                     </button>
                     <button wire:navigate
                         href="{{route('student.subject', ['evaluate' => $evaluate, 'semester' => $semester])}}"
-                        class="w-full sm:w-100 mt-3 sm:mt-0 text-white  items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        class="w-full sm:w-auto mt-3 sm:mt-0 text-white  items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
                         Return Subjects
                 </button>
