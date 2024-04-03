@@ -16,7 +16,7 @@
     </head>
     <body class="font-sans antialiased">
         <x-banner />
-
+s
         <div class="min-h-screen bg-gray-100">
             <!-- Page Content -->
             <main>
