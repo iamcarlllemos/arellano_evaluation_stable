@@ -1,7 +1,8 @@
 import './bootstrap'
 import 'jstree'
+// import 'flowbite/dist/flowbite.min.js'
 
-import $ from 'jquery';
+// import $ from 'jquery';
 
 window.$ = $;
 window.read_more = read_more;
