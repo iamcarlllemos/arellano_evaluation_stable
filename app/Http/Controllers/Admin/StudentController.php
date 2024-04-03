@@ -169,7 +169,7 @@ class StudentController extends Controller
                                 'image' => [
                                     'label' => 'Profile Image',
                                     'type' => 'file',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => false,
                                     'css' => 'col-span-12 md:col-span-32',
                                 ],
@@ -224,7 +224,7 @@ class StudentController extends Controller
                                     'type' => 'select',
                                     'options' => [
                                         'is_from_db' => true,
-                                        'group' => '',
+                                        'group' => 'courses',
                                         'data' => $courses,
                                         'no_data' => 'Create course first'
                                     ],
@@ -302,7 +302,7 @@ class StudentController extends Controller
                                 'image' => [
                                     'label' => 'Profile Image',
                                     'type' => 'file',
-                                    'required' => true,
+                                    'required' => false,
                                     'disabled' => false,
                                     'css' => 'col-span-12 md:col-span-32',
                                 ],
@@ -357,7 +357,7 @@ class StudentController extends Controller
                                     'type' => 'select',
                                     'options' => [
                                         'is_from_db' => true,
-                                        'group' => '',
+                                        'group' => 'courses',
                                         'data' => $courses,
                                         'no_data' => 'Create course first'
                                     ],

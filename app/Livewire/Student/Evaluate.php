@@ -283,8 +283,6 @@ class Evaluate extends Component
             $this->faculty_info($response['faculty']);
             $this->remember_responses();
 
-        } else {
-            return redirect()->route('student.subject', ['evaluation' => $this->evaluate, 'semester' => $this->semester]);
         }
     }
 

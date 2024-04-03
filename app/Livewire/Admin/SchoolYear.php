@@ -209,7 +209,7 @@ class SchoolYear extends Component
                     ->orWhere('start_year', 'like', '%' . $this->search['type'] . '%')
                     ->orWhere('end_year', 'like', '%' . $this->search['type'] . '%')
                     ->orWhere(function($query) {
-                        $query->whereRaw("CONCAT(start_year, '-', end_year) LIKE ?", ['%' . $this->search . '%']);
+                        $query->whereRaw("CONCAT(start_year, '-', end_year) LIKE ?", ['%' . $this->search['type'] . '%']);
                     });
             })->paginate($this->paginate_count);
 

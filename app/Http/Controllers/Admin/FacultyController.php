@@ -203,7 +203,7 @@ class FacultyController extends Controller
                                     'type' => 'select',
                                     'options' => [
                                         'is_from_db' => true,
-                                        'group' => '',
+                                        'group' => 'departments',
                                         'data' => $departments,
                                         'no_data' => 'Create department first'
                                     ],
@@ -310,7 +310,7 @@ class FacultyController extends Controller
                                     'type' => 'select',
                                     'options' => [
                                         'is_from_db' => true,
-                                        'group' => '',
+                                        'group' => 'departments',
                                         'data' => $departments,
                                         'no_data' => 'Create department first'
                                     ],
@@ -366,13 +366,6 @@ class FacultyController extends Controller
                                     'required' => true,
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-6',
-                                ],
-                                'image' => [
-                                    'label' => 'Profile Image',
-                                    'type' => 'file',
-                                    'required' => false,
-                                    'disabled' => true,
-                                    'css' => 'col-span-12 md:col-span-12',
                                 ],
                             ]
                         ],

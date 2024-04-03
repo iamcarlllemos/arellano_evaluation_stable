@@ -18,7 +18,7 @@
                 <div class="mb-4 w-full">
                     <label for="search" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase" style="font-size: 12px">Search By <span class="text-red-900">*</span></label>
                     <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" wire:model.live='type' >
-                        <option value="1"> - CHOOSE - </option>
+                        <option value="0"> - CHOOSE - </option>
                         <option value="1">Reference Code</option>
                         <option value="2">QR Code</option>
                     </select>
@@ -94,7 +94,7 @@
             <div class="bg-white p-4 border shadow-lg rounded-b text-sm font-medium">
                 <ul>
                     <li>Student #: {{$result_view['student']['student_number']}}</li>
-                    <li>Name: {{$result_view['student']['firstname'] . ' ' . $result_view['student']['lastname']}}</li>
+                    <li>Name: {{ucwords($result_view['student']['firstname'] . ' ' . $result_view['student']['lastname'])}}</li>
                     <li>Course: {{
                             $result_view['student']->courses->name . ' (' .
                             $result_view['student']->courses->code . ')'

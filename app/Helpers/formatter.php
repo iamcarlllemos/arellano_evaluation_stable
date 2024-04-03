@@ -37,7 +37,7 @@ if (!function_exists('to_ordinal')) {
     }
 }
 
-if(!function_exists('to_status_')) {
+if(!function_exists('to_status')) {
     function to_status($number) {
         if(!is_numeric($number)) {
             return $number;

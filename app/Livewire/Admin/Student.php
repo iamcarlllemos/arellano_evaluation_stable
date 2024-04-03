@@ -94,11 +94,10 @@ class Student extends Component
             'student_number' => 'required|unique:afears_student,student_number',
             'firstname' => 'required|string',
             'lastname' => 'required|string',
-            'middlename' => 'string|min:8',
+            'middlename' => 'string',
             'gender' => 'required|integer|in:1,2,3,4',
             'birthday' => 'required',
             'year_level' => 'required|integer|in:1,2',
-            'image' => 'image|mimes:jpeg,png,jpg|max:2000',
             'email' => 'required|email|unique:afears_student,email',
             'username' => 'required|string|unique:afears_student,username',
             'password' => 'required|string|min:8|same:password_repeat',
@@ -107,14 +106,25 @@ class Student extends Component
 
         $this->validate($rules, [], $this->attr);
 
-        $temp_filename = time();
-        $extension =$this->image->getClientOriginalExtension();
+        if($this->image instanceof TemporaryUploadedFile) {
 
-        $filename = $temp_filename . '.' . $extension;
+            $rules = [
+                'image' => 'image|mimes:jpeg,png,jpg|max:2000'
+            ];
 
-        try {
+            $this->validate($rules, [], $this->attr);
+
+            $temp_filename = time();
+            $extension =$this->image->getClientOriginalExtension();
+
+            $filename = $temp_filename . '.' . $extension;
 
             $this->image->storeAs('public/images/student', $filename);
+
+        }
+
+
+        try {
 
             $model = new StudentModel;
 
@@ -126,7 +136,7 @@ class Student extends Component
             $model->gender = $this->gender;
             $model->birthday = $this->birthday;
             $model->year_level = $this->year_level;
-            $model->image = $filename;
+            $model->image = $filename ?? null;
             $model->email = $this->email;
             $model->username = $this->username;
             $model->password = Hash::make($this->password);

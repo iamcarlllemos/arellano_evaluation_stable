@@ -56,6 +56,8 @@ class ValidateResponses extends Component
 
         if(!session()->has('error')) {
             $this->reset('code', 'type');
+        } else {
+            $this->reset('result_view');
         }
     }
 
@@ -121,7 +123,8 @@ class ValidateResponses extends Component
             $responses = ResponseModel::with('students.courses.departments.branches', 'items.questionnaire.criteria')
                 ->where('evaluation_id', $evaluation_id)
                 ->where('template_id', $template_id)
-                ->where('faculty_id', $faculty_id)->get();
+                ->where('faculty_id', $faculty_id)
+                ->where('id', $reference)->get();
 
             $sorted_responses = [];
 
@@ -135,7 +138,7 @@ class ValidateResponses extends Component
                 }
 
 
-                $student_name = $response['students']['firstname']. ' ' . $response['students']['lastname'];
+                $student_name = ucwords($response['students']['firstname']. ' ' . $response['students']['lastname']);
                 $comments[] = [
                     'commented_by' => $this->applyCensored($student_name),
                     'comment' => $response['comment']
