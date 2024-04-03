@@ -121,7 +121,7 @@ class Evaluate extends Component
                     'semester' => $this->semester,
                     'start_time' => $this->start_time,
                     'end_time' => $this->end_time,
-                    'comment' => $this->comments
+                    'comment' => $this->comments,
                 ]
             ];
 
@@ -166,7 +166,6 @@ class Evaluate extends Component
         if(!$data['faculty']['is_preview']) {
             if (array_key_exists('step', $data) && array_key_exists('faculty', $data) && array_key_exists('record', $data)) {
                 $data['faculty']['comment'] = $this->comments;
-
                 if(!empty($this->comments)) {
 
                     $inserted = ResponseModel::create($data['faculty']);
@@ -191,11 +190,11 @@ class Evaluate extends Component
                     session()->flash('error', ['comment']);
                 }
             }
+        } else {
+            $data['step'] = $step;
+            session()->put('response', $data);
+            $this->is_responded(4);
         }
-
-        $data['step'] = $step;
-        session()->put('response', $data);
-        $this->is_responded(4);
     }
 
     public function get_questionnaires() {
@@ -284,6 +283,8 @@ class Evaluate extends Component
             $this->faculty_info($response['faculty']);
             $this->remember_responses();
 
+        } else {
+            return redirect()->route('student.subject', ['evaluation' => $this->evaluate, 'semester' => $this->semester]);
         }
     }
 

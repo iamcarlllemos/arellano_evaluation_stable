@@ -11,7 +11,7 @@
             $step = session('response')['step'] ?? 1;
         @endphp
 
-        <ol class="flex justify-center gap-5 items-center w-full bg-white border rounded-lg shadow text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
+        <ol class="p-5 sm:flex justify-center gap-5  items-center w-full bg-white border rounded-lg shadow text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
             @for ($i = 1; $i <= 4; $i++)
                 @php
                     $isActive = $i <= $step;
@@ -21,7 +21,7 @@
                     $arrowColor = $isActive ? 'text-blue-600 dark:text-blue-500' : 'text-gray-500 dark:text-gray-400';
                 @endphp
 
-                <li class="flex items-center">
+                <li class="flex items-center mt-3 sm:mt-0 text-center ms-6">
                     <span class="flex items-center justify-center w-5 h-5 me-2 text-xs border {{ $borderClass }} rounded-full shrink-0 {{ $class }}">
                         {{ $i }}
                     </span>
@@ -45,7 +45,7 @@
         </ol>
 
     </div>
-    <div class="bg-white border shadow rounded-lg mt-5 p-8">
+    <div class="bg-white border shadow rounded-lg mt-5 p-5">
         @if (session()->has('response') && session('response')['step'] == 1)
             <h4 class="text-2xl font-bold">Faculty Name &amp; Schedule</h4>
             <p class="my-2 text-sm font-medium">Note: Please ensure that the faculty and schedule align with the details provided in your registration form. This evaluation will be part of your <span class="uppercase font-bold underline">clearance requirements</span>.</p>
@@ -164,77 +164,92 @@
                 <div class="flex items-center">
                     <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                      </svg>
-                      <span class="font-bold uppercase">Rating Legend!</span>
+                    </svg>
+                    <span class="font-bold uppercase">Rating Legend!</span>
                 </div>
                 <hr class="mt-2">
-                <ul class="mx-1 mt-2">
-                    <li><span class="uppercase font-bold">4. Strongly Agree</span> - <span class="font-semibold underline">Exemplary, passionate, dedicated.</span></li>
-                    <li><span class="uppercase font-bold">3. Agree</span> - <span class="font-semibold underline">Competent, engaging lectures.</span></li>
-                    <li><span class="uppercase font-bold">2. Neutral</span> - <span class="font-semibold underline">Adequate, neither impressive nor disappointing.</span></li>
-                    <li><span class="uppercase font-bold">1. Disgree</span> - <span class="font-semibold underline">Lacks expertise, outdated methods.</span></li>
-                </ul>
+                <div class="overflow-x-auto py-4">
+                    <ul class="mx-1 mt-2">
+                        <li class="whitespace-nowrap"><span class="uppercase font-bold">4. Strongly Agree</span> - <span class="font-semibold underline">Exemplary, passionate, dedicated.</span></li>
+                        <li class="whitespace-nowrap"><span class="uppercase font-bold">3. Agree</span> - <span class="font-semibold underline">Competent, engaging lectures.</span></li>
+                        <li class="whitespace-nowrap"><span class="uppercase font-bold">2. Neutral</span> - <span class="font-semibold underline">Adequate, neither impressive nor disappointing.</span></li>
+                        <li class="whitespace-nowrap"><span class="uppercase font-bold">1. Disgree</span> - <span class="font-semibold underline">Lacks expertise, outdated methods.</span></li>
+                    </ul>
+                </div>
             </div>
-            <div class="">
+            <div>
                 <div class="p-4 mt-5 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400">
                     <h1 class="text-1xl font-bold uppercase">{{$questionnaire->name}}</h1>
                 </div>
                 <form wire:submit='move(3)'>
-                    @forelse ($questionnaire->sorted_items as $item)
-                        <div class="mt-5" role="alert">
-                            <div class="px-6 py-2 text-sm text-blue-800 rounded-t-lg border bg-blue-50 dark:bg-gray-800 dark:text-blue-400">
-                                <div class="flex items-center justify-between my-3 me-2 font-bold ">
-                                    <div class="uppercase">{{ucwords($item['criteria_name'])}}</div>
-                                    <div class="flex items-center">
-                                        <div style="margin-left: 108px;">4</div>
-                                        <div style="margin-left: 108px;">3</div>
-                                        <div style="margin-left: 108px;">2</div>
-                                        <div style="margin-left: 108px;">1</div>
+                    <div class="relative overflow-x-auto rounded-lg shadow-lg">
+                        @forelse ($questionnaire->sorted_items as $item)
+                            <table class="border w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <thead class="mt-5  mb-5 rounded-t px-6 py-2 text-sm text-blue-800  border bg-blue-50 dark:bg-gray-800 dark:text-blue-400">
+                                    <tr>
+                                        <th class="px-6 py-3">
+                                            <div class="w-80">
+                                                {{ucwords($item['criteria_name'])}}
+                                            </div>
+                                        </th>
+                                        <th class="px-14 py-3 text-center">
+                                            4
+                                        </th>
+                                        <th class="px-14 py-3 text-center">
+                                            3
+                                        </th>
+                                        <th class="px-14 py-3 text-center">
+                                            2
+                                        </th>
+                                        <th class="px-14 py-3 text-center">
+                                            1
+                                        </th>
+                                    </tr>
+                                </thead>
+                                @foreach($item['item'] as $index => $questionnaire)
+                                    <tbody>
+                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                            <td class="px-6 py-4 text-sm text-slate-800 font-medium text-justify">
+                                                <div>
+                                                    {{$questionnaire['name']}}
+                                                </div>
+                                                @if(in_array($questionnaire['id'], session('error') ?? ['dum']))
+                                                    <div class="mt-2">
+                                                        <label class="text-red-900 font-bold mt-3 uppercase" style="font-size:11px">*This field is required</label>
+                                                    </div>
+                                                @endif
+                                            </td>
+                                            <td class="px-14 py-4 text-center font-medium whitespace-nowrap dark:text-white">
+                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="4">
+                                            </td>
+                                            <td class="px-14 py-4 text-center">
+                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="3">
+                                            </td>
+                                            <td class="px-14 py-4 text-center">
+                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="2">
+                                            </td>
+                                            <td class="px-14 py-4 text-center">
+                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="1">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+                                @endforeach
+                            </table>
+                        @empty
+                            <div class="col-span-12">
+                                <div class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800" role="alert">
+                                    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                                    </svg>
+                                    <span class="sr-only">Info</span>
+                                    <div>
+                                    <span class="font-medium">Currently no survery questionnaires added.</span>
                                     </div>
                                 </div>
                             </div>
-                            @foreach($item['item'] as $index => $questionnaire)
-                                <div class="bg-white border-b border-r border-l px-6 py-5{{ $loop->last ? ' rounded-b-lg shadow' : '' }}">
-                                    <div class="flex items-center justify-between">
-                                        <div class="text-sm font-medium text-justify">{{$questionnaire['name']}}</div>
-                                        <div class="flex items-center">
-                                            <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="4" class="">
-                                            </div>
-
-                                            <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="3" class="">
-                                            </div>
-
-                                            <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="2" class="">
-                                            </div>
-
-                                            <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="1" class="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @if(in_array($questionnaire['id'], session('error') ?? []))
-                                        <label class="text-red-900 uppercase font-bold mt-3" style="font-size:12px">*This field is required</label>
-                                    @enderror
-
-                                </div>
-                            @endforeach
-                        </div>
-                    @empty
-                        <div class="col-span-12">
-                            <div class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800" role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                                </svg>
-                                <span class="sr-only">Info</span>
-                                <div>
-                                <span class="font-medium">Currently no survery questionnaires added.</span>
-                                </div>
-                            </div>
-                        </div>
-                    @endforelse
+                        @endforelse
+                    </div>
                 </form>
                 <div class="flex justify-between mt-10">
                     <button
@@ -260,7 +275,6 @@
                     <ul>
                         <li>Name: {{$faculty['name']}}</li>
                         <li>Subject: {{$faculty['subject']}}</li>
-                        <li>Schedule: {{$faculty['schedule']}} </li>
                         <li>Academic Year: {{$faculty['academic_year']}}</li>
                     </ul>
                 </div>
@@ -273,59 +287,65 @@
                     <span class="font-bold uppercase">Rating Legend!</span>
                 </div>
                 <hr class="mt-2">
-                <ul class="mx-1 mt-2">
-                    <li><span class="uppercase font-bold">4. Strongly Agree</span> - <span class="font-semibold underline">Exemplary, passionate, dedicated.</span></li>
-                    <li><span class="uppercase font-bold">3. Agree</span> - <span class="font-semibold underline">Competent, engaging lectures.</span></li>
-                    <li><span class="uppercase font-bold">2. Neutral</span> - <span class="font-semibold underline">Adequate, neither impressive nor disappointing.</span></li>
-                    <li><span class="uppercase font-bold">1. Disgree</span> - <span class="font-semibold underline">Lacks expertise, outdated methods.</span></li>
-                </ul>
-            </div>
-            <div class="">
-                <div class="p-4 mt-5 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400">
-                    <h1 class="text-1xl font-bold uppercase">{{$questionnaire->name}}</h1>
+                <div class="overflow-x-auto py-4">
+                    <ul class="mx-1 mt-2">
+                        <li class="whitespace-nowrap"><span class="uppercase font-bold">4. Strongly Agree</span> - <span class="font-semibold underline">Exemplary, passionate, dedicated.</span></li>
+                        <li class="whitespace-nowrap"><span class="uppercase font-bold">3. Agree</span> - <span class="font-semibold underline">Competent, engaging lectures.</span></li>
+                        <li class="whitespace-nowrap"><span class="uppercase font-bold">2. Neutral</span> - <span class="font-semibold underline">Adequate, neither impressive nor disappointing.</span></li>
+                        <li class="whitespace-nowrap"><span class="uppercase font-bold">1. Disgree</span> - <span class="font-semibold underline">Lacks expertise, outdated methods.</span></li>
+                    </ul>
                 </div>
-                <form wire:submit='move(3)'>
+            </div>
+            <div class="p-4 mt-5 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400">
+                <h1 class="text-1xl font-bold uppercase">{{$questionnaire->name}}</h1>
+            </div>
+            <form wire:submit='move(3)'>
+                <div class="relative overflow-x-auto rounded-lg shadow-lg">
                     @forelse ($questionnaire->sorted_items as $item)
-                        <div class="mt-5" role="alert">
-                            <div class="px-6 py-2 text-sm text-blue-800 rounded-t-lg border bg-blue-50 dark:bg-gray-800 dark:text-blue-400">
-                                <div class="flex items-center justify-between my-3 me-2 font-bold ">
-                                    <div class="uppercase">{{ucwords($item['criteria_name'])}}</div>
-                                    <div class="flex items-center">
-                                        <div style="margin-left: 108px;">4</div>
-                                        <div style="margin-left: 108px;">3</div>
-                                        <div style="margin-left: 108px;">2</div>
-                                        <div style="margin-left: 108px;">1</div>
-                                    </div>
-                                </div>
-                            </div>
-                            @foreach($item['item'] as $index => $questionnaire)
-                                <div class="bg-white border-b border-r border-l px-6 py-5{{ $loop->last ? ' rounded-b-lg shadow' : '' }}">
-                                    <div class="flex items-center justify-between">
-                                        <div class="text-sm font-medium text-justify">{{$questionnaire['name']}}</div>
-                                        <div class="flex items-center">
-                                            <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="4" disabled>
-                                            </div>
-
-                                            <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="3" disabled>
-                                            </div>
-
-                                            <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="2" disabled>
-                                            </div>
-
-                                            <div class="flex-fill text-center" style="margin-left: 100px;">
-                                                <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="1" disabled>
-                                            </div>
+                        <table class="border w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead class="mt-5  mb-5 rounded-t px-6 py-2 text-sm text-blue-800  border bg-blue-50 dark:bg-gray-800 dark:text-blue-400">
+                                <tr>
+                                    <th class="px-6 py-3">
+                                        <div class="w-80">
+                                            {{ucwords($item['criteria_name'])}}
                                         </div>
-                                    </div>
-                                    @if(in_array($questionnaire['id'], session('error') ?? ['dum']))
-                                        <label class="text-red-900 uppercase font-bold mt-3" style="font-size:12px">*This field is required</label>
-                                    @endif
-                                </div>
+                                    </th>
+                                    <th class="px-14 py-3 text-center">
+                                        4
+                                    </th>
+                                    <th class="px-14 py-3 text-center">
+                                        3
+                                    </th>
+                                    <th class="px-14 py-3 text-center">
+                                        2
+                                    </th>
+                                    <th class="px-14 py-3 text-center">
+                                        1
+                                    </th>
+                                </tr>
+                            </thead>
+                            @foreach($item['item'] as $index => $questionnaire)
+                                <tbody>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                        <td class="px-6 py-4 text-sm text-slate-800 font-medium text-justify">
+                                            {{$questionnaire['name']}}
+                                        </td>
+                                        <td class="px-14 py-4 text-center font-medium whitespace-nowrap dark:text-white">
+                                            <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="4" disabled>
+                                        </td>
+                                        <td class="px-14 py-4 text-center">
+                                            <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="3" disabled>
+                                        </td>
+                                        <td class="px-14 py-4 text-center">
+                                            <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="2" disabled>
+                                        </td>
+                                        <td class="px-14 py-4 text-center">
+                                            <input type="radio" wire:model="responses.{{$questionnaire['id']}}" value="1" disabled>
+                                        </td>
+                                    </tr>
+                                </tbody>
                             @endforeach
-                        </div>
+                        </table>
                     @empty
                         <div class="col-span-12">
                             <div class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800" role="alert">
@@ -339,40 +359,41 @@
                             </div>
                         </div>
                     @endforelse
-                    <div class="mb-4 mt-5">
-                        <div class="p-4 text-sm text-blue-800 border-t border-r border-l rounded-t-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400">
-                            <h1 class="text-1xl font-bold uppercase">User Comments</h1>
-                        </div>
-                        <div class="bg-white p-4 border shadow-lg rounded-b text-sm font-medium">
-                            <textarea
-                                wire:model='comments'
-                                name="comments"
-                                id="comnents"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 resize-none" rows="8"
-                                placeholder="Write something..."
-                                {{session('response')['faculty']['is_preview'] ? 'disabled' : '' }}
-                                >
-                            </textarea>
-                            @if(session('error') && session('error')[0] == 'comment')
-                                <label class="text-red-900 uppercase font-bold mt-3" style="font-size:12px">*This field is required</label>
-                            @endif
-                        </div>
-                    </div>
-                </form>
-
-                <div class="flex justify-{{session('response')['faculty']['is_preview'] ? 'end' : 'between'}} mt-10">
-                    <button
-                        wire:click='move(2)'
-                        class="inline-flex items-center border border-sky-700 text-slate-900 bg-transparent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 {{session('response')['faculty']['is_preview'] ? 'hidden' : '456'}}"
-                        >
-                        Previous
-                    </button>
-                    <button wire:click='move(4)'
-                        class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        >
-                        Next
-                    </button>
                 </div>
+                <div class="mb-4 mt-5">
+                    <div class="p-4 text-sm text-blue-800 border-t border-r border-l rounded-t-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400">
+                        <h1 class="text-1xl font-bold uppercase">User Comments</h1>
+                    </div>
+                    <div class="bg-white p-4 border shadow-lg rounded-b text-sm font-medium">
+                        <textarea
+                            wire:model='comments'
+                            name="comments"
+                            id="comnents"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 resize-none" rows="8"
+                            placeholder="Write something..."
+                            {{session('response')['faculty']['is_preview'] ? 'disabled' : '' }}
+                            >
+                        </textarea>
+                        @if(session('error') && session('error')[0] == 'comment')
+                            <div class="mt-2">
+                                <label class="text-red-900 font-bold mt-3 uppercase" style="font-size:11px">*This field is required</label>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </form>
+            <div class="flex justify-{{session('response')['faculty']['is_preview'] ? 'end' : 'between'}} mt-10">
+                <button
+                    wire:click='move(2)'
+                    class="inline-flex items-center border border-sky-700 text-slate-900 bg-transparent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 {{session('response')['faculty']['is_preview'] ? 'hidden' : '456'}}"
+                    >
+                    Previous
+                </button>
+                <button wire:click='move(4)'
+                    class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                    Next
+                </button>
             </div>
         @elseif(session()->has('response') && session('response')['step'] == 4)
             <div class="px-5">
@@ -389,16 +410,16 @@
                     <p class="text-xs uppercase font-bold">Reference: #{{session('response')['faculty']['reference']}}</p>
                     <p class="text-xs uppercase font-bold text-slate-800">Submitted {{session('response')['faculty']['date_submitted']}}</p>
                 </div>
-                <div class="flex justify-between mt-10">
+                <div class="sm:flex justify-between mt-10">
                     <button
                         wire:click='move(3)'
-                        class="inline-flex items-center border border-sky-700 text-slate-900 bg-transparent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        class="w-full sm:w-auto justify-center inline-flex items-center border border-sky-700 text-slate-900 bg-transparent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
                         Previous
                     </button>
                     <a wire:navigate
                         href="{{route('student.subject', ['evaluate' => $evaluate, 'semester' => $semester])}}"
-                        class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        class="w-full sm:w-auto justify-center mt-3 sm:m-0 text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
                         Return Subjects
                     </a>

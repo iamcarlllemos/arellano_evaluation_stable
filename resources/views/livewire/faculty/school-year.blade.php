@@ -9,9 +9,15 @@
                         {!!to_status($school_year->status)!!}
                     </div>
                     <hr class="my-4">
-                    <div class="mt-3 flex justify-end">
-                        <a wire:navigate href="{{route('faculty.subject', ['evaluate' => $school_year->id, 'semester' => $school_year->semester])}}" class=" bg-blue-100 text-blue-800 p-2 px-4 text-sm font-bold rounded-lg">Open</a>
-                    </div>
+                    @if ($school_year->status == 1)
+                        <div class="mt-3 flex justify-end">
+                            <a wire:navigate href="{{route('student.subject', ['evaluate' => $school_year->id, 'semester' => $school_year->semester])}}" class=" bg-blue-100 text-blue-800 p-2 px-4 text-sm font-bold rounded-lg">Open</a>
+                        </div>
+                    @else
+                        <div class="mt-3 flex justify-end">
+                            <a href="javascript:void(0)" class=" bg-orange-100 text-orange-800 p-2 px-4 text-sm font-bold rounded-lg">Closed</a>
+                        </div>
+                    @endif
                 </div>
                 <div class="absolute top-6 left-5 p-4 rounded-full text-slate-100 backdrop-blur-sm bg-white/30">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
