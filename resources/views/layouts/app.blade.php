@@ -4,7 +4,6 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
 
         <title>{{ 'Arellano Evaluation' }}</title>
 
@@ -21,15 +20,6 @@
         <x-banner />
 
         <div class="min-h-screen bg-gray-100">
-            <!-- Page Heading -->
-            {{-- @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif --}}
-
             <!-- Page Content -->
             <main>
                 <div id="sidebar" class="sidebar fixed top-0 left-0 z-40 md:w-80 h-screen transition-transform -translate-x-full sm:translate-x-0" style="background-color: #192231">
