@@ -11,7 +11,7 @@
                     <hr class="my-4">
                     @if ($school_year->status == 1)
                         <div class="mt-3 flex justify-end">
-                            <a wire:navigate href="{{route('student.subject', ['evaluate' => $school_year->id, 'semester' => $school_year->semester])}}" class=" bg-blue-100 text-blue-800 p-2 px-4 text-sm font-bold rounded-lg">Open</a>
+                            <a wire:navigate href="{{route('faculty.subject', ['evaluate' => $school_year->id, 'semester' => $school_year->semester])}}" class=" bg-blue-100 text-blue-800 p-2 px-4 text-sm font-bold rounded-lg">Open</a>
                         </div>
                     @else
                         <div class="mt-3 flex justify-end">
