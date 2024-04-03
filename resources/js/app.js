@@ -1,5 +1,5 @@
-import './bootstrap'
-
+import 'jstree'
+import 'flowbite/dist/flowbite.min.js'
 
 import $ from 'jquery';
 

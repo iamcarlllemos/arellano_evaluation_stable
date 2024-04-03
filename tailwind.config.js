@@ -2,8 +2,6 @@ import defaultTheme from 'tailwindcss/defaultTheme';
 import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
 import flowbite from 'flowbite/plugin';
-import 'jstree';
-import 'flowbite/dist/flowbite.min.js';
 
 /** @type {import('tailwindcss').Config} */
 export default {
