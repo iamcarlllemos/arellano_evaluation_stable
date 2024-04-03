@@ -410,7 +410,7 @@
                     <p class="text-xs uppercase font-bold">Reference: #{{session('response')['faculty']['reference']}}</p>
                     <p class="text-xs uppercase font-bold text-slate-800">Submitted {{session('response')['faculty']['date_submitted']}}</p>
                 </div>
-                <div class="sm:flex justify-between mt-10">
+                <div class="block sm:flex justify-between mt-10">
                     <button
                         wire:click='move(3)'
                         class="w-full sm:w-auto justify-center items-center border border-sky-700 text-slate-900 bg-transparent focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -419,7 +419,7 @@
                     </button>
                     <a wire:navigate
                         href="{{route('student.subject', ['evaluate' => $evaluate, 'semester' => $semester])}}"
-                        class="w-full sm:w-auto justify-center mt-3 sm:m-0 text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        class="w-full sm:w-auto justify-center mt-3 sm:mt-0 text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
                         Return Subjects
                     </a>
