@@ -11,7 +11,7 @@
             $step = session('response')['step'] ?? 1;
         @endphp
 
-        <ol class="p-5 sm:flex justify-center gap-5  items-center w-full bg-white border rounded-lg shadow text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
+        <ol class="p-5 lg:flex justify-center gap-5  items-center w-full bg-white border rounded-lg shadow text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
             @for ($i = 1; $i <= 4; $i++)
                 @php
                     $isActive = $i <= $step;
