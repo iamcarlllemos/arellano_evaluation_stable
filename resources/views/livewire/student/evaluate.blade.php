@@ -11,7 +11,7 @@
             $step = session('response')['step'] ?? 1;
         @endphp
 
-        <ol class="p-5 lg:flex justify-center gap-5  items-center w-full bg-white border rounded-lg shadow text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
+        <ol class="p-5 lg:flex justify-center gap-5 items-center w-full bg-white border rounded-lg shadow text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:space-x-4 rtl:space-x-reverse">
             @for ($i = 1; $i <= 4; $i++)
                 @php
                     $isActive = $i <= $step;
@@ -21,7 +21,7 @@
                     $arrowColor = $isActive ? 'text-blue-600 dark:text-blue-500' : 'text-gray-500 dark:text-gray-400';
                 @endphp
 
-                <li class="flex items-center mt-3 sm:mt-0 text-center ms-6">
+                <li class="flex items-center mt-3 sm:mt-0 text-center ms-4">
                     <span class="flex items-center justify-center w-5 h-5 me-2 text-xs border {{ $borderClass }} rounded-full shrink-0 {{ $class }}">
                         {{ $i }}
                     </span>
