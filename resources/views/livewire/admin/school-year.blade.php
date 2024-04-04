@@ -203,7 +203,7 @@
                             <h5 class="text-2xl font-bold tracking-tight text-white uppercase whitespace-break-spaces line-clamp-1">{{$school_year->name}}</h5>
                             <p class="text-sm text-white font-bold line-clamp-2">{{$school_year->start_year . '-' . $school_year->end_year . ' ('.to_ordinal($school_year->semester, 'semester').')'}}</p>
                             <div class="my-3">
-                                {!!to_status($school_year->status)!!}
+                                {!!to_status((int)$school_year->status)!!}
                             </div>
                             <hr>
                             <div class="flex justify-end mt-3">

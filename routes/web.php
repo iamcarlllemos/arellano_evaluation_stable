@@ -29,6 +29,7 @@ use App\Http\Controllers\Faculty\LoginController as FacultyLoginController;
 use App\Http\Controllers\Faculty\DashboardController as FacultyDashboardController;
 use App\Http\Controllers\Faculty\SubjectController as FacultySubjectController;
 use App\Http\Controllers\Faculty\EvaluateController as FacultyEvaluateController;
+use App\Http\Controllers\PrintResultController;
 use App\Http\Controllers\TestController;
 
 /*
@@ -96,7 +97,6 @@ Route::prefix('student')->group(function() {
     });
 });
 
-Route::get('/test', [TestController::class, 'index']);
 
 Route::prefix('faculty')->group(function() {
     Route::get('login', [FacultyLoginController::class, 'index'])->name('faculty.index');

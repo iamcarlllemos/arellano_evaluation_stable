@@ -115,7 +115,7 @@
                                 </li>
                                 <hr class="my-3">
                                 <li class="my-2">
-                                    <a href="javascript:void(0)">Save as pdf</a>
+                                    <a href="javascript:void(0)" wire:click='save_pdf' download>Save as pdf</a>
                                 </li>
                                 <li class="my-2">
                                     <a href="#">Save as png</a>

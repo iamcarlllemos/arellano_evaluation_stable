@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Http\Controllers\PrintResultController;
 use App\Models\DepartmentModel;
 use App\Models\FacultyModel;
 use App\Models\QuestionnaireModel;
@@ -381,5 +382,19 @@ class EvaluationResults extends Component
         ];
 
         return view('livewire.admin.evaluation-result', compact('data'));
+    }
+
+    public function save_pdf() {
+
+        $data = [
+            'display' => $this->display,
+            'view' => $this->view
+        ];
+
+        $print = new PrintResultController($data);
+        $filename = $print->save();
+
+        return response()->download(public_path('pdf/'.$filename))
+            ->deleteFileAfterSend();
     }
 }
