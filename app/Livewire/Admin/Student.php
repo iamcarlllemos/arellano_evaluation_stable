@@ -133,8 +133,8 @@ class Student extends Component
 
             $model->course_id = $this->course_id;
             $model->student_number = $this->student_number;
-            $model->firstname = $this->firstname;
-            $model->lastname = $this->lastname;
+            $model->firstname = ucwords($this->firstname);
+            $model->lastname = ucwords($this->lastname);
             $model->middlename = $this->middlename;
             $model->gender = $this->gender;
             $model->birthday = $this->birthday;
@@ -274,8 +274,8 @@ class Student extends Component
 
                 $model->course_id = $this->course_id;
                 $model->student_number = $this->student_number;
-                $model->firstname = $this->firstname;
-                $model->lastname = $this->lastname;
+                $model->firstname = ucwords($this->firstname);
+                $model->lastname = ucwords($this->lastname);
                 $model->middlename = $this->middlename;
                 $model->gender = $this->gender;
                 $model->birthday = $this->birthday;

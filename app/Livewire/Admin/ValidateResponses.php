@@ -35,6 +35,10 @@ class ValidateResponses extends Component
         'code' => 'Code'
     ];
 
+    public function onchangeType() {
+        $this->reset('result_view');
+    }
+
     public function submit() {
 
         if($this->type == 1) {

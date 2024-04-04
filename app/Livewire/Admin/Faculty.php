@@ -123,8 +123,8 @@ class Faculty extends Component
             $model =  new FacultyModel;
             $model->department_id = $this->department_id;
             $model->employee_number = $this->employee_number;
-            $model->firstname = $this->firstname;
-            $model->lastname = $this->lastname;
+            $model->firstname = ucwords($this->firstname);
+            $model->lastname = ucwords($this->lastname);
             $model->middlename = $this->middlename;
             $model->email = $this->email;
             $model->gender = $this->gender;
@@ -240,8 +240,8 @@ class Faculty extends Component
 
                 $model->department_id = $this->department_id;
                 $model->employee_number = $this->employee_number;
-                $model->firstname = $this->firstname;
-                $model->lastname = $this->lastname;
+                $model->firstname = ucwords($this->firstname);
+                $model->lastname = ucwords($this->lastname);
                 $model->middlename = $this->middlename;
                 $model->gender = $this->gender;
                 $model->email = $this->email;

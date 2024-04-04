@@ -95,7 +95,7 @@ class Administrator extends Component
 
             $model = new User;
 
-            $model->name = $this->firstname . ' ' . $this->lastname;
+            $model->name = ucwords($this->firstname . ' ' . $this->lastname);
             $model->email = $this->email;
             $model->role = $this->role;
             $model->username = $this->username;
@@ -176,7 +176,7 @@ class Administrator extends Component
 
             try {
 
-                $model->name = $this->firstname . ' ' . $this->lastname;
+                $model->name = ucwords($this->firstname . ' ' . $this->lastname);
                 $model->email = $this->email;
                 $model->username = $this->username;
                 $model->role = $this->role;

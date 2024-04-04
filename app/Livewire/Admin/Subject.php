@@ -83,7 +83,7 @@ class Subject extends Component
 
             $model->save();
 
-            $this->resetExcept('form');
+            $this->resetExcept('form', 'initPaginate');
 
             $this->dispatch('alert');
             session()->flash('alert', [

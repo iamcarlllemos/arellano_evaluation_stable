@@ -17,7 +17,7 @@
             <form wire:submit='submit'>
                 <div class="mb-4 w-full">
                     <label for="search" class="block mb-1 font-extrabold text-gray-900 dark:text-white uppercase" style="font-size: 12px">Search By <span class="text-red-900">*</span></label>
-                    <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" wire:model.live='type' >
+                    <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" wire:model.live='type' wire:change='onchangeType'>
                         <option value="0"> - CHOOSE - </option>
                         <option value="1">Reference Code</option>
                         <option value="2">QR Code</option>
