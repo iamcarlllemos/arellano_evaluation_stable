@@ -29,11 +29,7 @@ use App\Http\Controllers\Faculty\LoginController as FacultyLoginController;
 use App\Http\Controllers\Faculty\DashboardController as FacultyDashboardController;
 use App\Http\Controllers\Faculty\SubjectController as FacultySubjectController;
 use App\Http\Controllers\Faculty\EvaluateController as FacultyEvaluateController;
-
-
-
-
-
+use App\Http\Controllers\TestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,10 +77,6 @@ Route::prefix('admin')->middleware('admins')->group(function() {
         Route::get('/faculty-template', [FacultyTemplateController::class, 'index'])->name('admin.linking.faculty-template');
     });
 
-    Route::middleware('role:superadmin')->prefix('settings')->group(function() {
-        Route::get('/smtp', [SmtpController::class, 'index'])->name('admin.settings.smtp');
-    });
-
     Route::prefix('accounts')->group(function() {
         Route::get('/students', [StudentController::class, 'index'])->name('admin.accounts.student')->middleware('role:admin,superadmin');
         Route::get('/faculty', [FacultyController::class, 'index'])->name('admin.accounts.faculty')->middleware('role:admin,superadmin');
@@ -103,6 +95,8 @@ Route::prefix('student')->group(function() {
         Route::get('subject/evaluate/start', [StudentEvaluateController::class, 'index'])->name('student.evaluate');
     });
 });
+
+Route::get('/test', [TestController::class, 'index']);
 
 Route::prefix('faculty')->group(function() {
     Route::get('login', [FacultyLoginController::class, 'index'])->name('faculty.index');
