@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Mail\Mailer;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
@@ -15,6 +16,7 @@ use App\Models\FacultyModel;
 
 use App\Traits\Account;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Livewire\WithPagination;
 
 class Faculty extends Component
@@ -43,6 +45,7 @@ class Faculty extends Component
     public $username;
     public $password;
     public $password_repeat;
+    public $is_email;
 
     public $initPaginate = false;
 
@@ -131,25 +134,43 @@ class Faculty extends Component
 
             $model->save();
 
-            $this->dispatch('alert');
-            session()->flash('alert', [
-                'message' => 'Saved.'
-            ]);
+            if($this->is_email) {
+                $data = [
+                    'view' => 'mail.notify',
+                    'subject' => 'Faculty Account Creation',
+                    'name' => ucwords($this->firstname . ' ' . $this->lastname),
+                    'role' => 'faculty',
+                    'number' => $this->employee_number,
+                    'username' => $this->username,
+                    'password' => $this->password,
+                ];
 
-            $this->department_id = '';
-            $this->employee_number = '';
-            $this->firstname = '';
-            $this->lastname = '';
-            $this->middlename = '';
-            $this->gender = '';
-            $this->image = '';
-            $this->email = '';
-            $this->username = '';
-            $this->password = '';
-            $this->password_repeat = '';
+                try {
+                    Mail::to($this->email)
+                    ->send(new Mailer($data));
+
+                    $this->dispatch('alert');
+                    session()->flash('alert', [
+                        'message' => 'Saved and email sent.'
+                    ]);
+
+                } catch (\Throwable $th) {
+                    $this->dispatch('alert');
+                    session()->flash('alert', [
+                        'message' => $th->getMessage()
+                    ]);
+                }
+            } else {
+                $this->dispatch('alert');
+                session()->flash('alert', [
+                    'message' => 'Saved.'
+                ]);
+            }
+
+            $this->resetExcept('form', 'initPaginate');
+
 
         } catch (\Exception $e) {
-
             session()->flash('flash', [
                 'status' => 'failed',
                 'message' => $e->getMessage()
@@ -175,6 +196,13 @@ class Faculty extends Component
                 'lastname' => 'required|string',
                 'middlename' => 'string',
                 'gender' => 'required|integer|in:1,2,3',
+                'username' => [
+                    'required',
+                    'string',
+                    Rule::unique('afears_faculty')->where(function($query) {
+                        return $query->where('username', $this->username);
+                    })->ignore($this->id)
+                ],
                 'email' =>  [
                     'required',
                     'string',

@@ -59,12 +59,12 @@ class Criteria extends Component
             $model->name = ucfirst($this->name);
             $model->save();
 
+            $this->resetExcept('form', 'initPaginate');
+
             $this->dispatch('alert');
             session()->flash('alert', [
                 'message' => 'Saved.'
             ]);
-
-            $this->name = '';
 
         } catch (\Exception $e) {
             session()->flash('flash', [

@@ -78,13 +78,12 @@ class Department extends Component
 
             $model->save();
 
+            $this->resetExcept('form', 'initPaginate');
+
             $this->dispatch('alert');
             session()->flash('alert', [
                 'message' => 'Saved.'
             ]);
-
-            $this->branch_id = '';
-            $this->name = '';
 
         } catch (\Exception $e) {
             session()->flash('flash', [

@@ -83,14 +83,12 @@ class Subject extends Component
 
             $model->save();
 
+            $this->resetExcept('form');
+
             $this->dispatch('alert');
             session()->flash('alert', [
                 'message' => 'Saved.'
             ]);
-
-            $this->course_id = '';
-            $this->code = '';
-            $this->name = '';
 
         } catch (\Exception $e) {
             session()->flash('flash', [
@@ -129,7 +127,8 @@ class Subject extends Component
 
                 $model->save();
 
-                $this->dispatch('alert');
+                $this->resetExcept('form', 'initPaginate');
+
                 session()->flash('alert', [
                     'message' => 'Updated.'
                 ]);

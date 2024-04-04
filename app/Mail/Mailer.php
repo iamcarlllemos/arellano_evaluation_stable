@@ -14,7 +14,8 @@ class Mailer extends Mailable
     public $view;
     public $name;
     public $subject;
-    public $student_number;
+    public $role;
+    public $number;
     public $username;
     public $password;
 
@@ -26,9 +27,10 @@ class Mailer extends Mailable
     public function __construct($data)
     {
         $this->view = $data['view'];
-        $this->name = $data['name'];
         $this->subject = $data['subject'];
-        $this->student_number = $data['student_number'];
+        $this->name = $data['name'];
+        $this->role = $data['role'];
+        $this->number = $data['number'];
         $this->username = $data['username'];
         $this->password = $data['password'];
     }
@@ -52,7 +54,8 @@ class Mailer extends Mailable
             view: $this->view,
             with: [
                 'name' => $this->name,
-                'student_number' => $this->student_number,
+                'role' => $this->role,
+                'number' => $this->number,
                 'username' => $this->username,
                 'password' => $this->password,
             ]

@@ -104,20 +104,12 @@ class Administrator extends Component
 
             $model->save();
 
+            $this->resetExcept('form', 'initPaginate');
+
             $this->dispatch('alert');
             session()->flash('alert', [
                 'message' => 'Saved.'
             ]);
-
-            $this->firstname = '';
-            $this->lastname = '';
-            $this->image = '';
-            $this->email = '';
-            $this->role = '';
-            $this->branch = '';
-            $this->username = '';
-            $this->password = '';
-            $this->password_repeat = '';
 
         } catch (\Exception $e) {
 
@@ -170,7 +162,7 @@ class Administrator extends Component
                 try {
                     $model->password = Hash::make($this->password);
                     $model->save();
-                    $this->password = '';
+                    $this->reset('password', 'password_repeat');
                     $this->password_repeat = '';
                 } catch (\Exception $e) {
                     session()->flash('flash', [

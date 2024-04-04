@@ -462,22 +462,6 @@ class StudentController extends Controller
                                     'disabled' => true,
                                     'css' => 'col-span-12 md:col-span-3',
                                 ],
-                                'password' => [
-                                    'label' => 'Password',
-                                    'type' => 'password',
-                                    'placeholder' => '••••••••',
-                                    'required' => false,
-                                    'disabled' => true,
-                                    'css' => 'col-span-12 md:col-span-32',
-                                ],
-                                'password_repeat' => [
-                                    'label' => 'Password Repeat',
-                                    'type' => 'password',
-                                    'placeholder' => '••••••••',
-                                    'required' => false,
-                                    'disabled' => true,
-                                    'css' => 'col-span-12 md:col-span-32',
-                                ],
                             ]
                         ],
                     ],

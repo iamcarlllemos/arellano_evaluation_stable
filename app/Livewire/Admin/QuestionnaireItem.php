@@ -95,8 +95,7 @@ class QuestionnaireItem extends Component
                     'message' => 'Saved.'
                 ]);
 
-                $this->criteria_id = '';
-                $this->item = '';
+                $this->reset('criteria_id', 'item');
 
             } catch (\Exception $e) {
                 session()->flash('flash', [
@@ -128,14 +127,13 @@ class QuestionnaireItem extends Component
 
                 QuestionnaireItemModel::where('id', $this->questionnaire_item_id)->update($data);
 
+                $this->resetExcept('form', 'initPaginate');
+
                 $this->dispatch('alert');
+
                 session()->flash('alert', [
                     'message' => 'Updated.'
                 ]);
-
-                $this->questionnaire_item_id = '';
-                $this->criteria_id = '';
-                $this->item = '';
 
             } catch (\Exception $e) {
                 session()->flash('flash', [
@@ -166,15 +164,15 @@ class QuestionnaireItem extends Component
         $model = QuestionnaireItemModel::where('id', $id)->first();
 
         if($model) {
+
             $model->delete();
+
+            $this->resetExcept('form', 'initPaginate');
 
             $this->dispatch('alert');
             session()->flash('alert', [
                 'message' => 'Deleted.'
             ]);
-
-            $this->criteria_id = '';
-            $this->item = '';
 
         } else {
             session()->flash('flash', [

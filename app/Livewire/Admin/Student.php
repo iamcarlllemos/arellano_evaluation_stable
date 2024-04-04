@@ -149,9 +149,10 @@ class Student extends Component
             if($this->is_email) {
                 $data = [
                     'view' => 'mail.notify',
+                    'subject' => 'Student Account Creation',
                     'name' => ucwords($this->firstname . ' ' . $this->lastname),
-                    'subject' => 'Account Creation',
-                    'student_number' => $this->student_number,
+                    'role' => 'student',
+                    'number' => $this->student_number,
                     'username' => $this->username,
                     'password' => $this->password,
                 ];
@@ -159,18 +160,26 @@ class Student extends Component
                 try {
                     Mail::to($this->email)
                     ->send(new Mailer($data));
+
+                    $this->dispatch('alert');
+                    session()->flash('alert', [
+                        'message' => 'Saved and email sent.'
+                    ]);
+
                 } catch (\Throwable $th) {
-                    dd($th->getMessage());
+                    $this->dispatch('alert');
+                    session()->flash('alert', [
+                        'message' => $th->getMessage()
+                    ]);
                 }
+            } else {
+                $this->dispatch('alert');
+                session()->flash('alert', [
+                    'message' => 'Saved.'
+                ]);
             }
 
-
-            $this->dispatch('alert');
-            session()->flash('alert', [
-                'message' => 'Saved.'
-            ]);
-
-            $this->resetExcept('form');
+            $this->resetExcept('form', 'initPaginate');
 
         } catch (\Exception $e) {
             session()->flash('flash', [
@@ -252,8 +261,7 @@ class Student extends Component
                 try {
                     $model->password = Hash::make($this->password);
                     $model->save();
-                    $this->password = '';
-                    $this->password_repeat = '';
+                    $this->except('password', 'password_repeat');
                 } catch (\Exception $e) {
                     session()->flash('flash', [
                         'status' => 'failed',
@@ -327,7 +335,7 @@ class Student extends Component
             'message' => 'Image removed.'
         ]);
 
-        $this->image = '';
+        $this->reset('image');
 
     }
 

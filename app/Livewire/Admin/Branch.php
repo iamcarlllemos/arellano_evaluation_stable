@@ -85,13 +85,13 @@ class Branch extends Component
 
             $model->save();
 
+            $this->resetExcept('form', 'initPaginate');
+
             $this->dispatch('alert');
             session()->flash('alert', [
                 'message' => 'Saved.'
             ]);
 
-            $this->name = '';
-            $this->image = '';
 
         } catch (\Exception $e) {
             session()->flash('flash', [

@@ -89,15 +89,12 @@ class SchoolYear extends Component
 
             $model->save();
 
+            $this->resetExcept('form', 'initPaginate');
+
             $this->dispatch('alert');
             session()->flash('alert', [
                 'message' => 'Saved.'
             ]);
-
-            $this->name = '';
-            $this->start_year = '';
-            $this->semester = '';
-            $this->status = '';
 
         } catch (\Exception $e) {
             session()->flash('flash', [
