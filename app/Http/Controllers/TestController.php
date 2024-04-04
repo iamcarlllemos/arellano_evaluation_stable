@@ -9,9 +9,18 @@ use Illuminate\Support\Facades\Mail;
 class TestController extends Controller
 {
     public function index() {
+
+        $data = [
+            'view' => 'mail.notify',
+            'name' => '',
+            'student_number' => '',
+            'username' => '',
+            'password' => '',
+        ];
+
         try {
-            Mail::to('llemoscarl671@gmail.com')
-            ->send(new Mailer);
+            Mail::to('iamcarlllemos@gmail.com')
+            ->send(new Mailer($data));
         } catch (\Throwable $th) {
             dd($th->getMessage());
         }

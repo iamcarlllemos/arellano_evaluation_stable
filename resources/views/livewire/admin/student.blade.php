@@ -140,6 +140,14 @@
                                         <p class="text-xs text-red-500 font-bold mt-2">{{$message}}</p>
                                     @enderror
                                 </div>
+                            @elseif(in_array($item['type'], ['checkbox']))
+                                <div class="flex items-center gap-2 {{$item['css']}}">
+                                    <input type="checkbox" name="{{$key}}" wire:model='{{$key}}' id="{{$key}}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 cursor-pointer">
+                                    <label for="{{$key}}" class="block font-extrabold text-gray-900 dark:text-white uppercase" style="font-size: 12px">
+                                        {{$item['label']}}
+                                        {!!($item['required']) ? '<span class="text-red-900">*</span>' : ''!!}
+                                    </label>
+                                </div>
                             @endif
                         @endforeach
                     </div>

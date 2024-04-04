@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Mail\Mailer;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
@@ -15,6 +16,7 @@ use App\Traits\Account;
 
 use App\Models\BranchModel;
 use App\Models\StudentModel;
+use Illuminate\Support\Facades\Mail;
 use Livewire\WithPagination;
 
 class Student extends Component
@@ -46,6 +48,7 @@ class Student extends Component
     public $username;
     public $password;
     public $password_repeat;
+    public $is_email;
 
     public $initPaginate = false;
 
@@ -143,24 +146,31 @@ class Student extends Component
 
             $model->save();
 
+            if($this->is_email) {
+                $data = [
+                    'view' => 'mail.notify',
+                    'name' => ucwords($this->firstname . ' ' . $this->lastname),
+                    'subject' => 'Account Creation',
+                    'student_number' => $this->student_number,
+                    'username' => $this->username,
+                    'password' => $this->password,
+                ];
+
+                try {
+                    Mail::to($this->email)
+                    ->send(new Mailer($data));
+                } catch (\Throwable $th) {
+                    dd($th->getMessage());
+                }
+            }
+
+
             $this->dispatch('alert');
             session()->flash('alert', [
                 'message' => 'Saved.'
             ]);
 
-            $this->course_id = '';
-            $this->student_number = '';
-            $this->firstname = '';
-            $this->lastname = '';
-            $this->middlename = '';
-            $this->gender = '';
-            $this->birthday = '';
-            $this->year_level = '';
-            $this->image = '';
-            $this->email = '';
-            $this->username = '';
-            $this->password = '';
-            $this->password_repeat = '';
+            $this->resetExcept('form');
 
         } catch (\Exception $e) {
             session()->flash('flash', [

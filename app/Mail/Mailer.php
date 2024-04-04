@@ -11,14 +11,26 @@ use Illuminate\Queue\SerializesModels;
 
 class Mailer extends Mailable
 {
+    public $view;
+    public $name;
+    public $subject;
+    public $student_number;
+    public $username;
+    public $password;
+
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($data)
     {
-        //
+        $this->view = $data['view'];
+        $this->name = $data['name'];
+        $this->subject = $data['subject'];
+        $this->student_number = $data['student_number'];
+        $this->username = $data['username'];
+        $this->password = $data['password'];
     }
 
     /**
@@ -27,7 +39,7 @@ class Mailer extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Mailer',
+            subject: $this->subject,
         );
     }
 
@@ -37,7 +49,13 @@ class Mailer extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.test',
+            view: $this->view,
+            with: [
+                'name' => $this->name,
+                'student_number' => $this->student_number,
+                'username' => $this->username,
+                'password' => $this->password,
+            ]
         );
     }
 

@@ -205,6 +205,13 @@ class StudentController extends Controller
                                     'disabled' => false,
                                     'css' => 'col-span-12 md:col-span-32',
                                 ],
+                                'is_email' => [
+                                    'label' => 'Notify this user via provided email',
+                                    'type' => 'checkbox',
+                                    'required' => false,
+                                    'disabled' => false,
+                                    'css' => 'col-span-12'
+                                ]
                             ]
                         ],
                         'update' => [
