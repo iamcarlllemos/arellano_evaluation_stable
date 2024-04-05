@@ -391,10 +391,13 @@ class EvaluationResults extends Component
             'view' => $this->view
         ];
 
-        $print = new PrintResultController($data);
-        $filename = $print->save();
+        $pdf = new PrintResultController($data);
+        $pdf = $pdf->save();
 
-        return response()->download(public_path('pdf/'.$filename))
-            ->deleteFileAfterSend();
+        // dd($filename);
+        dd($pdf);
+        $pdf->download('users-lists.pdf');
+        // return response()->download(public_path('pdf/'.$filename))
+        //     ->deleteFileAfterSend();
     }
 }

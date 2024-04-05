@@ -97,6 +97,7 @@ Route::prefix('student')->group(function() {
     });
 });
 
+Route::get('test', [PrintResultController::class, 'save']);
 
 Route::prefix('faculty')->group(function() {
     Route::get('login', [FacultyLoginController::class, 'index'])->name('faculty.index');

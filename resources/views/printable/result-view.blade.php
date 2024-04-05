@@ -1,61 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        table {
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
+<style>
+table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12px
+}
 
-        th, td {
-            border: 1px solid #cdcdcd;
-            text-align: left;
-            padding: 8px;
-        }
+table td, table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
 
-        tr:nth-child(even) {
-            background-color: #e1e1e1;
-        }
+table tr:nth-child(even){background-color: #f2f2f2;}
 
-        th {
-            width: 10%;
-        }
+table tr:hover {background-color: #ddd;}
 
-        td {
-            width: 10%;
-        }
-
-        .description {
-            width: 30%;
-        }
-
-        .center {
-            text-align: center;
-        }
-    </style>
+table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}
+</style>
 </head>
 <body>
-    <table>
-        <tr>
-            <th class="description">Total Responses: 1</th>
-            <th class="center">4</th>
-            <th class="center">3</th>
-            <th class="center">2</th>
-            <th class="center">1</th>
 
-        </tr>
-        <tr>
-            <td class="description">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nisi veniam facere laboriosam nam. Veritatis perspiciatis ea ut unde deserunt, laboriosam dolor sunt recusandae, odio sequi soluta debitis rem aspernatur ex.</td>
-            <td class="center">0</td>
-            <td class="center">0</td>
-            <td class="center">0</td>
-            <td class="center">0</td>
+<h1>A Fancy Table</h1>
 
-        </tr>
-    </table>
+<table>
+  <tr>
+    <th>Total Responses</th>
+    <th>4</th>
+    <th>3</th>
+    <th>2</th>
+    <th>1</th>
+  </tr>
+  <tr>
+    <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Numquam reiciendis dicta nesciunt doloremque esse eius cum, voluptatum debitis, maiores pariatur et maxime id incidunt quo fugit fugiat quisquam. Consequuntur, molestiae.</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+</table>
+
 </body>
 </html>
+
+

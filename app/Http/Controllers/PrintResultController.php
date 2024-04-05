@@ -1,34 +1,24 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PrintResultController extends Controller
 {
 
-    public $data;
+    // public $data;
 
-    public function __construct($data)
-    {
-        $this->data = $data;
-    }
+    // public function __construct($data)
+    // {
+    //     $this->data = $data;
+    // }
 
     public function save() {
 
-        $filename = 'test.pdf';
 
-        $html = view()->make('printable.result-view', $this->data)->render();
+        $pdf = PDF::loadView('printable.result-view');
 
-        $pdf = new PDF;
+        return $pdf->download('users-lists.pdf');
 
-        $pdf::SetTitle('Result View');
-        $pdf::AddPage('L');
-        $pdf::writeHTML($html, true, false, true, false, '');
-
-        $pdf::Output(public_path('pdf/' . $filename), 'F');
-
-
-        return $filename;
     }
 }
