@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Admin;
 
-use App\Http\Controllers\PrintResultController;
 use App\Models\DepartmentModel;
 use App\Models\FacultyModel;
 use App\Models\QuestionnaireModel;
@@ -10,6 +9,8 @@ use App\Models\ResponseModel;
 use App\Models\StudentModel;
 use Livewire\Component;
 use App\Traits\Censored;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class EvaluationResults extends Component
 {
@@ -391,13 +392,11 @@ class EvaluationResults extends Component
             'view' => $this->view
         ];
 
-        $pdf = new PrintResultController($data);
-        $pdf = $pdf->save();
+        $pdf = PDF::loadView('printable.result-view', $data);
 
-        // dd($filename);
-        dd($pdf);
-        $pdf->download('users-lists.pdf');
-        // return response()->download(public_path('pdf/'.$filename))
-        //     ->deleteFileAfterSend();
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->stream();
+        }, 'name.pdf');
+
     }
 }
