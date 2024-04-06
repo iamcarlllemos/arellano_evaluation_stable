@@ -10,6 +10,13 @@ use App\Models\StudentModel;
 use Livewire\Component;
 use App\Traits\Censored;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\View;
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Reader\Html;
+use Illuminate\Support\Facades\Response;
+
 
 
 class EvaluationResults extends Component
@@ -394,9 +401,50 @@ class EvaluationResults extends Component
 
         $pdf = PDF::loadView('printable.result-view', $data);
 
+        $faculty = $this->view['faculty'];
+
+        $filename = strtolower('evaluation_result_of_' . $faculty->firstname . '_' . $faculty->lastname . '.pdf');
+
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->stream();
-        }, 'name.pdf');
+        }, $filename);
+
+    }
+
+    public function save_excel() {
+
+        $data = [
+            'display' => $this->display,
+            'view' => $this->view
+        ];
+
+        // Create new PHPExcel object
+        $spreadsheet = new Spreadsheet();
+
+        // Set active sheet
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getColumnDimension('A')->setWidth(30);
+        $sheet->getColumnDimension('B')->setWidth(20);
+
+        // HTML content to be converted to Excel
+        $html = View::make('printable.test', $data)->render();
+
+
+        // dd($html);
+
+        // Load HTML content into PHPExcel
+        $reader = new HTML();
+        $spreadsheet = $reader->loadFromString($html);
+
+        // Save Excel file
+        $tempFilePath = storage_path('app/example.xlsx');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($tempFilePath);
+
+        // Return the Excel file as a downloadable response
+        return Response::download($tempFilePath, 'example.xlsx')->deleteFileAfterSend(true);
+
 
     }
 }

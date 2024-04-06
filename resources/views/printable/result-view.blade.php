@@ -43,9 +43,17 @@ table th {
         Faculty Information
     </div>
     <ul style="list-style:none; list-style-type: none; padding: 0; margin: 0;">
-        <li>Name: Carl Llemos</li>
-        <li>Subject: BSIT</li>
-        <li>Academic Stage: 1st Year & 1st Semester</li>
+        <li>Name: {{$view['faculty']['firstname'] . ' ' . $view['faculty']['lastname']}}</li>
+        <li>Subject: {{
+                $view['faculty']['templates'][0]['curriculum_template'][0]['subjects']['name'] . ' (' .
+                $view['faculty']['templates'][0]['curriculum_template'][0]['subjects']['code'] . ')'
+            }}
+        </li>
+        <li>Academic Stage: {{
+            to_ordinal($view['faculty']['templates'][0]['curriculum_template'][0]['year_level'], 'year') . ' & ' .
+            to_ordinal($view['faculty']['templates'][0]['curriculum_template'][0]['subject_sem'], 'semester')
+            }}
+        </li>
     </ul>
 </div>
 
@@ -53,7 +61,7 @@ table th {
     <tr>
         <th style="width: 100%; background-color: #fff; text-transform: uppercase;">
             Total Responses:
-            <span>
+            <span style="font-weight: bold; text-decoration: underline;">
                 {{$view['evaluation_result']['total_responses']}}
             </span>
         </th>
@@ -61,18 +69,10 @@ table th {
         <th style="width: 20px; text-align:center; color: #703a13; background-color: #e0a009">3</th>
         <th style="width: 20px; text-align:center; color: #9c3916; background-color: #ff8b4d">2</th>
         <th style="width: 20px; text-align:center; color: #9c1c1c; background-color: #fa7f7f">1</th>
-        @if ($display['wm'])
-            <th style="width: 20px; text-align:center;">Weighted Mean</th>
-        @endif
-        @if ($display['sqm'])
-            <th style="width: 20px; text-align:center; color: #5d25b8; background-color: #a689fa">Mean Squared</th>
-        @endif
-        @if ($display['std'])
-            <th style="width: 20px; text-align:center;">Standard Deviation</th>
-        @endif
-        @if ($display['itrprtn'])
-            <th style="width: 20px; text-align:center;">Interpretation</th>
-        @endif
+        <th style="width: 20px; text-align:center;">Weighted Mean</th>
+        <th style="width: 20px; text-align:center; color: #5d25b8; background-color: #a689fa">Mean Squared</th>
+        <th style="width: 20px; text-align:center;">Standard Deviation</th>
+        <th style="width: 20px; text-align:center;">Interpretation</th>
     </tr>
     @forelse ($view['evaluation_result']['stats'] as $questionnaire)
         <tr>
@@ -83,19 +83,10 @@ table th {
             <td style="width: 20px; text-align:center; background-color: #e0a009"></td>
             <td style="width: 20px; text-align:center; background-color: #ff8b4d"></td>
             <td style="width: 20px; text-align:center; background-color: #fa7f7f"></td>
-
-            @if ($display['wm'])
-                <td style="width: 20px; text-align:center;"></td>
-            @endif
-            @if ($display['sqm'])
-                <td style="width: 20px; text-align:center; background-color: #a689fa"></td>
-            @endif
-            @if ($display['std'])
-                <td style="width: 20px; text-align:center;"></td>
-            @endif
-            @if ($display['itrprtn'])
-                <td style="width: 20px; text-align:center;"></td>
-            @endif
+            <td style="width: 20px; text-align:center;"></td>
+            <td style="width: 20px; text-align:center; background-color: #a689fa"></td>
+            <td style="width: 20px; text-align:center;"></td>
+            <td style="width: 20px; text-align:center;"></td>
         </tr>
         @forelse ($questionnaire['items'] as $items)
             <tr>
@@ -114,27 +105,18 @@ table th {
                 <td style="width: 20px; text-align:center; color: #9c1c1c; background-color: #fa7f7f">
                     {{number_format($items['tally'][1], 2)}}
                 </td>
-
-                @if ($display['wm'])
-                    <td style="width: 20px; text-align:center;">
-                        {{number_format($items['weighted_mean'], 2)}}
-                    </td>
-                @endif
-                @if ($display['sqm'])
-                    <td style="width: 20px; text-align:center; color: #5d25b8; background-color: #a689fa">
-                        {{number_format($items['mean_squared'], 2)}}
-                    </td>
-                @endif
-                @if ($display['std'])
-                    <td style="width: 20px; text-align:center;">
-                        {{number_format($items['standard_deviation'], 2)}}
-                    </td>
-                @endif
-                @if ($display['itrprtn'])
-                    <td style="width: 20px; text-align:center;">
-                        {!!to_interpret($items['interpretation'])!!}
-                    </td>
-                @endif
+                <td style="width: 20px; text-align:center;">
+                    {{number_format($items['weighted_mean'], 2)}}
+                </td>
+                <td style="width: 20px; text-align:center; color: #5d25b8; background-color: #a689fa">
+                    {{number_format($items['mean_squared'], 2)}}
+                </td>
+                <td style="width: 20px; text-align:center;">
+                    {{number_format($items['standard_deviation'], 2)}}
+                </td>
+                <td style="width: 20px; text-align:center;">
+                    {!!strip_tags(to_interpret($items['interpretation']))!!}
+                </td>
             </tr>
         @empty
         <tr>
@@ -153,26 +135,18 @@ table th {
             <td style="width: 20px; text-align:center; color: #9c1c1c; background-color: #fa7f7f">
                 {{number_format(0, 2)}}
             </td>
-            @if ($display['wm'])
-                <td style="width: 20px; text-align:center;">
-                    {{number_format(0, 2)}}
-                </td>
-            @endif
-            @if ($display['sqm'])
-                <td style="width: 20px; text-align:center; color: #5d25b8; background-color: #a689fa">
-                    {{number_format(0, 2)}}
-                </td>
-            @endif
-            @if ($display['std'])
-                <td style="width: 20px; text-align:center;">
-                    {{number_format(0, 2)}}
-                </td>
-            @endif
-            @if ($display['itrprtn'])
-                <td style="width: 20px; text-align:center;">
-                    {{ 'No responses yet.' }}
-                </td>
-            @endif
+            <td style="width: 20px; text-align:center;">
+                {{number_format(0, 2)}}
+            </td>
+            <td style="width: 20px; text-align:center; color: #5d25b8; background-color: #a689fa">
+                {{number_format(0, 2)}}
+            </td>
+            <td style="width: 20px; text-align:center;">
+                {{number_format(0, 2)}}
+            </td>
+            <td style="width: 20px; text-align:center;">
+                {{ 'No responses yet.' }}
+            </td>
         </tr>
         @endforelse
     @empty
@@ -193,57 +167,35 @@ table th {
             <td colspan="5" style="text-align: center">
                 AVERAGES
             </td>
-            @if ($display['wm'])
-                <td style="width: 20px; text-align:center;">
-                    {{number_format($view['evaluation_result']['averages']['mean'], 2)}}
-                </td>
-            @endif
-            @if ($display['sqm'])
-                <td style="width: 20px; text-align:center; color: #5d25b8; background-color: #a689fa">
-                    {{number_format($view['evaluation_result']['averages']['squared_mean'], 2)}}
-                </td>
-            @endif
-            @if ($display['std'])
-                <td style="width: 20px; text-align:center;">
-                    {{number_format($view['evaluation_result']['averages']['standard_deviation'], 2)}}
-                </td>
-            @endif
-            @if ($display['itrprtn'])
-                <td style="width: 20px; text-align:center;">
-                    {!!to_interpret($view['evaluation_result']['averages']['descriptive_interpretation'])!!}
-                </td>
-            @endif
+            <td style="width: 20px; text-align:center;">
+                {{number_format($view['evaluation_result']['averages']['mean'], 2)}}
+            </td>
+            <td style="width: 20px; text-align:center; color: #5d25b8; background-color: #a689fa">
+                {{number_format($view['evaluation_result']['averages']['squared_mean'], 2)}}
+            </td>
+            <td style="width: 20px; text-align:center;">
+                {{number_format($view['evaluation_result']['averages']['standard_deviation'], 2)}}
+            </td>
+            <td style="width: 20px; text-align:center;">
+                {!!strip_tags(to_interpret($view['evaluation_result']['averages']['descriptive_interpretation']))!!}
+            </td>
         </tr>
     @endif
 </table>
 <table style="margin-top: 10px">
     <tr>
         @if ($view['evaluation_result']['total_responses'] > 0)
-            @if ($trueDisplay >= 1 && $trueDisplay <= 2)
-                <td style="width: 50%; text-align: center; text-transform: uppercase;">
-                    Descriptive Interpretation
-                </td>
-                <td >
-                    The collective weighted mean registers at
-                    <span style="font-style: bold;">{{number_format($view['evaluation_result']['averages']['mean'], 2)}}</span>,
-                    accompanied by a mean squared figure of <span style="font-style: bold;">{{number_format($view['evaluation_result']['averages']['squared_mean'], 2)}}</span>
-                    and a standard deviation resting at <span style="font-style: bold;">{{number_format($view['evaluation_result']['averages']['standard_deviation'], 2)}}</span>.
-                    In essence, the overall interpretation tends towards
-                    <span style="text-decoration: underline; font-style: bold;">{!!strip_tags(to_interpret($view['evaluation_result']['averages']['descriptive_interpretation'])) !!}</span>
-                </td>
-            @elseif ($trueDisplay >= 3)
-                <td  style="width: 50%; text-align: center; text-transform: uppercase;">
-                    Descriptive Interpretation
-                </td>
-                <td>
-                    The collective weighted mean registers at
-                    <span style="font-style: bold;">{{number_format($view['evaluation_result']['averages']['mean'], 2)}}</span>,
-                    accompanied by a mean squared figure of <span style="font-style: bold;">{{number_format($view['evaluation_result']['averages']['squared_mean'], 2)}}</span>
-                    and a standard deviation resting at <span style="font-style: bold;">{{number_format($view['evaluation_result']['averages']['standard_deviation'], 2)}}</span>.
-                    In essence, the overall interpretation tends towards
-                    <span style="text-decoration: underline; font-style: bold;">{!!strip_tags(to_interpret($view['evaluation_result']['averages']['descriptive_interpretation'])) !!}</span>
-                </td>
-            @endif
+            <td style="width: 50%; text-align: center; text-transform: uppercase;">
+                Descriptive Interpretation
+            </td>
+            <td >
+                The collective weighted mean registers at
+                <span style="font-style: bold;">{{number_format($view['evaluation_result']['averages']['mean'], 2)}}</span>,
+                accompanied by a mean squared figure of <span style="font-style: bold;">{{number_format($view['evaluation_result']['averages']['squared_mean'], 2)}}</span>
+                and a standard deviation resting at <span style="font-style: bold;">{{number_format($view['evaluation_result']['averages']['standard_deviation'], 2)}}</span>.
+                In essence, the overall interpretation tends towards
+                <span style="text-decoration: underline; font-style: bold;">{!!strip_tags(to_interpret($view['evaluation_result']['averages']['descriptive_interpretation'])) !!}</span>
+            </td>
         @else
             <td colspan="3" style="text-align: center">
                 Descriptive Interpretation

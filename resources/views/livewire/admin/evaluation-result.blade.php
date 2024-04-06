@@ -118,10 +118,10 @@
                                     <a href="javascript:void(0)" wire:click='save_pdf' download>Save as pdf</a>
                                 </li>
                                 <li class="my-2">
-                                    <a href="#">Save as png</a>
+                                    <a href="javascript:void(0">Save as png</a>
                                 </li>
                                 <li class="my-2">
-                                    <a href="#">Save as excel</a>
+                                    <a href="javascript:void(0" wire:click='save_excel'>Save as excel</a>
                                 </li>
                             </ul>
                         </div>
