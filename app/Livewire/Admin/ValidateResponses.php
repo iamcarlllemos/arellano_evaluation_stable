@@ -9,6 +9,13 @@ use chillerlan\QRCode\QRCode;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Traits\Censored;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\View;
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Reader\Html;
+use Illuminate\Support\Facades\Response;
 
 
 class ValidateResponses extends Component
@@ -345,6 +352,67 @@ class ValidateResponses extends Component
     public function render()
     {
         return view('livewire.admin.validate-responses');
+    }
+
+    public function save_pdf() {
+
+        $data = [
+            'display' => $this->display,
+            'view' => $this->result_view
+        ];
+
+        $pdf = PDF::loadView('printable.result-view', $data);
+
+        $faculty = $this->result_view['faculty'];
+        $filename = strtolower('evaluation_result_of_' . $faculty->firstname . '_' . $faculty->lastname . '_' .time().'.pdf');
+
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->stream();
+        }, $filename);
+
+    }
+
+    public function save_excel() {
+
+        $data = [
+            'display' => $this->display,
+            'view' => $this->result_view
+        ];
+
+        $spreadsheet = new Spreadsheet();
+
+        // Set active sheet
+        $spreadsheet->setActiveSheetIndex(0);
+
+        // HTML content to be converted to Excel
+        $html = View::make('printable.result-view', $data)->render();
+
+        // Load HTML content into PHPExcel
+        $reader = new HTML();
+        $spreadsheet = $reader->loadFromString($html);
+
+        // Set column widths after loading HTML content
+        $sheet = $spreadsheet->getActiveSheet();
+
+        for ($i = 'A'; $i <= $sheet->getHighestColumn(); $i++) {
+            if($i != 'B') {
+                $sheet->getColumnDimension($i)->setAutoSize(true);
+            } else {
+                $sheet->getColumnDimension('B')->setWidth(5);
+            }
+        }
+
+        $faculty = $this->result_view['faculty'];
+        $filename = strtolower('evaluation_result_of_' . $faculty->firstname . '_' . $faculty->lastname . '_' .time().'.xlsx');
+
+        // Save Excel file
+        $tempFilePath = storage_path('app/'.$filename);
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($tempFilePath);
+
+        // Return the Excel file as a downloadable response
+        return Response::download($tempFilePath, $filename)->deleteFileAfterSend(true);
+
     }
 
 }

@@ -402,7 +402,7 @@ class EvaluationResults extends Component
         $pdf = PDF::loadView('printable.result-view', $data);
 
         $faculty = $this->view['faculty'];
-        $filename = strtolower('evaluation_result_of_' . $faculty->firstname . '_' . $faculty->lastname . '.pdf');
+        $filename = strtolower('evaluation_result_of_' . $faculty->firstname . '_' . $faculty->lastname . '_' .time().'.pdf');
 
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->stream();
@@ -423,7 +423,7 @@ class EvaluationResults extends Component
         $spreadsheet->setActiveSheetIndex(0);
 
         // HTML content to be converted to Excel
-        $html = View::make('printable.test', $data)->render();
+        $html = View::make('printable.result-view', $data)->render();
 
         // Load HTML content into PHPExcel
         $reader = new HTML();
@@ -431,8 +431,6 @@ class EvaluationResults extends Component
 
         // Set column widths after loading HTML content
         $sheet = $spreadsheet->getActiveSheet();
-
-
 
         for ($i = 'A'; $i <= $sheet->getHighestColumn(); $i++) {
             if($i != 'B') {
@@ -442,10 +440,8 @@ class EvaluationResults extends Component
             }
         }
 
-
-
         $faculty = $this->view['faculty'];
-        $filename = strtolower('evaluation_result_of_' . $faculty->firstname . '_' . $faculty->lastname . '.xlsx');
+        $filename = strtolower('evaluation_result_of_' . $faculty->firstname . '_' . $faculty->lastname . '_' .time().'.xlsx');
 
         // Save Excel file
         $tempFilePath = storage_path('app/'.$filename);
