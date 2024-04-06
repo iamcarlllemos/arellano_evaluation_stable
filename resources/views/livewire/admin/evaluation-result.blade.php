@@ -107,7 +107,7 @@
                             </svg>
                         </button>
                         <div wire:ignore.self id="dropdown" class="w-100 dropdown z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-100 dark:bg-gray-700">
-                            <ul class="py-2 px-4 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                            <ul class="py-2 px-4 text-sm text-gray-700 dark:text-gray-200 whitespace-nowrap" aria-labelledby="dropdownDefaultButton">
                                 <li class="mt-2">
                                     <div class="text-xs uppercase font-bold whitespace-nowrap">
                                         Download as
@@ -115,13 +115,10 @@
                                 </li>
                                 <hr class="my-3">
                                 <li class="my-2">
-                                    <a href="javascript:void(0)" wire:click='save_pdf' download>Save as pdf</a>
+                                    <a href="javascript:void(0)" wire:click='save_pdf' download>Save as PDF (.pdf)</a>
                                 </li>
                                 <li class="my-2">
-                                    <a href="javascript:void(0">Save as png</a>
-                                </li>
-                                <li class="my-2">
-                                    <a href="javascript:void(0" wire:click='save_excel'>Save as excel</a>
+                                    <a href="javascript:void(0" wire:click='save_excel'>Save as EXCEL (.xlsx)</a>
                                 </li>
                             </ul>
                         </div>
@@ -524,7 +521,7 @@
                                 fontSize: '14px',
                                 fontFamily: undefined
                             }
-                        }
+                        },
                     }
 
                     const allZeroValues = options.series.every(value => value === 0);

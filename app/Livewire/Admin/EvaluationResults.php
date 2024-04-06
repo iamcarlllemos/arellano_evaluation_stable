@@ -402,7 +402,6 @@ class EvaluationResults extends Component
         $pdf = PDF::loadView('printable.result-view', $data);
 
         $faculty = $this->view['faculty'];
-
         $filename = strtolower('evaluation_result_of_' . $faculty->firstname . '_' . $faculty->lastname . '.pdf');
 
         return response()->streamDownload(function () use ($pdf) {
@@ -418,33 +417,43 @@ class EvaluationResults extends Component
             'view' => $this->view
         ];
 
-        // Create new PHPExcel object
         $spreadsheet = new Spreadsheet();
 
         // Set active sheet
         $spreadsheet->setActiveSheetIndex(0);
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->getColumnDimension('A')->setWidth(30);
-        $sheet->getColumnDimension('B')->setWidth(20);
 
         // HTML content to be converted to Excel
         $html = View::make('printable.test', $data)->render();
-
-
-        // dd($html);
 
         // Load HTML content into PHPExcel
         $reader = new HTML();
         $spreadsheet = $reader->loadFromString($html);
 
+        // Set column widths after loading HTML content
+        $sheet = $spreadsheet->getActiveSheet();
+
+
+
+        for ($i = 'A'; $i <= $sheet->getHighestColumn(); $i++) {
+            if($i != 'B') {
+                $sheet->getColumnDimension($i)->setAutoSize(true);
+            } else {
+                $sheet->getColumnDimension('B')->setWidth(5);
+            }
+        }
+
+
+
+        $faculty = $this->view['faculty'];
+        $filename = strtolower('evaluation_result_of_' . $faculty->firstname . '_' . $faculty->lastname . '.xlsx');
+
         // Save Excel file
-        $tempFilePath = storage_path('app/example.xlsx');
+        $tempFilePath = storage_path('app/'.$filename);
         $writer = new Xlsx($spreadsheet);
         $writer->save($tempFilePath);
 
         // Return the Excel file as a downloadable response
-        return Response::download($tempFilePath, 'example.xlsx')->deleteFileAfterSend(true);
-
+        return Response::download($tempFilePath, $filename)->deleteFileAfterSend(true);
 
     }
 }
