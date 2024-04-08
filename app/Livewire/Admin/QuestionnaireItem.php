@@ -95,8 +95,7 @@ class QuestionnaireItem extends Component
                     'message' => 'Saved.'
                 ]);
 
-                $this->criteria_id = '';
-                $this->item = '';
+                $this->reset('item');
 
             } catch (\Exception $e) {
                 session()->flash('flash', [
