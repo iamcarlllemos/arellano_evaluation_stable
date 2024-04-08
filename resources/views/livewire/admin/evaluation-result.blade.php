@@ -661,59 +661,60 @@
                     </div>
                 @endif
                 <div wire:poll class="grid grid-cols-12 gap-3 mt-10">
-                    @forelse ($data['faculty'] as $collection)
-                        <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-3 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
-                            <div wire:ignore.self class="absolute z-10 top-5 right-3 text-teal-50 w-100">
-                                <button id="dropdown-button" >
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                                    </svg>
-                                </button>
-                                <div wire:ignore.self id="drodown" class="dropdown absolute top-[100px] right-[100px] z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
-                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200 w-full" aria-labelledby="dropdownDefaultButton">
-                                        <div class="mt-2 w-full whitespace-nowrap">
-                                            <label for="" class="text-xs px-3 mt-3 uppercase">Select subjects</label>
-                                        </div>
-                                        <hr class="mt-2">
-                                        @forelse ($collection->templates as $template)
-                                            <li class="text-xs whitespace-nowrap">
-                                                <a wire:navigate href="{{route('admin.programs.results', ['id' => $form['id'], 'action' => 'view', 'faculty' => $collection->id, 'template' => $template->curriculum_template[0]->id, 'subject' => $template->curriculum_template[0]->subject_id])}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                    {{$template->curriculum_template[0]->subjects->name}}
-                                                </a>
-                                            </li>
-                                        @empty
-                                            <li class="text-xs whitespace-nowrap text-red-700 px-4 py-2">
-                                                No records found
-                                            </li>
-                                        @endforelse
-                                    </ul>
+                    @if (count($data['faculty']) > 0)
+                        @foreach ($data['faculty'] as $collection)
+                            <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-3 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
+                                <div wire:ignore.self class="absolute z-10 top-5 right-3 text-teal-50 w-100">
+                                    <button id="dropdown-button" >
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                                        </svg>
+                                    </button>
+                                    <div wire:ignore.self id="drodown" class="dropdown absolute top-[100px] right-[100px] z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
+                                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200 w-full" aria-labelledby="dropdownDefaultButton">
+                                            <div class="mt-2 w-full whitespace-nowrap">
+                                                <label for="" class="text-xs px-3 mt-3 uppercase">Select subjects</label>
+                                            </div>
+                                            <hr class="mt-2">
+                                            @forelse ($collection->templates as $template)
+                                                <li class="text-xs whitespace-nowrap">
+                                                    <a wire:navigate href="{{route('admin.programs.results', ['id' => $form['id'], 'action' => 'view', 'faculty' => $collection->id, 'template' => $template->curriculum_template[0]->id, 'subject' => $template->curriculum_template[0]->subject_id])}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                        {{$template->curriculum_template[0]->subjects->name}}
+                                                    </a>
+                                                </li>
+                                            @empty
+                                                <li class="text-xs whitespace-nowrap text-red-700 px-4 py-2">
+                                                    No records found
+                                                </li>
+                                            @endforelse
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relatives">
+                                    <img class="rounded-lg w-full h-56 object-cover brightness-50" src="{{$collection['departments']['branches']->image ? asset('storage/images/branches/' . $collection['departments']['branches']->image) : 'https://ui-avatars.com/api/?name='.$collection['departments']['branches']->name.'&length=2&bold=true&color=ff0000&background=random'}}" alt="" />
+                                    <div class="p-5 absolute bottom-0 left-0">
+                                        <h5 class="text-2xl font-black tracking-tight text-white uppercase whitespace-break-spaces line-clamp-1">{{ucwords($collection->firstname . ' ' . $collection->lastname)}}</h5>
+                                        <p class="text-sm text-white font-bold line-clamp-2">{{'@' . $collection->username}}</p>
+                                        <p class="text-sm text-white font-bold line-clamp-2">{{$collection->email}}</p>
+                                    </div>
+                                    <div class="absolute top-6 border-2 border-sky-500 left-5 rounded-full text-slate-100 backdrop-blur-sm bg-white/30">
+                                        <img src="{{$collection->image ? asset('storage/images/student/' . $collection->image) : 'https://ui-avatars.com/api/?name='.$collection->firstname.'&length=2&bold=true&color=ff0000&background=random'}}" class="rounded-full w-[100px] h-[100px]">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relatives">
-                                <img class="rounded-lg w-full h-56 object-cover brightness-50" src="{{$collection['departments']['branches']->image ? asset('storage/images/branches/' . $collection['departments']['branches']->image) : 'https://ui-avatars.com/api/?name='.$collection['departments']['branches']->name.'&length=2&bold=true&color=ff0000&background=random'}}" alt="" />
-                                <div class="p-5 absolute bottom-0 left-0">
-                                    <h5 class="text-2xl font-black tracking-tight text-white uppercase whitespace-break-spaces line-clamp-1">{{ucwords($collection->firstname . ' ' . $collection->lastname)}}</h5>
-                                    <p class="text-sm text-white font-bold line-clamp-2">{{'@' . $collection->username}}</p>
-                                    <p class="text-sm text-white font-bold line-clamp-2">{{$collection->email}}</p>
-                                </div>
-                                <div class="absolute top-6 border-2 border-sky-500 left-5 rounded-full text-slate-100 backdrop-blur-sm bg-white/30">
-                                    <img src="{{$collection->image ? asset('storage/images/student/' . $collection->image) : 'https://ui-avatars.com/api/?name='.$collection->firstname.'&length=2&bold=true&color=ff0000&background=random'}}" class="rounded-full w-[100px] h-[100px]">
+                        @endforeach
+                    @else
+                        <div class="col-span-12">
+                            <div class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800" role="alert">
+                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                                </svg>
+                                <span class="sr-only">Info</span>
+                                <div>
+                                <span class="font-medium">No records found.</span>
                                 </div>
                             </div>
                         </div>
-                    @empty
-                    <div class="col-span-12">
-                        <div class="flex items-center p-4 mb-4 text-sm text-yellow-800 border border-yellow-300 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300 dark:border-yellow-800" role="alert">
-                            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-                            </svg>
-                            <span class="sr-only">Info</span>
-                            <div>
-                            <span class="font-medium">No records found.</span>
-                            </div>
-                        </div>
-                    </div>
-                    @endforelse
                 </div>
             </div>
         </div>
