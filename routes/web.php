@@ -50,8 +50,11 @@ Route::get('/', function () {
 require_once __DIR__ . '/fortify.php';
 require_once __DIR__ . '/jetstream.php';
 
-// ADMIN
+Route::get('/', function () {
+    return view('homepage');
+});
 
+// ADMIN
 
 Route::prefix('admin')->middleware('admins')->group(function() {
 
