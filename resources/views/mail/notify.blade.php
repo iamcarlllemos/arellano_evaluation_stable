@@ -11,4 +11,4 @@ We want to notify you that a {{$role}} account has been registered on Arellano U
 <br>
 Warm regards,
 <br>
-Legarda's babies.
+Developers.
