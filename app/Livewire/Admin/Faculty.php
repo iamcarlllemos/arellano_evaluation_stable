@@ -357,7 +357,7 @@ class Faculty extends Component
                     $subQuery->where('branch_id', $assigned_branch);
                 });
             })
-            ->paginate($this->paginate_count);
+        ->paginate($this->paginate_count);
 
 
         $branches = BranchModel::with('departments')

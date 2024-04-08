@@ -16,6 +16,8 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Reader\Html;
 use Illuminate\Support\Facades\Response;
+use App\Traits\Account;
+use Livewire\WithPagination;
 
 
 
@@ -23,6 +25,8 @@ class EvaluationResults extends Component
 {
 
     use Censored;
+    use Account;
+    use WithPagination;
 
     public $form;
     public $view;
@@ -36,6 +40,15 @@ class EvaluationResults extends Component
         'itrprtn' => false,
         'comments' => false
     ];
+
+    public $search = [
+        'type' => '',
+        'select' => ''
+    ];
+
+    public $initPaginate = false;
+    public $paginate_count;
+    protected $listeners = ['screen'];
 
     public function generate_random_code($length = 8) {
         $characters = 'abcdefghijklmnopqrstuvwxyz';
@@ -382,7 +395,32 @@ class EvaluationResults extends Component
             }
         }
 
-        $faculty = FacultyModel::with('departments.branches','templates.curriculum_template.subjects.courses.departments.branches')->get();
+        $role = $this->admin()->role;
+        $assigned_branch = $this->admin()->assigned_branch;
+
+        $faculty = FacultyModel::with(['departments.branches'])
+            ->when(strlen($this->search['type']) >= 1, function ($sQuery) {
+                $sQuery->where(function($query) {
+                    $query->where('firstname', 'like', '%' . $this->search['type'] . '%');
+                });
+                $sQuery->orWhereHas('departments', function ($dQuery) {
+                    $dQuery->where('name', 'like', '%' . $this->search['type'] . '%');
+                    $dQuery->orWhereHas('branches', function ($bQuery) {
+                        $bQuery->where('name', 'like', '%' . $this->search['type'] . '%');
+                    });
+                });
+            })
+            ->when($this->search['select'] != '', function ($query) {
+                $query->whereHas('departments.branches', function ($subQuery) {
+                    $subQuery->where('branch_id', $this->search['select']);
+                });
+            })
+            ->when($role == 'admin', function($query) use ($assigned_branch) {
+                $query->whereHas('departments.branches', function($subQuery) use ($assigned_branch) {
+                    $subQuery->where('branch_id', $assigned_branch);
+                });
+            })
+        ->paginate($this->paginate_count);
 
         $data = [
             'departments' => $departments,
