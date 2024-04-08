@@ -199,7 +199,7 @@
                                 </svg>
                             </div>
                             <div class="p-5 absolute bottom-0 left-0">
-                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-white uppercase whitespace-break-spaces line-clamp-3">{{$collection->name}}</h5>
+                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-white uppercase line-clamp-3">{{$collection->name}}</h5>
                             </div>
                         </div>
                     </div>
