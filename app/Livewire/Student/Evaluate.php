@@ -198,33 +198,37 @@ class Evaluate extends Component
     }
 
     public function get_questionnaires() {
-        $data = QuestionnaireModel::with('school_year', 'questionnaire_item.criteria')->where(function($query) {
+        $questionnaire = QuestionnaireModel::with('school_year', 'questionnaire_item.criteria')->where(function($query) {
             $query->whereHas('school_year', function($subQuery) {
                 $subQuery->where('semester', $this->semester);
             });
-        })->get()[0];
+        });
 
-        $sorted_item = [];
+        if($questionnaire->count() > 0) {
+            $data = $questionnaire->get()[0];
+            $sorted_item = [];
+            foreach($data['questionnaire_item'] as $item) {
+                $key = $item['criteria_id'];
+                if(!isset($sorted_item[$key])) {
+                    $sorted_item[$key] = [
+                        'id' => $item['id'],
+                        'criteria_name' => $item['criteria']['name'],
+                        'item' => []
+                    ];
+                }
 
-        foreach($data['questionnaire_item'] as $item) {
-            $key = $item['criteria_id'];
-            if(!isset($sorted_item[$key])) {
-                $sorted_item[$key] = [
+                $sorted_item[$key]['item'][] = [
                     'id' => $item['id'],
-                    'criteria_name' => $item['criteria']['name'],
-                    'item' => []
+                    'name' => $item['item']
                 ];
             }
 
-            $sorted_item[$key]['item'][] = [
-                'id' => $item['id'],
-                'name' => $item['item']
-            ];
+            $data['sorted_items'] = array_values($sorted_item);
+
+            $this->questionnaire = $data;
+        } else {
+            return redirect()->route('student.subject', ['evaluate' => $this->evaluate, 'semester' => $this->semester])->with('error', 'No questionnaires created yet');
         }
-
-        $data['sorted_items'] = array_values($sorted_item);
-
-        $this->questionnaire = $data;
 
     }
 
