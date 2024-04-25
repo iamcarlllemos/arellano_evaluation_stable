@@ -42,11 +42,11 @@
                             <hr class="my-4">
                             @if (!$collection->is_exists)
                                 <div class="mt-3 flex justify-end">
-                                    <a wire:navigate href="{{route('student.evaluate', ['evaluate' => $evaluate, 'template' => $collection->id, 'semester' => $semester])}}" class=" bg-blue-100 text-blue-800 p-2 px-4 text-sm font-bold rounded-lg uppercase">Start</a>
+                                    <a wire:navigate href="{{route('student.evaluate', ['evaluate' => $evaluate, 'template' => $collection->id, 'semester' => $semester, 'subject' => $collection->subject_id])}}" class=" bg-blue-100 text-blue-800 p-2 px-4 text-sm font-bold rounded-lg uppercase">Start</a>
                                 </div>
                             @else
                                 <div class="mt-3 flex justify-end">
-                                    <a wire:navigate href="{{route('student.evaluate', ['evaluate' => $evaluate, 'template' => $collection->id, 'semester' => $semester])}}" class=" bg-orange-100 text-orange-800 p-2 px-4 text-sm font-bold rounded-lg uppercase">View Response</a>
+                                    <a wire:navigate href="{{route('student.evaluate', ['evaluate' => $evaluate, 'template' => $collection->id, 'semester' => $semester, 'subject' => $collection->subject_id])}}" class=" bg-orange-100 text-orange-800 p-2 px-4 text-sm font-bold rounded-lg uppercase">View Response</a>
                                 </div>
                             @endif
                         </div>

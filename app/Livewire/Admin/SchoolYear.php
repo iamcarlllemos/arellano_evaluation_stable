@@ -200,6 +200,8 @@ class SchoolYear extends Component
 
     public function render(Request $request) {
 
+        session()->forget('no_questionnaire');
+
         $school_year = SchoolYearModel::
             when(strlen($this->search['type']) >= 1, function ($query) {
                 $query->where('name', 'like', '%' . $this->search['type'] . '%')

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Livewire\Admin\CurriculumTemplate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -28,6 +29,10 @@ class ResponseModel extends Model
 
     public function students() {
         return $this->belongsTo(StudentModel:: class, 'user_id');
+    }
+
+    public function template() {
+        return $this->belongsTo(CurriculumTemplateModel::class, 'template_id');
     }
 
 }

@@ -8,6 +8,8 @@ window.$ = $;
 window.read_more = read_more;
 window.jstree_init = jstree_init;
 window.ApexCharts = ApexCharts;
+window.chart_fi = chart_fi;
+window.chart_se = chart_se;
 
 $(function () {
 
@@ -193,3 +195,110 @@ $(document).on('livewire:initialized', () => {
 Livewire.on('initPaginate', () => {
     screenSize();
 });
+
+function chart_fi(elem, data) {
+    const options = {
+        chart: {
+            type: 'donut'
+        },
+        series: [
+            data[4],
+            data[3],
+            data[2],
+            data[1],
+        ],
+        labels: ['Strongly Agree', 'Agree', 'Neutral', 'Disagreee'],
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200,
+                    height: 400
+                },
+                legend: {
+                position: 'bottom'
+                }
+            }
+        }],
+        plotOptions: {
+            pie: {
+                donut: {
+                    labels: {
+                        show: true,
+                    },
+                    size: '50%'
+                }
+            }
+        },
+        noData: {
+            text: undefined,
+            align: 'center',
+            verticalAlign: 'middle',
+            offsetX: 0,
+            offsetY: 0,
+            style: {
+                color: undefined,
+                fontSize: '14px',
+                fontFamily: undefined
+            }
+        },
+    }
+
+    const allZeroValues = options.series.every(value => value === 0);
+
+    if(allZeroValues) {
+        document.querySelector(elem).innerHTML = `
+        <div class="text-xs font-bold uppercase text-red-500">
+            No responses yet.
+        </div>`;
+    } else {
+        const chart = new ApexCharts(document.querySelector(elem), options);
+        chart.render();
+    }
+
+}
+
+function chart_se(elem, data) {
+    const options = {
+        chart: {
+            type: 'bar'
+        },
+        series: [{
+            data: [{
+                x: 'Already responded',
+                y: data['total_respondents'],
+            }, {
+                x: 'Not yet responded',
+                y: data['respondents'],
+            }, {
+                x: 'Total respondents',
+                y: data['not_responded'],
+            }]
+        }],
+        labels: ['Assumed respondents', 'Already responded', 'Not yet responded'],
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200,
+                    height: 600
+                },
+                legend: {
+                position: 'bottom'
+                }
+            }
+        }],
+    }
+
+    const allZeroValues = options.series.every(value => value === 0);
+
+    if(allZeroValues) {
+        document.querySelector(elem).innerHTML = `
+        <div class="text-xs font-bold uppercase text-red-500">
+            No responses yet.
+        </div>`;
+    } else {
+        const chart = new ApexCharts(document.querySelector(elem), options);
+        chart.render();
+    }
+}

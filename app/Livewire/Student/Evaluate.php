@@ -16,7 +16,7 @@ use App\Models\SchoolYearModel;
 
 use App\Models\ResponseModel;
 use App\Models\ResponseItemModel;
-
+use App\Models\SubjectModel;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 use Livewire\Component;
@@ -29,6 +29,7 @@ class Evaluate extends Component
     public $evaluate;
     public $semester;
     public $template_id;
+    public $subject_id;
 
     public $step;
     public $faculty_id;
@@ -200,7 +201,8 @@ class Evaluate extends Component
     public function get_questionnaires() {
         $questionnaire = QuestionnaireModel::with('school_year', 'questionnaire_item.criteria')->where(function($query) {
             $query->whereHas('school_year', function($subQuery) {
-                $subQuery->where('semester', $this->semester);
+                $subQuery->where('id', $this->evaluate)
+                    ->where('semester', $this->semester);
             });
         });
 
@@ -295,15 +297,13 @@ class Evaluate extends Component
         $evaluate_id = $this->evaluate;
 
         $faculty = FacultyModel::find($faculty_id);
-        $subject = FacultyTemplateModel::with('faculty.templates.curriculum_template.subjects')->where(function($query) {
-            $query->where('template_id', $this->template_id);
-        })->get()[0];
+        $subject = SubjectModel::where('id', $this->subject_id)->get()[0];
 
         $evaluate = SchoolYearModel::find($evaluate_id);
 
         $this->faculty['name'] = $faculty->firstname . ' ' . $faculty->lastname;
-        $this->faculty['subject'] = $subject->faculty->templates[0]->curriculum_template[0]->subjects->name . ' (' .
-            $subject->faculty->templates[0]->curriculum_template[0]->subjects->code . ')';
+        $this->faculty['subject'] = $subject->name . ' (' .
+            $subject->code . ')';
         $this->faculty['schedule'] = to_hour($data['start_time']) . ' - ' . to_hour($data['end_time']);
         $this->faculty['academic_year'] = $evaluate->start_year . ' - ' . $evaluate->end_year;
     }
@@ -334,10 +334,12 @@ class Evaluate extends Component
         $evaluate = $request->input('evaluate');
         $semester = $request->input('semester');
         $template_id = $request->input('template');
+        $subject_id = $request->input('subject');
 
         $this->evaluate = $evaluate;
         $this->semester = $semester;
         $this->template_id = $template_id;
+        $this->subject_id = $subject_id;
 
         $this->step = session('response')['step'];
 

@@ -14,14 +14,20 @@ class EvaluateController extends Controller
         $course = auth()->guard('students')->user()->course_id;
         $year = auth()->guard('students')->user()->year_level;
         $semester = $request->input('semester');
+        $subject_id = $request->input('subject');
+        $template_id = $request->input('template');
 
-        $dirty_faculty = FacultyModel::with('templates.curriculum_template.courses.departments.branches')->where(function($query) use($course, $year, $semester) {
-            $query->whereHas('templates.curriculum_template', function ($subquery) use ($course, $year, $semester) {
-                $subquery->where('course_id', $course);
-                $subquery->where('year_level', $year);
-                $subquery->where('subject_sem', $semester);
-            });
-        })->get();
+        $dirty_faculty = FacultyModel::with('templates.curriculum_template.courses.departments.branches')
+        ->whereHas('templates', function($subquery) use ($template_id) {
+            $subquery->where('template_id', $template_id);
+        })
+        ->whereHas('templates.curriculum_template', function ($subquery) use ($course, $year, $semester, $subject_id) {
+            $subquery->where('course_id', $course)
+                ->where('year_level', $year)
+                ->where('subject_sem', $semester)
+                ->where('subject_id', $subject_id);
+        })
+        ->get();
 
         $faculty = [];
 
