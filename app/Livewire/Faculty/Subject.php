@@ -10,6 +10,8 @@ use Livewire\Component;
 
 use App\Models\StudentModel;
 use App\Models\CurriculumTemplateModel;
+use App\Models\FacultyModel;
+use App\Models\FacultyTemplateModel;
 
 class Subject extends Component
 {
@@ -56,25 +58,22 @@ class Subject extends Component
 
         $user_id = auth()->guard('faculty')->user()->id;
 
-        $user_data = StudentModel::find($user_id);
-        $course = $user_data->course_id;
-        $year = $user_data->year_level;
+        $user_data = FacultyModel::find($user_id);
 
 
-        $data = CurriculumTemplateModel::with('subjects.courses.departments.branches')
-            ->where('course_id', $course)
-            ->where('year_level', $year)
-            ->where('subject_sem', $semester)
+        $data = FacultyTemplateModel::with('faculty.templates.curriculum_template.subjects.courses.departments.branches')
+            ->where('faculty_id', $user_id)
             ->select('*', DB::raw('(CASE WHEN EXISTS (
                     SELECT 1
                     FROM afears_response
+                    INNER JOIN afears_curriculum_template ON afears_response.template_id = afears_curriculum_template.id
                     WHERE user_id = ' . $user_id . '
                         AND evaluation_id = ' . $evaluate . '
-                        AND template_id = afears_curriculum_template.id
                         AND semester = ' . $semester . '
                 ) THEN true ELSE false END) AS is_exists'))
             ->get();
 
+        dd($data->toArray());
         $this->subjects = $data;
     }
 
