@@ -99,7 +99,7 @@ table th {
         </tr>
         @forelse ($data['stats'] as $questionnaire)
             <tr>
-                <td style="width: 20px; text-align:center;">
+                <td style="width: 20px;">
                     {{ucwords($questionnaire['criteria_name'])}}
                 </td>
                 <td style="width: 20px; text-align:center;"></td>
@@ -109,7 +109,7 @@ table th {
             </tr>
             @forelse ($questionnaire['items'] as $items)
                 <tr>
-                    <td style="width: 20px; text-align:center;">
+                    <td style="width: 20px;">
                         {{$items['name']}}
                     </td>
                     <td style="width: 20px; text-align:center;">
