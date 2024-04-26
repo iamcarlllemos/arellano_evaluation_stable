@@ -4,7 +4,7 @@
     <div class="w-100 block md:flex justify-between items-center gap-2 mt-5">
         <div>
             <a wire:navigate href="{{route('faculty.subject',
-                ['id' => $form['id'],
+                ['evaluate' => $form['id'],
                 'semester' => $form['semester']])}}" class="bg-slate-900 py-2 px-6 text-white text-sm font-bold rounded-md">Go Back</a>
         </div>
     </div>
@@ -57,35 +57,11 @@
                         style="transform: translate3d(0px, 54px, 0px) !important">
                         <ul class="py-2 px-4 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
                             <li class="mt-2">
-                                <div class="text-xs uppercase font-bold">
+                                <div class="text-xs uppercase font-bold whitespace-nowrap">
                                     Result Settings
                                 </div>
                             </li>
                             <hr class="my-3">
-                            <li class="my-2">
-                                <div class="flex items-center">
-                                    <input id="checkbox-wm" wire:model='display.wm' type="checkbox" wire:change='result_settings()' value="wm" class="w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="checkbox-wm" class="ms-2 text-sm whitespace-nowrap font-medium text-gray-900 dark:text-gray-300 cursor-pointer">Weighted Mean</label>
-                                </div>
-                            </li>
-                            <li class="my-2">
-                                <div class="flex items-center">
-                                    <input id="checkbox-sqm" wire:model='display.sqm' type="checkbox" wire:change='result_settings()' value="sqm" class="w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="checkbox-sqm" class="ms-2 text-sm whitespace-nowrap font-medium text-gray-900 dark:text-gray-300 cursor-pointer">Mean²</label>
-                                </div>
-                            </li>
-                            <li class="my-2">
-                                <div class="flex items-center">
-                                    <input id="checkbox-std" wire:model='display.std' type="checkbox" wire:change='result_settings()' value="std" class="w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="checkbox-std" class="ms-2 text-sm whitespace-nowrap font-medium text-gray-900 dark:text-gray-300 cursor-pointer">𝜎 Standard Deviation</label>
-                                </div>
-                            </li>
-                            <li class="my-2">
-                                <div class="flex items-center">
-                                    <input id="checkbox-int" wire:model='display.itrprtn' type="checkbox" wire:change='result_settings()' value="itrprtn" class="w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="checkbox-int" class="ms-2 text-sm whitespace-nowrap font-medium text-gray-900 dark:text-gray-300 cursor-pointer">Interpretation</label>
-                                </div>
-                            </li>
                             <li class="my-2">
                                 <div class="flex items-center">
                                     <input id="checkbox-coms" wire:model='display.comments' type="checkbox" wire:change='result_settings()' value="comments" class="w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
@@ -103,7 +79,7 @@
                         </svg>
                     </button>
                     <div wire:ignore.self id="dropdown" class="w-100 dropdown z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-100 dark:bg-gray-700">
-                        <ul class="py-2 px-4 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                        <ul class="py-2 px-4 text-sm text-gray-700 dark:text-gray-200 whitespace-nowrap" aria-labelledby="dropdownDefaultButton">
                             <li class="mt-2">
                                 <div class="text-xs uppercase font-bold whitespace-nowrap">
                                     Download as
@@ -111,13 +87,10 @@
                             </li>
                             <hr class="my-3">
                             <li class="my-2">
-                                <a href="javascript:void(0)">Save as pdf</a>
+                                <a href="javascript:void(0)" wire:click='save_pdf' download>Save as PDF (.pdf)</a>
                             </li>
                             <li class="my-2">
-                                <a href="#">Save as png</a>
-                            </li>
-                            <li class="my-2">
-                                <a href="#">Save as excel</a>
+                                <a href="javascript:void(0" wire:click='save_excel'>Save as EXCEL (.xlsx)</a>
                             </li>
                         </ul>
                     </div>
@@ -134,38 +107,18 @@
                                 {{$view['evaluation_result']['total_responses']}}
                             </span>
                         </th>
-                        <th class="px-14 py-5 text-center whitespace-nowrap bg-blue-400 text-blue-800 border-b border-l border-r border-slate-500">
-                            4
+                        <th class="px-6 py-5 text-center whitespace-nowrap border-b border-l border-r border-slate-500">
+                            Weighted Mean
                         </th>
-                        <th class="px-14 py-5 text-center whitespace-nowrap bg-yellow-400 text-yellow-800 border-b border-l border-r border-slate-500">
-                            3
+                        <th class="px-6 py-5 text-center whitespace-nowrap bg-violet-400 text-violet-800 border-b border-l border-r border-slate-500">
+                            Mean²
                         </th>
-                        <th class="px-14 py-5 text-center whitespace-nowrap bg-orange-400 text-orange-800 border-b border-l border-r border-slate-500">
-                            2
+                        <th class="px-6 py-5 text-center whitespace-nowrap border-b border-l border-r border-slate-500">
+                            𝜎 (Standard Deviation)
                         </th>
-                        <th class="px-14 py-5 text-center whitespace-nowrap bg-red-400 text-red-800 border-b border-l border-r border-slate-500">
-                            1
+                        <th class="px-6 py-5 text-center whitespace-nowrap border-b border-slate-500">
+                            Interpretation
                         </th>
-                        @if ($display['wm'])
-                            <th class="px-6 py-5 text-center whitespace-nowrap border-b border-l border-r border-slate-500">
-                                Weighted Mean
-                            </th>
-                        @endif
-                        @if ($display['sqm'])
-                            <th class="px-6 py-5 text-center whitespace-nowrap bg-violet-400 text-violet-800 border-b border-l border-r border-slate-500">
-                                Mean²
-                            </th>
-                        @endif
-                        @if ($display['std'])
-                            <th class="px-6 py-5 text-center whitespace-nowrap border-b border-l border-r border-slate-500">
-                                𝜎 (Standard Deviation)
-                            </th>
-                        @endif
-                        @if ($display['itrprtn'])
-                            <th class="px-6 py-5 text-center whitespace-nowrap border-b border-slate-500">
-                                Interpretation
-                            </th>
-                        @endif
                     </tr>
                 </thead>
                 @forelse ($view['evaluation_result']['stats'] as $questionnaire)
@@ -176,38 +129,18 @@
                                     {{ucwords($questionnaire['criteria_name'])}}
                                 </div>
                             </th>
-                            <th class="px-14 py-3 text-center whitespace-nowrap bg-blue-400 text-blue-800 border-b border-l border-r border-slate-500">
+                            <th class="px-6 py-3 text-center whitespace-nowrap border-b border-l border-r border-slate-500">
 
                             </th>
-                            <th class="px-14 py-3 text-center whitespace-nowrap bg-yellow-400 text-yellow-800 border-b border-l border-r border-slate-500">
+                            <th class="px-6 py-3 text-center whitespace-nowrap bg-violet-400 text-violet-800 border-b border-l border-r border-slate-500">
 
                             </th>
-                            <th class="px-14 py-3 text-center whitespace-nowrap bg-orange-400 text-orange-800 border-b border-l border-r border-slate-500">
+                            <th class="px-6 py-3 text-center whitespace-nowrap border-b border-l border-r border-slate-500">
 
                             </th>
-                            <th class="px-14 py-3 text-center whitespace-nowrap bg-red-400 text-red-800 border-b border-l border-r border-slate-500">
+                            <th class="px-6 py-3 text-center whitespace-nowrap border-b border-slate-500">
 
                             </th>
-                            @if ($display['wm'])
-                                <th class="px-6 py-3 text-center whitespace-nowrap border-b border-l border-r border-slate-500">
-
-                                </th>
-                            @endif
-                            @if ($display['sqm'])
-                                <th class="px-6 py-3 text-center whitespace-nowrap bg-violet-400 text-violet-800 border-b border-l border-r border-slate-500">
-
-                                </th>
-                            @endif
-                            @if ($display['std'])
-                                <th class="px-6 py-3 text-center whitespace-nowrap border-b border-l border-r border-slate-500">
-
-                                </th>
-                            @endif
-                            @if ($display['itrprtn'])
-                                <th class="px-6 py-3 text-center whitespace-nowrap border-b border-slate-500">
-
-                                </th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -218,38 +151,18 @@
                                         {{$items['name']}}
                                     </div>
                                 </td>
-                                <td class="px-14 py-4 text-center font-bold bg-blue-400 text-blue-800 border border-slate-500">
-                                    {{number_format($items['tally'][4], 2)}}
+                                <td class="px-14 py-4 text-center font-bold border border-slate-500">
+                                    {{number_format($items['weighted_mean'], 2)}}
                                 </td>
-                                <td class="px-14 py-4 text-center font-bold bg-yellow-400 text-yellow-800 border border-slate-500">
-                                    {{number_format($items['tally'][3], 2)}}
+                                <td class="px-14 py-4 text-center font-bold border bg-violet-400 text-violet-800 border-slate-500">
+                                    {{number_format($items['mean_squared'], 2)}}
                                 </td>
-                                <td class="px-14 py-4 text-center font-bold bg-orange-400 text-orange-800 border border-slate-500">
-                                    {{number_format($items['tally'][2], 2)}}
+                                <td class="px-6 py-4 text-center font-bold border border-slate-500">
+                                    {{number_format($items['standard_deviation'], 2)}}
                                 </td>
-                                <td class="px-14 py-4 text-center font-bold bg-red-400 text-red-800 border border-slate-500">
-                                    {{number_format($items['tally'][1], 2)}}
+                                <td class="px-6 py-4 text-center font-bold border-b border-slate-500 whitespace-nowrap">
+                                    {!!to_interpret($items['interpretation'])!!}
                                 </td>
-                                @if ($display['wm'])
-                                    <td class="px-14 py-4 text-center font-bold border border-slate-500">
-                                        {{number_format($items['weighted_mean'], 2)}}
-                                    </td>
-                                @endif
-                                @if ($display['sqm'])
-                                    <td class="px-14 py-4 text-center font-bold border bg-violet-400 text-violet-800 border-slate-500">
-                                        {{number_format($items['mean_squared'], 2)}}
-                                    </td>
-                                @endif
-                                @if ($display['std'])
-                                    <td class="px-6 py-4 text-center font-bold border border-slate-500">
-                                        {{number_format($items['standard_deviation'], 2)}}
-                                    </td>
-                                @endif
-                                @if ($display['itrprtn'])
-                                    <td class="px-6 py-4 text-center font-bold border-b border-slate-500 whitespace-nowrap">
-                                        {!!to_interpret($items['interpretation'])!!}
-                                    </td>
-                                @endif
                             </tr>
                         @empty
                         <tr class="bg-white border-b">
@@ -258,38 +171,18 @@
                                     No responses yet.
                                 </div>
                             </td>
-                            <td class="px-14 py-4 text-center font-bold bg-blue-400 text-blue-800 border border-slate-500">
+                            <td class="px-14 py-4 text-center font-bold border border-slate-500">
                                 {{number_format(0, 2)}}
                             </td>
-                            <td class="px-14 py-4 text-center font-bold bg-yellow-400 text-yellow-800 border border-slate-500">
+                            <td class="px-14 py-4 text-center font-bold border bg-violet-400 text-violet-800 border-slate-500">
                                 {{number_format(0, 2)}}
                             </td>
-                            <td class="px-14 py-4 text-center font-bold bg-orange-400 text-orange-800 border border-slate-500">
+                            <td class="px-6 py-4 text-center font-bold border border-slate-500">
                                 {{number_format(0, 2)}}
                             </td>
-                            <td class="px-14 py-4 text-center font-bold bg-red-400 text-red-800 border border-slate-500">
-                                {{number_format(0, 2)}}
+                            <td class="px-6 py-4 text-center font-bold border-b border-slate-500 whitespace-nowrap">
+                                {{ 'No responses yet.' }}
                             </td>
-                            @if ($display['wm'])
-                                <td class="px-14 py-4 text-center font-bold border border-slate-500">
-                                    {{number_format(0, 2)}}
-                                </td>
-                            @endif
-                            @if ($display['sqm'])
-                                <td class="px-14 py-4 text-center font-bold border bg-violet-400 text-violet-800 border-slate-500">
-                                    {{number_format(0, 2)}}
-                                </td>
-                            @endif
-                            @if ($display['std'])
-                                <td class="px-6 py-4 text-center font-bold border border-slate-500">
-                                    {{number_format(0, 2)}}
-                                </td>
-                            @endif
-                            @if ($display['itrprtn'])
-                                <td class="px-6 py-4 text-center font-bold border-b border-slate-500 whitespace-nowrap">
-                                    {{ 'No responses yet.' }}
-                                </td>
-                            @endif
                         </tr>
                         @endforelse
                     </tbody>
@@ -307,78 +200,42 @@
                     </div>
                 @endforelse
                 <tfoot>
-                    @php
-                        $trueDisplay = 0;
-                        foreach($display as $value) {
-                            if($value) {
-                                $trueDisplay++;
-                            }
-                        }
-                    @endphp
-                    @if ($trueDisplay > 1)
                     <tr class="bg-white border-b">
-                        <td colspan="5" class="px-6 py-4 text-start border-b border-slate-500">
+                        <td class="px-6 py-4 text-start border-b border-slate-500">
                             <p class="w-full text-center font-bold tracking-widest text-slate-600">
                                 AVERAGES
                             </p>
                         </td>
-                        @if ($display['wm'])
-                            <td class="px-14 py-4 text-center font-bold border border-slate-500">
-                                {{number_format($view['evaluation_result']['averages']['mean'], 2)}}
-                            </td>
-                        @endif
-                        @if ($display['sqm'])
-                            <td class="px-14 py-4 text-center font-bold border bg-violet-400 text-violet-800 border-slate-500">
-                                {{number_format($view['evaluation_result']['averages']['squared_mean'], 2)}}
-                            </td>
-                        @endif
-                        @if ($display['std'])
-                            <td class="px-6 py-4 text-center font-bold border border-slate-500">
-                                {{number_format($view['evaluation_result']['averages']['standard_deviation'], 2)}}
-                            </td>
-                        @endif
-                        @if ($display['itrprtn'])
-                            <td class="px-6 py-4 text-center font-bold border-b border-slate-500 whitespace-nowrap">
-                                {!!to_interpret($view['evaluation_result']['averages']['descriptive_interpretation'])!!}
-                            </td>
-                        @endif
+                        <td class="px-14 py-4 text-center font-bold border border-slate-500">
+                            {{number_format($view['evaluation_result']['averages']['mean'], 2)}}
+                        </td>
+                        <td class="px-14 py-4 text-center font-bold border bg-violet-400 text-violet-800 border-slate-500">
+                            {{number_format($view['evaluation_result']['averages']['squared_mean'], 2)}}
+                        </td>
+                        <td class="px-6 py-4 text-center font-bold border border-slate-500">
+                            {{number_format($view['evaluation_result']['averages']['standard_deviation'], 2)}}
+                        </td>
+                        <td class="px-6 py-4 text-center font-bold border-b border-slate-500 whitespace-nowrap">
+                            {!!to_interpret($view['evaluation_result']['averages']['descriptive_interpretation'])!!}
+                        </td>
                     </tr>
-                    @endif
                     <tr class="bg-white border-b">
                         @if ($view['evaluation_result']['total_responses'] > 0)
-                            @if ($trueDisplay >= 1 && $trueDisplay <= 2)
-                                <td colspan="3" class="px-6 py-4 text-start border-b border-slate-500">
-                                    <p class="w-full uppercase text-center font-bold tracking-widest text-slate-600">
-                                        Descriptive Interpretation
-                                    </p>
-                                </td>
-                                <td colspan="9" class="px-6 py-4 text-start border-l border-b border-slate-500">
-                                    <p class="w-full text-sm font-medium text-slate-600">
-                                        The collective weighted mean registers at
-                                        <span class="underline">{{number_format($view['evaluation_result']['averages']['mean'], 2)}}</span>,
-                                        accompanied by a mean squared figure of <span class="underline">{{number_format($view['evaluation_result']['averages']['squared_mean'], 2)}}</span>
-                                        and a standard deviation resting at <span class="underline">{{number_format($view['evaluation_result']['averages']['standard_deviation'], 2)}}</span>.
-                                        In essence, the overall interpretation tends towards
-                                        <span class="underline uppercase font-bold">{!!strip_tags(to_interpret($view['evaluation_result']['averages']['descriptive_interpretation'])) !!}</span>
-                                    </p>
-                                </td>
-                            @elseif ($trueDisplay >= 3)
-                                <td colspan="5" class="px-6 py-4 text-start border-b border-slate-500">
-                                    <p class="w-full uppercase text-center font-bold tracking-widest text-slate-600">
-                                        Descriptive Interpretation
-                                    </p>
-                                </td>
-                                <td colspan="7" class="px-6 py-4 text-start border-l border-b border-slate-500">
-                                    <p class="w-full text-sm font-medium text-slate-600">
-                                        The collective weighted mean registers at
-                                        <span class="underline">{{number_format($view['evaluation_result']['averages']['mean'], 2)}}</span>,
-                                        accompanied by a mean squared figure of <span class="underline">{{number_format($view['evaluation_result']['averages']['squared_mean'], 2)}}</span>
-                                        and a standard deviation resting at <span class="underline">{{number_format($view['evaluation_result']['averages']['standard_deviation'], 2)}}</span>.
-                                        In essence, the overall interpretation tends towards
-                                        <span class="underline uppercase font-bold">{!!strip_tags(to_interpret($view['evaluation_result']['averages']['descriptive_interpretation'])) !!}</span>
-                                    </p>
-                                </td>
-                            @endif
+                            <td class="px-6 py-4 text-start border-b border-slate-500">
+                                <p class="w-full uppercase text-center font-bold tracking-widest text-slate-600">
+                                    Descriptive Interpretation
+                                </p>
+                            </td>
+                            <td colspan="12" class="px-6 py-4 text-start border-l border-b border-slate-500">
+                                <p class="w-full text-sm font-medium text-slate-600">
+                                    The collective weighted mean registers at
+                                    <span class="underline">{{number_format($view['evaluation_result']['averages']['mean'], 2)}}</span>,
+                                    accompanied by a mean squared figure of <span class="underline">{{number_format($view['evaluation_result']['averages']['squared_mean'], 2)}}</span>
+                                    and a standard deviation resting at <span class="underline">{{number_format($view['evaluation_result']['averages']['standard_deviation'], 2)}}</span>.
+                                    In essence, the overall interpretation tends towards
+                                    <span class="underline uppercase font-bold">{!!strip_tags(to_interpret($view['evaluation_result']['averages']['descriptive_interpretation'])) !!}</span>
+                                </p>
+                            </td>
                         @else
                             <td colspan="3" class="px-6 py-4 text-start border-b border-slate-500">
                                 <p class="w-full uppercase text-center font-bold tracking-widest text-slate-600">

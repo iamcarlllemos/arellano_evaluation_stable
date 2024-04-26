@@ -256,12 +256,12 @@
                                         </tr>
                                         <tr class="bg-white border-b">
                                             @if ($redata['total_responses'] > 0)
-                                                <td colspan="5" class="px-6 py-4 text-start border-b border-slate-500">
+                                                <td class="px-6 py-4 text-start border-b border-slate-500">
                                                     <p class="w-full uppercase text-center font-bold tracking-widest text-slate-600">
                                                         Descriptive Interpretation
                                                     </p>
                                                 </td>
-                                                <td colspan="7" class="px-6 py-4 text-start border-l border-b border-slate-500">
+                                                <td colspan="12" class="px-6 py-4 text-start border-l border-b border-slate-500">
                                                     <p class="w-full text-sm font-medium text-slate-600">
                                                         The collective weighted mean registers at
                                                         <span class="underline">{{number_format($redata['averages']['mean'], 2)}}</span>,

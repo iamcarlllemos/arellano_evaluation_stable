@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 
-use App\Models\StudentModel;
-use App\Models\CurriculumTemplateModel;
-use App\Models\FacultyModel;
 use App\Models\FacultyTemplateModel;
 
 class Subject extends Component
@@ -18,7 +15,7 @@ class Subject extends Component
 
     public $evaluate;
     public $semester;
-    public $subjects;
+    public $subject;
 
     public function mount(Request $request) {
 
@@ -56,25 +53,13 @@ class Subject extends Component
             return redirect()->route('faculty.dashboard');
         }
 
-        $user_id = auth()->guard('faculty')->user()->id;
-
-        $user_data = FacultyModel::find($user_id);
-
+        $id = auth()->guard('faculty')->user()->id;
 
         $data = FacultyTemplateModel::with('faculty.templates.curriculum_template.subjects.courses.departments.branches')
-            ->where('faculty_id', $user_id)
-            ->select('*', DB::raw('(CASE WHEN EXISTS (
-                    SELECT 1
-                    FROM afears_response
-                    INNER JOIN afears_curriculum_template ON afears_response.template_id = afears_curriculum_template.id
-                    WHERE user_id = ' . $user_id . '
-                        AND evaluation_id = ' . $evaluate . '
-                        AND semester = ' . $semester . '
-                ) THEN true ELSE false END) AS is_exists'))
-            ->get();
+            ->where('faculty_id', $id)
+            ->get()[0];
 
-        dd($data->toArray());
-        $this->subjects = $data;
+        $this->subject = $data;
     }
 
     public function render()

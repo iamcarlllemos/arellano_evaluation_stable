@@ -7,32 +7,26 @@
         </div>
     </div>
     <div class="grid grid-cols-12 gap-4 mt-10" wire:poll>
-        @forelse ($subjects as $collection)
+        @forelse ($subject->faculty->templates as $collection)
             <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-3 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
                 <div class="h-[300px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relative w-full">
-                    <img class="rounded-lg w-full h-full object-cover brightness-50" src="{{$collection->courses->departments->branches->image ? asset('storage/images/branches/' . $collection->courses->departments->branches->image) : 'https://ui-avatars.com/api/?name='.$collection->courses->departments->branches->name.'&length=2&bold=true&background=random&color=fff'}}" alt="" />
+                    <img class="rounded-lg w-full h-full object-cover brightness-50" src="{{$collection->curriculum_template[0]->subjects->courses->departments->branches->image ? asset('storage/images/branches/' . $collection->curriculum_template[0]->subjects->courses->departments->branches->image) : 'https://ui-avatars.com/api/?name='.$collection->courses->departments->branches->name.'&length=2&bold=true&background=random&color=fff'}}" alt="" />
                     <div class="p-5 absolute bottom-0 left-0 w-full">
-                        <h5 class="text-2xl font-bold tracking-tight text-white uppercase whitespace-break-spaces line-clamp-1">{{$collection->subjects->name}}</h5>
-                        <p class="text text-white font-bold line-clamp-2">{{$collection->subjects->code}}</p>
+                        <h5 class="text-2xl font-bold tracking-tight text-white uppercase whitespace-break-spaces line-clamp-2">{{$collection->curriculum_template[0]->subjects->name}}</h5>
+                        <p class="text text-white font-bold line-clamp-2">{{$collection->curriculum_template[0]->subjects->code}}</p>
                         <div wire:ignore>
                             <hr class="my-4">
-                            @if (!$collection->is_exists)
-                                <div class="mt-3 flex justify-end">
-                                    <a wire:navigate href="javascript:void(0)" class=" bg-blue-100 text-blue-800 p-2 px-4 text-sm font-bold rounded-lg uppercase">No responses yet</a>
-                                </div>
-                            @else
-                                <div class="mt-3 flex justify-end">
-                                    <a wire:navigate
-                                        href="{{route('faculty.evaluation-results',
-                                        ['id' => $evaluate,
-                                            'action' => 'view',
-                                            'faculty' => Auth::guard('faculty')->user()->id,
-                                            'template' => $collection->id,
-                                            'subject' => $collection->subject_id,
-                                            'semester' => $semester,
-                                        ])}}" class=" bg-orange-100 text-orange-800 p-2 px-4 text-sm font-bold rounded-lg uppercase">View Results</a>
-                                </div>
-                            @endif
+                            <div class="mt-3 flex justify-end">
+                                <a wire:navigate
+                                href="{{route('faculty.evaluation-results',
+                                ['id' => $evaluate,
+                                    'action' => 'view',
+                                    'faculty' => Auth::guard('faculty')->user()->id,
+                                    'template' => $collection->id,
+                                    'subject' => $collection->subject_id,
+                                    'semester' => $semester,
+                                ])}}" class=" bg-orange-100 text-orange-800 p-2 px-4 text-sm font-bold rounded-lg uppercase">View Results</a>
+                            </div>
                         </div>
                     </div>
                     <div class="absolute top-6 left-5 p-4 rounded-full text-slate-100 backdrop-blur-sm bg-white/30">

@@ -9,6 +9,13 @@ use App\Models\ResponseModel;
 use App\Models\StudentModel;
 use Livewire\Component;
 use App\Traits\Censored;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\View;
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Reader\Html;
+use Illuminate\Support\Facades\Response;
 
 class EvaluationResults extends Component
 {
@@ -232,31 +239,17 @@ class EvaluationResults extends Component
             $evaluation_result['stats'] = array_values($evaluation_result['stats']);
             $evaluation_result['respondents'] = $this->respondents();
 
-            try {
-                $view = [
-                    'faculty' => FacultyModel::with([
-                            'templates' => function($query) use ($template, $subject) {
-                                $query->where('template_id', $template)
-                                    ->whereHas('curriculum_template.subjects', function($query) use ($subject) {
-                                        $query->where('subject_id', $subject);
-                                    });
-                            },
-                            'templates.curriculum_template.subjects.courses.departments.branches'
-                        ])
-                        ->where('id', $faculty)
-                        ->whereHas('templates', function($query) use ($template, $subject) {
-                            $query->where('template_id', $template)
-                                ->whereHas('curriculum_template.subjects', function($query) use ($subject) {
-                                    $query->where('subject_id', $subject);
-                                });
-                        })
-                        ->get()[0],
-
-                    'evaluation_result' => $evaluation_result,
-                ];
-            } catch (\Throwable $th) {
-                return redirect()->route('faculty.subject', ['evaluate' => $this->form['id'], 'semester' => $this->form['semester']]);
-            }
+            $view = [
+                'faculty' => FacultyModel::with([
+                    'templates' => function($query) use ($template, $subject) {
+                        $query->where('template_id', $template);
+                    },
+                    'templates.curriculum_template.subjects.courses.departments.branches'
+                ])
+                ->where('id', $faculty)
+                ->get()[0],
+                'evaluation_result' => $evaluation_result,
+            ];
 
             $this->view = $view;
         }
@@ -348,5 +341,68 @@ class EvaluationResults extends Component
         ];
 
         return view('livewire.faculty.evaluation-results', compact('data'));
+    }
+
+    public function save_pdf() {
+
+        $data = [
+            'display' => $this->display,
+            'view' => $this->view,
+            'has_image' => true
+        ];
+
+        $pdf = PDF::loadView('printable.result-view-single', $data);
+
+        $faculty = $this->view['faculty'];
+        $filename = strtolower('evaluation_result_of_' . $faculty['firstname'] . '_' . $faculty['lastname'] . '_' .time().'.pdf');
+
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->stream();
+        }, $filename);
+
+    }
+
+    public function save_excel() {
+
+        $data = [
+            'display' => $this->display,
+            'view' => $this->view,
+            'has_image' => false
+        ];
+
+        $spreadsheet = new Spreadsheet();
+
+        // Set active sheet
+        $spreadsheet->setActiveSheetIndex(0);
+
+        // HTML content to be converted to Excel
+        $html = View::make('printable.result-view-single', $data)->render();
+
+        // Load HTML content into PHPExcel
+        $reader = new HTML();
+        $spreadsheet = $reader->loadFromString($html);
+
+        // Set column widths after loading HTML content
+        $sheet = $spreadsheet->getActiveSheet();
+
+        for ($i = 'A'; $i <= $sheet->getHighestColumn(); $i++) {
+            if($i != 'B') {
+                $sheet->getColumnDimension($i)->setAutoSize(true);
+            } else {
+                $sheet->getColumnDimension('B')->setWidth(5);
+            }
+        }
+
+        $faculty = $this->view['faculty'];
+        $filename = strtolower('evaluation_result_of_' . $faculty['firstname'] . '_' . $faculty['lastname'] . '_' .time().'.xlsx');
+
+        // Save Excel file
+        $tempFilePath = storage_path('app/'.$filename);
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($tempFilePath);
+
+        // Return the Excel file as a downloadable response
+        return Response::download($tempFilePath, $filename)->deleteFileAfterSend(true);
+
     }
 }
