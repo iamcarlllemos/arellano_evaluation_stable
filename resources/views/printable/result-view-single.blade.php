@@ -107,7 +107,7 @@ table th {
             </tr>
         @empty
             <tr>
-                <td style="width: 100%;">
+                <td style="width: 100%; text-align:center;">
                     No responses yet
                 </td>
                 <td style="width: 20px; text-align:center;">
