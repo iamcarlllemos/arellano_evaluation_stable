@@ -14,6 +14,7 @@ class EvaluateController extends Controller
         $id = $request->input('id');
         $action = $request->input('action');
         $faculty = $request->input('faculty');
+        $curriculum = $request->input('curriculum');
         $template = $request->input('template');
         $subject = $request->input('subject');
         $semester = $request->input('semester');
@@ -35,6 +36,7 @@ class EvaluateController extends Controller
                         'action' => $action,
                         'faculty' => $faculty,
                         'template' => $template,
+                        'curriculum' => $curriculum,
                         'subject' => $subject,
                         'semester' => $semester,
                         'index' => [

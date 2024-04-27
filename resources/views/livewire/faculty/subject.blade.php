@@ -23,7 +23,8 @@
                                     'action' => 'view',
                                     'faculty' => Auth::guard('faculty')->user()->id,
                                     'template' => $collection->id,
-                                    'subject' => $collection->subject_id,
+                                    'curriculum' => $collection->template_id,
+                                    'subject' => $collection->curriculum_template[0]['subjects']->id,
                                     'semester' => $semester,
                                 ])}}" class=" bg-orange-100 text-orange-800 p-2 px-4 text-sm font-bold rounded-lg uppercase">View Results</a>
                             </div>

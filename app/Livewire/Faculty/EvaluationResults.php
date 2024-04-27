@@ -50,6 +50,7 @@ class EvaluationResults extends Component
         $id = $this->form['id'];
         $faculty = $this->form['faculty'];
         $template = $this->form['template'];
+        $curriculum = $this->form['curriculum'];
         $subject = $this->form['subject'];
         $semester = $this->form['semester'];
 
@@ -66,7 +67,7 @@ class EvaluationResults extends Component
 
             $responses = ResponseModel::with('students', 'items.questionnaire.criteria')
                 ->where('evaluation_id', $id)
-                ->where('template_id', $template)
+                ->where('template_id', $curriculum)
                 ->where('faculty_id', $faculty)->get();
 
             $sorted_responses = [];
@@ -239,19 +240,28 @@ class EvaluationResults extends Component
             $evaluation_result['stats'] = array_values($evaluation_result['stats']);
             $evaluation_result['respondents'] = $this->respondents();
 
-            $view = [
-                'faculty' => FacultyModel::with([
-                    'templates' => function($query) use ($template, $subject) {
-                        $query->where('template_id', $template);
-                    },
-                    'templates.curriculum_template.subjects.courses.departments.branches'
-                ])
-                ->where('id', $faculty)
-                ->get()[0],
-                'evaluation_result' => $evaluation_result,
-            ];
 
-            $this->view = $view;
+            $faculty_data = FacultyModel::with([
+                'templates' => function($query) use ($template, $subject) {
+                    $query->where('id', $template);
+                },
+                'templates.curriculum_template.subjects.courses.departments.branches'
+            ])
+            ->where('id', $faculty)
+            ->get()[0];
+
+
+            if($faculty_data['templates']->count() == 0) {
+                return redirect()->route('faculty.subject', ['evaluate', $this->form['id']]);
+            } else {
+                $view = [
+                    'faculty' => $faculty_data,
+                    'evaluation_result' => $evaluation_result,
+                ];
+                $this->view = $view;
+            }
+
+
         }
     }
 
@@ -287,13 +297,13 @@ class EvaluationResults extends Component
     public function respondents() {
         $total_respondents = StudentModel::with('courses.template')
             ->whereHas('courses.template', function($query) {
-                $query->where('id', $this->form['template'])
-                    ->where('subject_id', $this->form['subject']);
+                $query->where('subject_id', $this->form['subject'])
+                    ->where('subject_sem', $this->form['semester']);
             })
             ->get()->count();
 
         $respondents = ResponseModel::where('evaluation_id', $this->form['id'])
-            ->where('template_id', $this->form['template'])
+            ->where('template_id', $this->form['curriculum'])
             ->get()->count();
 
         $not_responded = $total_respondents - $respondents;
