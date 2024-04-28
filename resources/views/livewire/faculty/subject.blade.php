@@ -8,10 +8,9 @@
     </div>
     <div class="grid grid-cols-12 gap-4 mt-10" wire:poll>
         @forelse ($subject->faculty->templates as $collection)
-            @dd($collection->toArray());
             <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-3 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
                 <div class="h-[300px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relative w-full">
-                    <img class="rounded-lg w-full h-full object-cover brightness-50" src="{{$collection->curriculum_template[0]->subjects->courses->departments->branches->image ? asset('storage/images/branches/' . $collection->curriculum_template[0]->subjects->courses->departments->branches->image) : 'https://ui-avatars.com/api/?name='.$collection->courses->departments->branches->name.'&length=2&bold=true&background=random&color=fff'}}" alt="" />
+                    <img class="rounded-lg w-full h-full object-cover brightness-50" src="{{$collection->curriculum_template[0]->subjects->courses->departments->branches->image ? asset('storage/images/branches/' . $collection->curriculum_template[0]->subjects->courses->departments->branches->image) : 'https://ui-avatars.com/api/?name='.$collection->curriculum_template[0]->courses->departments->branches->name.'&length=2&bold=true&background=random&color=fff'}}" alt="" />
                     <div class="p-5 absolute bottom-0 left-0 w-full">
                         <h5 class="text-2xl font-bold tracking-tight text-white uppercase whitespace-break-spaces line-clamp-2">{{$collection->curriculum_template[0]->subjects->name}}</h5>
                         <p class="text text-white font-bold line-clamp-2">{{$collection->curriculum_template[0]->subjects->code}}</p>
