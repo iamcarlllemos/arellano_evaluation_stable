@@ -34,16 +34,6 @@
                         </a>
                     </li>
                     <li class="ps-3 border-l-2 border-sky-950 hover:border-sky-400 transition ease-in-out duration-400">
-                        <a wire:navigate.hover href="#" class="p-2 w-100 flex items-center gap-3 text-slate-400 hover:text-sky-400">
-                            <div class="p-2 rounded-lg bg-slate-800">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
-                                </svg>
-                            </div>
-                            <span class="text-xs uppercase font-bold" style="font-size: 10px;">Student->Subject</span>
-                        </a>
-                    </li>
-                    <li class="ps-3 border-l-2 border-sky-950 hover:border-sky-400 transition ease-in-out duration-400">
                         <a wire:navigate.hover href="{{route('admin.linking.curriculum-template')}}" class="p-2 w-100 flex items-center gap-3 text-slate-400 hover:text-sky-400">
                             <div class="p-2 rounded-lg bg-slate-800">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
