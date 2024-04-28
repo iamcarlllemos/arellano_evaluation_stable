@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('start_year');
             $table->integer('end_year');
             $table->integer('semester');
-            $table->enum('status', ['0', '1', '2', '3'])->default('0');
+            $table->integer('status');
             $table->timestamps();
         });
     }

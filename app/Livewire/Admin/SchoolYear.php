@@ -105,11 +105,9 @@ class SchoolYear extends Component
     }
 
     public function update() {
-
         $model = SchoolYearModel::where('id', $this->id)->first();
 
         if ($model) {
-
             $rules = [
                 'name' => 'required|min:4',
                 'start_year' => [
@@ -134,18 +132,18 @@ class SchoolYear extends Component
             $this->validate($rules, [], $this->attr);
 
             try {
+                // Set status of other records to 0
+                SchoolYearModel::where('id', '!=', $this->id)->update(['status' => 0]);
 
                 $model->name = htmlspecialchars($this->name);
                 $model->semester = $this->semester;
                 $model->status = $this->status;
-
                 $model->save();
 
                 $this->dispatch('alert');
                 session()->flash('alert', [
                     'message' => 'Updated.'
                 ]);
-
             } catch (\Exception $e) {
                 session()->flash('flash', [
                     'status' => 'failed',

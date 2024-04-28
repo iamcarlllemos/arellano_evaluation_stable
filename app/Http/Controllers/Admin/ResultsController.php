@@ -23,6 +23,7 @@ class ResultsController extends Controller
         $faculty = $request->input('faculty');
         $template = $request->input('template');
         $subject = $request->input('subject');
+        $tab = $request->input('tab');
 
         $data = [
             'breadcrumbs' => 'Dashboard,programs,school year',
@@ -36,6 +37,7 @@ class ResultsController extends Controller
                         'faculty' => $faculty,
                         'template' => $template,
                         'subject' => $subject,
+                        'tab' => $tab,
                         'index' => [
                             'title' => 'Evaluation Results',
                             'subtitle' => 'List of all faculties evaluation results.'

@@ -70,9 +70,12 @@ class EvaluationResults extends Component
                 ->where('template_id', $curriculum)
                 ->where('faculty_id', $faculty)->get();
 
+
+
             $sorted_responses = [];
 
             $comments = [];
+
 
             // sorted responses
             foreach ($responses as $response) {
@@ -91,6 +94,7 @@ class EvaluationResults extends Component
                     'comment' => $response['comment']
                 ];
             }
+
 
             $evaluation_result = [
                 'total_responses' => 0,
@@ -259,8 +263,8 @@ class EvaluationResults extends Component
                     'evaluation_result' => $evaluation_result,
                 ];
                 $this->view = $view;
-            }
 
+            }
 
         }
     }

@@ -158,7 +158,7 @@ table th {
             accompanied by a mean squared figure of {{number_format($view['evaluation_result']['averages']['squared_mean'], 2)}}
             and a standard deviation resting at {{number_format($view['evaluation_result']['averages']['standard_deviation'], 2)}}.
             In essence, the overall interpretation tends towards
-            {{number_format($view['evaluation_result']['averages']['descriptive_interpretation'])}}
+            <span style="text-decoration: underline; font-style: bold;">{!!strip_tags(to_interpret($view['evaluation_result']['averages']['descriptive_interpretation'])) !!}</span>
         </td>
     </tr>
 </table>

@@ -11,7 +11,7 @@ class SchoolYear extends Component
     public $school_year;
 
     public function mount() {
-        $this->school_year = SchoolYearModel::all()[0];
+        $this->school_year = SchoolYearModel::all();
     }
 
     public function render() {
