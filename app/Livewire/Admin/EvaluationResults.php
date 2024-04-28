@@ -545,7 +545,7 @@ class EvaluationResults extends Component
 
                         $item['mean_squared'] = array_sum($squared_tally) / $divisor;
 
-                        $item['standard_deviation'] = sqrt($item['mean_squared'] - pow($item['weighted_mean'], 2));
+                        $item['standard_deviation'] =  sqrt((int)$item['mean_squared'] - (int) $item['weighted_mean']);
 
                         $item['interpretation'] = $this->interpretation($item['weighted_mean']);
                         $evaluation_result['total_interpretation'][$item['interpretation']]++;
@@ -567,6 +567,7 @@ class EvaluationResults extends Component
                     }
                 }
 
+
                 if ($total_items > 0) {
                     $evaluation_result['averages'] = [
                         'mean' => $total_mean / $total_items,
@@ -583,9 +584,12 @@ class EvaluationResults extends Component
                     ];
                 }
 
+
+
                 $evaluation_result['template'] = $template->toArray();
                 $evaluation_result['respondents'] = $this->respondents(1, array_values($evaluation_result));
                 $evaluation_results[] = $evaluation_result;
+
             }
 
             $view = [
