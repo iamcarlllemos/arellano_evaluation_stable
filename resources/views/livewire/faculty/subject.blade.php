@@ -6,7 +6,7 @@
             <a wire:navigate href="{{route('faculty.dashboard')}}" class="bg-slate-900 py-2 px-6 text-white text-sm font-bold rounded-md">Go Back</a>
         </div>
     </div>
-    @dd($subject);
+    @dd($subject->toArray());
     <div class="grid grid-cols-12 gap-4 mt-10" wire:poll>
         @forelse ($subject->faculty->templates as $collection)
             <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-3 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
