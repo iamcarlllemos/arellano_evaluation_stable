@@ -521,7 +521,7 @@
                                     <div wire:ignore.self id="drodown" class="dropdown absolute top-[100px] right-[100px] z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
                                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200 w-full" aria-labelledby="dropdownDefaultButton">
                                             <li class="text-xs whitespace-nowrap">
-                                                @if(!empty($collection['templates']))
+                                                @if(!empty($collection['templates']->toArray()))
                                                     <a wire:navigate href="{{route('admin.programs.results', ['id' => $form['id'], 'action' => 'view', 'faculty' => $collection->id, 'template' => $collection->templates[0]->curriculum_template[0]->id, 'subject' => $collection->templates[0]->curriculum_template[0]->subject_id, 'tab' => 1])}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                                         View Results
                                                     </a>
