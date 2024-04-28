@@ -6,9 +6,9 @@
             <a wire:navigate href="{{route('faculty.dashboard')}}" class="bg-slate-900 py-2 px-6 text-white text-sm font-bold rounded-md">Go Back</a>
         </div>
     </div>
-    @dd($subject->toArray());
     <div class="grid grid-cols-12 gap-4 mt-10" wire:poll>
         @forelse ($subject->faculty->templates as $collection)
+            @dd($collection->toArray());
             <div class="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-3 bg-slate-100 shadow-lg rounded-lg text-dark relative overflow-hidden">
                 <div class="h-[300px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relative w-full">
                     <img class="rounded-lg w-full h-full object-cover brightness-50" src="{{$collection->curriculum_template[0]->subjects->courses->departments->branches->image ? asset('storage/images/branches/' . $collection->curriculum_template[0]->subjects->courses->departments->branches->image) : 'https://ui-avatars.com/api/?name='.$collection->courses->departments->branches->name.'&length=2&bold=true&background=random&color=fff'}}" alt="" />
